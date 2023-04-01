@@ -27,6 +27,4 @@ export default {
         port : process.env.REDIS_POST,
       }
     },
-    
-    
 }
