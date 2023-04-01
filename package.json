@@ -25,6 +25,8 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.3.0",
     "aws-sdk": "^2.1348.0",
+    "cache-manager": "^5.2.0",
+    "cache-manager-redis-store": "^3.0.1",
     "dotenv": "^16.0.3",
     "mysql2": "^3.2.0",
     "redis": "^4.6.5",
