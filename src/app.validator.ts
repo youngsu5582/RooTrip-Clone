@@ -6,6 +6,6 @@ export const appConfig = registerAs('app',()=>({
   port :parseInt(process.env.SERVER_PORT,10),
 }));
 
-export const appSchema = Joi.object({
+export const appSchema = {
     SERVER_PORT: Joi.number().required(),
-  });
+  };

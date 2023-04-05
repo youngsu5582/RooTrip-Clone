@@ -9,7 +9,6 @@ async function bootstrap() {
   await InitSwagger(app);
   const service = app.get(ConfigService);
   const port = service.get('app.port');
-  console.log(port);
   await app.listen(port)
   .then(()=>console.log('Server Open!'))
   .catch((err)=>console.error(err));
