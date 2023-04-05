@@ -8,22 +8,25 @@ import { TypeOrmProvider } from './database/typeorm/typeorm.module';
 import { typeormConfig } from './database/typeorm/typeorm.validator';
 import { typeormSchema } from './database/typeorm/typeorm.validator';
 import * as Joi from 'joi';
+import { redisConfig, redisSchema } from './database/redis/redis.validator';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ 
       envFilePath: [`config/.env.${process.env.NODE_ENV || 'development'}`],
-      load:[appConfig,typeormConfig],
+      load:[appConfig,typeormConfig,redisConfig],
       
       validationSchema:Joi.object({
         ...typeormSchema,
         ...appSchema,
+        ...redisSchema,
       }),
       isGlobal: true,
       cache:true,
     }),
     TypeOrmModule.forRootAsync({
       useClass:TypeOrmProvider
-  }), 
+    }),
   ],
   controllers: [AppController],
   providers: [AppService,ConfigService],
