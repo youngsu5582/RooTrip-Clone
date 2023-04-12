@@ -17,6 +17,12 @@ lerna-debug.log*
 /config/*.*
 
 
+# Nestia File
+/src/api
+/bin/*.*
+
+
+
 
 # OS
 .DS_Store

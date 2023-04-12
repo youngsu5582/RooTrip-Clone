@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "CommonJS",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "esModuleInterop": true,
+    "target": "es2020",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -16,6 +17,41 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "strict": true,
+    "plugins": [
+      {
+        "transform": "@nestia/core/lib/transform",
+        /**
+         * Validate request body.
+         * 
+         *   - "assert": Use typia.assert() function
+         *   - "is": Use typia.is() function
+         *   - "validate": Use typia.validate() function
+         */
+        "validate": "assert",
+        /**
+         * Validate JSON typed response body.
+         * 
+         *   - "assert": Use typia.assertStringify() function
+         *   - "is": Use typia.isStringify() function
+         *   - "validate": Use typia.validateStringify() function
+         *   - "stringify": Use typia.stringify() function, but dangerous
+         *   - null: Just use JSON.stringify() function, without boosting
+         */
+        "stringify": "assert"
+      },
+      {
+        "transform": "typia/lib/transform"
+      }
+    ]
+  },
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "./src/api"
+  ]
 }
