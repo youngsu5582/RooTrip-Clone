@@ -4,5 +4,5 @@ export default registerAs("database.typeorm", () => ({
   port: parseInt(process.env.DATABASE_PORT, 10),
   username: process.env.DATABASE_USERNAME,
   password: process.env.DATABASE_PASSWORD,
-  database: process.env.DABASE_NAME,
+  database: process.env.DATABASE_NAME,
 }));
