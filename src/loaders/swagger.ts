@@ -5,5 +5,4 @@ const option = new DocumentBuilder().setTitle('RooTrip Clone Coding').setDescrip
 export default async function(app:INestApplication){
     const document = SwaggerModule.createDocument(app,option);
     SwaggerModule.setup('api-docs',app,document);
-
 }

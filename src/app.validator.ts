@@ -8,4 +8,4 @@ export const appConfig = registerAs('app',()=>({
 
 export const appSchema = {
     SERVER_PORT: Joi.number().required(),
-  };
+  }; 
