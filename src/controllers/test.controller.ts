@@ -1,7 +1,7 @@
-import { TypedRoute } from '@nestia/core';
-import { Controller } from '@nestjs/common';
+import { TypedRoute } from "@nestia/core";
+import { Controller } from "@nestjs/common";
 
-@Controller('test')
+@Controller("test")
 export class TestController {
   constructor() {}
 
@@ -13,8 +13,8 @@ export class TestController {
    * @param name 유저 아이디
    * @returns
    */
-  @TypedRoute.Get('user')
+  @TypedRoute.Get("user")
   async getHello() {
-    return 'hihi';
+    return "hihi";
   }
 }

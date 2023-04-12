@@ -1,4 +1,4 @@
-import * as Joi from 'joi';
+import * as Joi from "joi";
 export default {
   DATABASE_HOST: Joi.string().required(),
   DATABASE_PORT: Joi.number().required(),
