@@ -26,7 +26,7 @@ import { TestModule } from './module/test.module';
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmProvider,
     }),
-    TestModule
+    TestModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
