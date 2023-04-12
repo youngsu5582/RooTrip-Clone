@@ -8,18 +8,24 @@ import * as winston from 'winston';
     WinstonModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        level: configService.get('app.logLevel', 'info'),
-        format: winston.format.combine(
-          winston.format.timestamp(),
-          winston.format.json(),
-        ),
+        //level: configService.get('app.logLevel', 'info'),
+        
         transports: [
           new winston.transports.File({
             filename: 'logs/error.log',
             level: 'error',
+            format: winston.format.combine(
+              winston.format.json(),
+            ),
           }),
           new winston.transports.File({
             filename: 'logs/combined.log',
+            level:'info',
+            format: winston.format.combine(
+              winston.format.timestamp(),
+              winston.format.json(),
+            ),
+            
           }),
         ],
       }),

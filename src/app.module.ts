@@ -11,6 +11,9 @@ import { typeormValidator, appValidator, redisValidator } from './validator';
 import { TestModule } from './module/test.module';
 import { LoggerMiddleware } from './middleware/logging.middleware';
 import { LoggerModule } from './loaders/winston.module';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from './middleware/error.middleware';
+//import { ErrorMiddleware } from './middleware/error.middleware';
 
 @Module({
   imports: [
@@ -32,10 +35,17 @@ import { LoggerModule } from './loaders/winston.module';
     LoggerModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ConfigService],
+  providers: [AppService, ConfigService,
+  {
+    provide:APP_FILTER,
+    useClass:AllExceptionsFilter,
+  }
+  
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
+    //consumer.apply(ErrorMiddleware).forRoutes('*');
   }
 }

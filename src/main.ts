@@ -1,12 +1,11 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import InitSwagger from './config/swagger/swagger';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { AllExceptionsFilter } from './middleware/error.middleware';
 
 async function bootstrap() {
-  
   const app = await NestFactory.create(AppModule);
 
   await InitSwagger(app);
@@ -21,7 +20,6 @@ async function bootstrap() {
     }),
   );
   //app.enableCors();
-
   await app
     .listen(port)
     .then(() => console.log('Server Open!'))
