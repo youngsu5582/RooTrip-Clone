@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmProvider } from './database/typeorm/typeorm.module';
@@ -9,6 +9,9 @@ import { AppService } from './app.service';
 import { typeormConfig, appConfig, redisConfig } from './config';
 import { typeormValidator, appValidator, redisValidator } from './validator';
 import { TestModule } from './module/test.module';
+import { LoggerMiddleware } from './middleware/logging.middleware';
+import { LoggerModule } from './loaders/winston.module';
+
 
 @Module({
   imports: [
@@ -27,8 +30,13 @@ import { TestModule } from './module/test.module';
       useClass: TypeOrmProvider,
     }),
     TestModule,
+    LoggerModule
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

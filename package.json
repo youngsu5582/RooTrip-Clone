@@ -10,14 +10,11 @@
     "build:swagger": "nestia swagger",
     "build:sdk": "nestia sdk",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-
-    "dev":"nestia swagger && nest start --watch",
-
+    "dev": "nestia swagger && nest start --watch",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -44,12 +41,15 @@
     "class-validator": "^0.14.0",
     "cross-env": "^7.0.3",
     "joi": "^17.9.1",
+    "nest-winston": "^1.9.1",
     "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^4.4.1",
     "swagger-ui-express": "^4.6.2",
     "typeorm": "^0.3.13",
-    "typia": "^3.7.4"
+    "typia": "^3.7.4",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "@nestia/sdk": "^1.0.19",

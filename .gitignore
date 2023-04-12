@@ -21,7 +21,8 @@ lerna-debug.log*
 /src/api
 /bin/*.*
 
-
+# Log File
+/log
 
 
 # OS
