@@ -12,7 +12,6 @@ import { TestModule } from './module/test.module';
 import { LoggerMiddleware } from './middleware/logging.middleware';
 import { LoggerModule } from './loaders/winston.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -30,7 +29,7 @@ import { LoggerModule } from './loaders/winston.module';
       useClass: TypeOrmProvider,
     }),
     TestModule,
-    LoggerModule
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
