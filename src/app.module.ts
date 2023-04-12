@@ -1,34 +1,34 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { appConfig, appSchema } from './app.validator';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmProvider } from './database/typeorm/typeorm.module';
-import { typeormConfig } from './database/typeorm/typeorm.validator';
-import { typeormSchema } from './database/typeorm/typeorm.validator';
 import * as Joi from 'joi';
-import { redisConfig, redisSchema } from './database/redis/redis.validator';
+
+
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { typeormConfig,appConfig,redisConfig } from './config';
+import { typeormValidator,appValidator,redisValidator } from './validator';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ 
+    ConfigModule.forRoot({
       envFilePath: [`config/.env.${process.env.NODE_ENV || 'development'}`],
-      load:[appConfig,typeormConfig,redisConfig],
-      
-      validationSchema:Joi.object({
-        ...typeormSchema,
-        ...appSchema,
-        ...redisSchema,
+      load: [typeormConfig,appConfig,redisConfig],
+
+      validationSchema: Joi.object({
+        ...typeormValidator,
+        ...appValidator,
+        ...redisValidator,
       }),
       isGlobal: true,
-      cache:true,
+      cache: true,
     }),
     TypeOrmModule.forRootAsync({
-      useClass:TypeOrmProvider
+      useClass: TypeOrmProvider,
     }),
   ],
   controllers: [AppController],
-  providers: [AppService,ConfigService],
+  providers: [AppService, ConfigService],
 })
 export class AppModule {}

@@ -6,11 +6,11 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   await InitSwagger(app);
   const service = app.get(ConfigService);
   const port = service.get('app.port');
-  
+
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,
@@ -20,9 +20,9 @@ async function bootstrap() {
   );
   app.enableCors();
 
-  await app.listen(port)
-  .then(()=>console.log('Server Open!'))
-  .catch((err)=>console.error(err));
-  
+  await app
+    .listen(port)
+    .then(() => console.log('Server Open!'))
+    .catch((err) => console.error(err));
 }
 bootstrap();

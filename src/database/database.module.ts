@@ -3,6 +3,6 @@ import { TypeOrmProvider } from './typeorm/typeorm.module';
 import { RedisCacheService } from './redis/redis.service';
 
 @Module({
-    exports:[TypeOrmProvider,RedisCacheService],
+  exports: [TypeOrmProvider, RedisCacheService],
 })
-export class DatabaseModule{};
+export class DatabaseModule {}
