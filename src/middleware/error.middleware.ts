@@ -4,7 +4,7 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-  Inject,
+  Inject
 } from "@nestjs/common";
 import { HttpAdapterHost } from "@nestjs/core";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
@@ -30,7 +30,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const responseBody = {
       statusCode: httpStatus,
       timestamp: new Date().toISOString(),
-      path: httpAdapter.getRequestUrl(ctx.getRequest()),
+      path: httpAdapter.getRequestUrl(ctx.getRequest())
     };
     this.logger.error(responseBody);
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);

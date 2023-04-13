@@ -23,16 +23,16 @@ import { AllExceptionsFilter } from "./middleware/error.middleware";
       validationSchema: Joi.object({
         ...typeormValidator,
         ...appValidator,
-        ...redisValidator,
+        ...redisValidator
       }),
       isGlobal: true,
-      cache: true,
+      cache: true
     }),
     TypeOrmModule.forRootAsync({
-      useClass: TypeOrmProvider,
+      useClass: TypeOrmProvider
     }),
     TestModule,
-    LoggerModule,
+    LoggerModule
   ],
   controllers: [AppController],
   providers: [
@@ -40,9 +40,9 @@ import { AllExceptionsFilter } from "./middleware/error.middleware";
     ConfigService,
     {
       provide: APP_FILTER,
-      useClass: AllExceptionsFilter,
-    },
-  ],
+      useClass: AllExceptionsFilter
+    }
+  ]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

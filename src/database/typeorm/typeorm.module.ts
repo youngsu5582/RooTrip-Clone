@@ -4,8 +4,7 @@ import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class TypeOrmProvider implements TypeOrmOptionsFactory {
-  constructor(private configService: ConfigService) {
-  }
+  constructor(private configService: ConfigService) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
@@ -15,9 +14,9 @@ export class TypeOrmProvider implements TypeOrmOptionsFactory {
       username: this.configService.get("database.typeorm.username"),
       password: this.configService.get("database.typeorm.password"),
       database: this.configService.get("database.typeorm.database"),
-      entities: [__dirname + '/../../models/tables/*.entity{.ts,.js}'],
+      entities: [__dirname + "/../../models/tables/*.entity{.ts,.js}"],
       logging: "all",
-      synchronize: true,
+      synchronize: true
     };
   }
 }

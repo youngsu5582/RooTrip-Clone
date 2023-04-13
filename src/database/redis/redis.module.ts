@@ -6,12 +6,12 @@ const cacheModule = CacheModule.register({
   useFactory: async (configService: ConfigService) => ({
     store: redisStore,
     host: configService.get<string>("database.redis.host"),
-    port: configService.get<number>("database.redis.port"),
-  }),
+    port: configService.get<number>("database.redis.port")
+  })
 });
 @Module({
   imports: [cacheModule],
   providers: [RedisCacheService],
-  exports: [RedisCacheService],
+  exports: [RedisCacheService]
 })
 export class RedisCacheModule {}
