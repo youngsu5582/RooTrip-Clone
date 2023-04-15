@@ -1,9 +1,9 @@
-import { PrimaryColumn } from "typeorm";
+import { PrimaryGeneratedColumn } from "typeorm";
 import { CreatedAtColumn } from "./time-column";
 import { ApiProperty } from "@nestjs/swagger";
 
 export abstract class defaultColumn extends CreatedAtColumn {
   @ApiProperty({ description: "id" })
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   public readonly id!: string;
 }

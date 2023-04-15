@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { TypeOrmProvider } from "./database/typeorm/typeorm.module";
+import {TypeOrmMoudleOptions} from './database/typeorm';
 import * as Joi from "joi";
 
 import { AppController } from "./app.controller";
@@ -13,10 +13,13 @@ import { LoggerMiddleware } from "./middleware/logging.middleware";
 import { LoggerModule } from "./loaders/winston.module";
 import { APP_FILTER } from "@nestjs/core";
 import { AllExceptionsFilter } from "./middleware/error.middleware";
+import { UserModule } from "./module/user.module";
+
 //import { ErrorMiddleware } from './middleware/error.middleware';
 
 @Module({
   imports: [
+    TypeOrmModule.forRootAsync(TypeOrmMoudleOptions),
     ConfigModule.forRoot({
       envFilePath: [`config/.env.${process.env.NODE_ENV || "development"}`],
       load: [typeormConfig, appConfig, redisConfig],
@@ -28,11 +31,9 @@ import { AllExceptionsFilter } from "./middleware/error.middleware";
       isGlobal: true,
       cache: true
     }),
-    TypeOrmModule.forRootAsync({
-      useClass: TypeOrmProvider
-    }),
     TestModule,
-    LoggerModule
+    LoggerModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [

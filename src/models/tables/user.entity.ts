@@ -1,4 +1,4 @@
-import { Entity, Column, BeforeInsert, BeforeUpdate } from "typeorm";
+import { Entity, Column, BeforeInsert } from "typeorm";
 import { hashSync, compareSync } from "bcrypt";
 import { defaultColumn } from "../common/default-column";
 type GenderType = "m" | "w";
@@ -16,6 +16,9 @@ export class User extends defaultColumn {
   @Column({ nullable: true, type: String })
   password: string | null;
 
+  @Column({})
+  phoneNumber: string;
+
   @Column({ nullable: true, type: String })
   gender: GenderType | null;
 
@@ -23,7 +26,6 @@ export class User extends defaultColumn {
   refreshToken: string | null;
 
   @BeforeInsert()
-  @BeforeUpdate()
   async hashPassword() {
     if (this.password) {
       this.password = hashSync(this.password, 10);

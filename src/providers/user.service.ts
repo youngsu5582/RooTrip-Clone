@@ -1,14 +1,39 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UsersRepository } from "src/models/repositories/user.repository";
-import { User } from "src/models/tables/user.entity";
+import { UsersRepository } from "../models/repositories/user.repository";
+import { User } from "../models/tables/user.entity";
 import { CreateUserDto } from "../models/dtos/create-user-dto";
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly _userRepository: UsersRepository
+    @InjectRepository(UsersRepository)
+    private readonly _userRepository: UsersRepository
   ) {}
   async create(createUserDto: CreateUserDto) {
-    this._userRepository.save({ ...createUserDto });
+    const { email, phoneNumber } = createUserDto;
+    const alreadyCreatedEmail = await this._userRepository.findOne({
+      where: { email }
+    });
+    if(alreadyCreatedEmail)
+      return {
+        status: false,
+        message: "중복된 이메일이 있습니다."
+      };
+    const alreadyCreatedPhoneNumber = await this._userRepository.findOne({
+      where: { phoneNumber }
+    });
+    if(alreadyCreatedPhoneNumber)
+        return {
+          status: false,
+          message: "중복된 전화번호가 있습니다."
+      };
+
+    const user = this._userRepository.save(User.create({ ...createUserDto }));
+    if (user) {
+      return {
+        status: true,
+        message: "회원가입 성공"
+      };
+    }
   }
 }

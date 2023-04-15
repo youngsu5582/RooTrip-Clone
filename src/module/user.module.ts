@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
-import { CustomTypeOrmModule } from "src/config/typeorm/custom-typeorm.module";
-import { UserController } from "src/controllers/user.controller";
-import { UsersRepository } from "src/models/repositories/user.repository";
-import { UserService } from "src/providers/user.service";
+import { CustomTypeOrmModule } from "../config/typeorm/custom-typeorm.module";
+import { UserController } from "../controllers/user.controller";
+import { UsersRepository } from "../models/repositories/user.repository";
+import { UserService } from "../providers/user.service";
 
 @Module({
   imports: [CustomTypeOrmModule.forCustomRepository([UsersRepository])],
