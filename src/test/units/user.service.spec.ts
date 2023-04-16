@@ -70,5 +70,19 @@ describe("User service", () => {
         message: "중복된 이메일이 있습니다."
       });
     })
+    it("3.If Invalid dto , should return error",async()=>{
+        const invalidDto:CreateUserDto={
+            email:null,
+            gender:"m",
+            name:null,
+            nickname:null,
+            password:null
+        }
+        const result = await service.create(invalidDto);
+        expect(result).toEqual({
+            status:false,
+            message: "회원가입 실패"
+        })
+    })
   });
 });

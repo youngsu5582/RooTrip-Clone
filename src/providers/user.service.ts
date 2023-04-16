@@ -14,21 +14,26 @@ export class UserService {
     const alreadyCreatedEmail = await this._userRepository.findOne({
       where: { email }
     });
-
-    if (alreadyCreatedEmail)
+    if (alreadyCreatedEmail && email!==null)
       return {
         status: false,
         message: "중복된 이메일이 있습니다."
       }
     const user = await this._userRepository.save(
       User.create({ ...createUserDto })
-    );
+    ).catch(()=>null);
 
     if (user) {
       return {
         status: true,
         message: "회원가입 성공"
       };
+    }
+    else{
+      return {
+        status : false,
+        message: "회원가입 실패"
+      }
     }
   }
 }
