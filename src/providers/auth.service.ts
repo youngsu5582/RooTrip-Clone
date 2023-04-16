@@ -36,4 +36,10 @@ export class AuthService {
       }
     }
   }
+  async checkDuplicateEmail(email:string){
+    return Boolean(!(await this._userRepository.getByEmail(email)));
+  }
+  async checkDuplicateNickname(nickname:string){
+    return Boolean(!(await this._userRepository.getByNickname(nickname)));
+  }
 }

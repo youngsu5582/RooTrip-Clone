@@ -10,7 +10,7 @@ async function bootstrap() {
   await InitSwagger(app);
   const service = app.get(ConfigService);
   const port = service.get("app.port");
-
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,
@@ -18,7 +18,7 @@ async function bootstrap() {
       whitelist: true
     })
   );
-  //app.enableCors();
+  app.enableCors();
   await app
     .listen(port)
     .then(() => console.log("Server Open!"))
