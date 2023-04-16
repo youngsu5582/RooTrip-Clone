@@ -16,9 +16,6 @@ export class User extends defaultColumn {
   @Column({ nullable: true, type: String, select: false })
   password: string | null;
 
-  @Column({})
-  phoneNumber: string;
-
   @Column({ nullable: true, type: String })
   gender: GenderType | null;
 

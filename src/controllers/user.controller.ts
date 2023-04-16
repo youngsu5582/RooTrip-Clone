@@ -2,7 +2,6 @@ import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 import { CreateUserDto } from "src/models/dtos/create-user-dto";
 import { UserService } from "../providers/user.service";
-
 @Controller("user")
 export class UserController {
   constructor(private readonly _userService: UserService) {}

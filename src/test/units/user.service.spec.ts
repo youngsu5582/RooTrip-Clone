@@ -10,7 +10,6 @@ const userDto: CreateUserDto = {
   name: "test",
   nickname: "testnickname",
   password: "testest1234!",
-  phoneNumber: "01012345678"
 };
 describe("User service", () => {
   let service: UserService;
@@ -49,7 +48,6 @@ describe("User service", () => {
         name: "testname",
         nickname: "testnickname",
         password: "testest1234!",
-        phoneNumber: "01011112222"
       };
       const result = await service.create(newUserDto);
       expect(result).toEqual({
@@ -65,28 +63,12 @@ describe("User service", () => {
         name: "duplicated",
         nickname: "duplicated",
         password: "duplicated",
-        phoneNumber: "01022221111"
       };
       const result = await service.create(duplicatedEmailDto);
       expect(result).toEqual({
         status: false,
         message: "중복된 이메일이 있습니다."
       });
-    });
-    it("3. If duplicated phonenumber , should return error", async () => {
-      const duplicatedPhoneDto: CreateUserDto = {
-        email: "test1234@gmail.com",
-        gender: "m",
-        name: "duplicated",
-        nickname: "duplicated",
-        password: "duplicated",
-        phoneNumber: "01012345678"
-      };
-      const result = await service.create(duplicatedPhoneDto);
-      expect(result).toEqual({
-        status: false,
-        message: "중복된 전화번호가 있습니다."
-      });
-    });
+    })
   });
 });

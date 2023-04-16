@@ -10,7 +10,7 @@ export class UserService {
     private readonly _userRepository: UsersRepository
   ) {}
   async create(createUserDto: CreateUserDto) {
-    const { email, phoneNumber } = createUserDto;
+    const { email } = createUserDto;
     const alreadyCreatedEmail = await this._userRepository.findOne({
       where: { email }
     });
@@ -19,17 +19,7 @@ export class UserService {
       return {
         status: false,
         message: "중복된 이메일이 있습니다."
-      };
-    const alreadyCreatedPhoneNumber = await this._userRepository.findOne({
-      where: { phoneNumber }
-    });
-
-    if (alreadyCreatedPhoneNumber)
-      return {
-        status: false,
-        message: "중복된 전화번호가 있습니다."
-      };
-
+      }
     const user = await this._userRepository.save(
       User.create({ ...createUserDto })
     );
