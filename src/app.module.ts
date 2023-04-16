@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import {TypeOrmMoudleOptions} from './database/typeorm';
+import { TypeOrmMoudleOptions } from "./database/typeorm";
 import * as Joi from "joi";
 
 import { AppController } from "./app.controller";

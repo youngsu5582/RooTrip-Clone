@@ -23,9 +23,5 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-duplicate-imports": "error",
     "@typescript-eslint/no-empty-function": "off"
-  },
-  unmockedModulePathPatterns: [
-    "/node_modules/typeorm",
-    "/node_modules/@nestjs/typeorm"
-  ]
+  }
 };

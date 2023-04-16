@@ -13,7 +13,7 @@ export class User extends defaultColumn {
   @Column({ nullable: true, type: String })
   nickname: string | null;
 
-  @Column({ nullable: true, type: String })
+  @Column({ nullable: true, type: String, select: false })
   password: string | null;
 
   @Column({})
@@ -22,7 +22,7 @@ export class User extends defaultColumn {
   @Column({ nullable: true, type: String })
   gender: GenderType | null;
 
-  @Column({ nullable: true, type: String })
+  @Column({ nullable: true, type: String, select: false })
   refreshToken: string | null;
 
   @BeforeInsert()
