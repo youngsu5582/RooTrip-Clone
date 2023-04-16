@@ -13,7 +13,7 @@ import { LoggerMiddleware } from "./middleware/logging.middleware";
 import { LoggerModule } from "./loaders/winston.module";
 import { APP_FILTER } from "@nestjs/core";
 import { AllExceptionsFilter } from "./middleware/error.middleware";
-import { UserModule } from "./module/user.module";
+import { AuthModule } from "./module/auth.module";
 
 //import { ErrorMiddleware } from './middleware/error.middleware';
 
@@ -33,7 +33,7 @@ import { UserModule } from "./module/user.module";
     }),
     TestModule,
     LoggerModule,
-    UserModule
+    AuthModule
   ],
   controllers: [AppController],
   providers: [

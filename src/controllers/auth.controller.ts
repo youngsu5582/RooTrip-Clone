@@ -1,10 +1,11 @@
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 import { CreateUserDto } from "src/models/dtos/create-user-dto";
-import { UserService } from "../providers/user.service";
-@Controller("user")
-export class UserController {
-  constructor(private readonly _userService: UserService) {}
+import { AuthService } from "../providers/auth.service";
+@Controller("auth")
+export class AuthController {
+  constructor(private readonly _authService: AuthService) {}
+
 
   /**
    * @summary 회원 가입 기능
@@ -17,7 +18,7 @@ export class UserController {
    */
   @TypedRoute.Post("register")
   public async register(@TypedBody() createUserDto: CreateUserDto) {
-    const result = this._userService.create(createUserDto);
+    const result = this._authService.create(createUserDto);
     return result;
   }
 }

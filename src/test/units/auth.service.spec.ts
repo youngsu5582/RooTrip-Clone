@@ -2,7 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { AppModule } from "src/app.module";
 import { CreateUserDto } from "src/models/dtos/create-user-dto";
 import { UsersRepository } from "src/models/repositories/user.repository";
-import { UserService } from "src/providers/user.service";
+import { AuthService } from "src/providers/auth.service";
 
 const userDto: CreateUserDto = {
   email: "test@gmail.com",
@@ -12,14 +12,14 @@ const userDto: CreateUserDto = {
   password: "testest1234!",
 };
 describe("User service", () => {
-  let service: UserService;
+  let service: AuthService;
   let repository: UsersRepository;
   let module: TestingModule;
   beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [AppModule],
       providers: [
-        UserService,
+        AuthService,
         {
           provide: UsersRepository,
           useValue: {
@@ -28,7 +28,7 @@ describe("User service", () => {
         }
       ]
     }).compile();
-    service = module.get<UserService>(UserService);
+    service = module.get<AuthService>(AuthService);
     await service.create(userDto);
     repository = module.get<UsersRepository>(UsersRepository);
   });

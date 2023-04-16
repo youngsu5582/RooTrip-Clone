@@ -4,7 +4,7 @@ import { UsersRepository } from "../models/repositories/user.repository";
 import { User } from "../models/tables/user.entity";
 import { CreateUserDto } from "../models/dtos/create-user-dto";
 @Injectable()
-export class UserService {
+export class AuthService {
   constructor(
     @InjectRepository(UsersRepository)
     private readonly _userRepository: UsersRepository
