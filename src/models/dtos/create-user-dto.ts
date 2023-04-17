@@ -1,18 +1,9 @@
-import { User } from "../tables/user.entity";
-
-// export type CreateUserDto = Pick<
-//   User,
-//   "email"
-//    | "name" | "nickname" | "password" | "gender" | "phoneNumber"
-// >;
-
-export interface CreateUserDto{
-  
+export interface CreateUserDto {
   /**
-   * Email 주소
+   * 사용자의 Email 주소
    * @format email
    */
-  email : string;
+  email: string;
 
   /**
    * 사용자 이름
@@ -20,7 +11,7 @@ export interface CreateUserDto{
    * @maxLength 10
    * @pattern ^[가-힣]{2,}$
    */
-    name : string;
+  name: string;
 
   /**
    * 사용자의 닉네임
@@ -28,18 +19,16 @@ export interface CreateUserDto{
    * @maxLength 20
    * @pattern ^(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9가-힣]{2,8}$
    */
-  nickname : string;
-
+  nickname: string;
 
   /**
    * 사용자의 비밀번호
    * @pattern ^(?=.*[A-Za-z])(?=.*\d)(?=.*[`~!@#$%^&*()/])[A-Za-z\d`~!@#$%^&*()/]{8,16}$
    */
-  password : string;
-
+  password: string;
 
   /**
    * 사용자의 성별
    */
-  gender : 'm'|'w';
+  gender: "m" | "w";
 }

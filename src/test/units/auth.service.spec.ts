@@ -9,7 +9,7 @@ const userDto: CreateUserDto = {
   gender: "m",
   name: "test",
   nickname: "testnickname",
-  password: "testest1234!",
+  password: "testest1234!"
 };
 describe("User service", () => {
   let service: AuthService;
@@ -47,7 +47,7 @@ describe("User service", () => {
         gender: "m",
         name: "testname",
         nickname: "testnickname",
-        password: "testest1234!",
+        password: "testest1234!"
       };
       const result = await service.create(newUserDto);
       expect(result).toEqual({
@@ -62,27 +62,27 @@ describe("User service", () => {
         gender: "m",
         name: "duplicated",
         nickname: "duplicated",
-        password: "duplicated",
+        password: "duplicated"
       };
       const result = await service.create(duplicatedEmailDto);
       expect(result).toEqual({
         status: false,
         message: "중복된 이메일이 있습니다."
       });
-    })
-    it("3.If Invalid dto , should return error",async()=>{
-        const invalidDto:CreateUserDto={
-            email:null,
-            gender:"m",
-            name:null,
-            nickname:null,
-            password:null
-        }
-        const result = await service.create(invalidDto);
-        expect(result).toEqual({
-            status:false,
-            message: "회원가입 실패"
-        })
-    })
+    });
+    it("3.If Invalid dto , should return error", async () => {
+      const invalidDto: CreateUserDto = {
+        email: null,
+        gender: "m",
+        name: null,
+        nickname: null,
+        password: null
+      };
+      const result = await service.create(invalidDto);
+      expect(result).toEqual({
+        status: false,
+        message: "회원가입 실패"
+      });
+    });
   });
 });

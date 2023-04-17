@@ -6,6 +6,7 @@ export const NESTIA_CONFIG: sdk.INestiaConfig = {
     json: true,
     swagger: {
         output: "bin/swagger.json",
+        
     },
 };
 export default NESTIA_CONFIG;

@@ -9,7 +9,7 @@ export class AuthController {
   constructor(private readonly _authService: AuthService) {}
   /**
    * @summary 회원 가입 기능
-   * 이메일이 중복되지 않는 새로운 유저를 만든다.
+   * @description 이메일이 중복되지 않는 새로운 유저를 만든다.
    *
    *
    * @tag users
@@ -25,20 +25,22 @@ export class AuthController {
 
   /**
    * @summary 이메일 , 닉네임 중복확인 기능
-   * type (email,nickanme) 과 data 를 받아서 중복확인을 합니다.
-   * 
+   * @description type (email,nickanme) 과 data 를 받아서 중복확인을 합니다.
+   *
    * @tag users
    * @param type
    * @param data
    * @returns
-   * 
+   *
    */
   @TypedRoute.Get("check")
   @HttpCode(200)
-  public async check(@TypedQuery()checkDto :CheckDto){
-    const {data,type} = checkDto;
-    if(type==='email') return await this._authService.checkDuplicateEmail(data);
-    else if (type==='nickname')return await this._authService.checkDuplicateNickname(data);
+  public async check(@TypedQuery() checkDto: CheckDto) {
+    const { data, type } = checkDto;
+    if (type === "email")
+      return await this._authService.checkDuplicateEmail(data);
+    else if (type === "nickname")
+      return await this._authService.checkDuplicateNickname(data);
     else return false;
   }
 }

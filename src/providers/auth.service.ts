@@ -14,32 +14,31 @@ export class AuthService {
     const alreadyCreatedEmail = await this._userRepository.findOne({
       where: { email }
     });
-    if (alreadyCreatedEmail && email!==null)
+    if (alreadyCreatedEmail && email !== null)
       return {
         status: false,
         message: "중복된 이메일이 있습니다."
-      }
-    const user = await this._userRepository.save(
-      User.create({ ...createUserDto })
-    ).catch(()=>null);
+      };
+    const user = await this._userRepository
+      .save(User.create({ ...createUserDto }))
+      .catch(() => null);
 
     if (user) {
       return {
         status: true,
         message: "회원가입 성공"
       };
-    }
-    else{
+    } else {
       return {
-        status : false,
+        status: false,
         message: "회원가입 실패"
-      }
+      };
     }
   }
-  async checkDuplicateEmail(email:string){
+  async checkDuplicateEmail(email: string) {
     return Boolean(!(await this._userRepository.getByEmail(email)));
   }
-  async checkDuplicateNickname(nickname:string){
+  async checkDuplicateNickname(nickname: string) {
     return Boolean(!(await this._userRepository.getByNickname(nickname)));
   }
 }

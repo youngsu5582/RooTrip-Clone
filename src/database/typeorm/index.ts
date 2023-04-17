@@ -13,11 +13,11 @@ export const TypeOrmMoudleOptions = {
       username: configService.get("database.typeorm.username"),
       password: configService.get("database.typeorm.password"),
       database: configService.get("database.typeorm.database"),
-      entities: [__dirname + "/../../models/tables/*.entity{.ts,.js}",User],
-      logging: configService.get('app.nodeEnv')==='development'?"all":null,
+      entities: [__dirname + "/../../models/tables/*.entity{.ts,.js}", User],
+      logging:
+        configService.get("app.nodeEnv") === "development" ? "all" : null,
       synchronize: true
     };
     return option;
   }
 };
-  

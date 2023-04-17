@@ -8,6 +8,5 @@ export default async function (app: INestApplication) {
     "utf-8"
   );
   const swaggerDocument = JSON.parse(swaggerConfig);
-
-  SwaggerModule.setup("api-docs", app, swaggerDocument);
+  SwaggerModule.setup("/docs", app, swaggerDocument);
 }

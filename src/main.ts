@@ -8,9 +8,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   await InitSwagger(app);
+  app.setGlobalPrefix("api");
   const service = app.get(ConfigService);
   const port = service.get("app.port");
-  app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,

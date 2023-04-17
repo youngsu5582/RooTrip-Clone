@@ -14,8 +14,7 @@ import { LoggerModule } from "./loaders/winston.module";
 import { APP_FILTER } from "@nestjs/core";
 import { AllExceptionsFilter } from "./middleware/error.middleware";
 import { AuthModule } from "./module/auth.module";
-
-//import { ErrorMiddleware } from './middleware/error.middleware';
+import { LoginModule } from "./module/login.module";
 
 @Module({
   imports: [
@@ -33,7 +32,8 @@ import { AuthModule } from "./module/auth.module";
     }),
     TestModule,
     LoggerModule,
-    AuthModule
+    AuthModule,
+    LoginModule
   ],
   controllers: [AppController],
   providers: [
@@ -48,6 +48,5 @@ import { AuthModule } from "./module/auth.module";
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes("*");
-    //consumer.apply(ErrorMiddleware).forRoutes('*');
   }
 }

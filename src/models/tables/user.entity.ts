@@ -13,7 +13,7 @@ export class User extends defaultColumn {
   @Column({ nullable: true, type: String })
   nickname: string | null;
 
-  @Column({ nullable: true, type: String, select: false })
+  @Column({ nullable: true, type: String })
   password: string | null;
 
   @Column({ nullable: true, type: String })
