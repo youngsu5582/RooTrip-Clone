@@ -15,6 +15,9 @@ import { APP_FILTER } from "@nestjs/core";
 import { AllExceptionsFilter } from "./middleware/error.middleware";
 import { AuthModule } from "./module/auth.module";
 import { LoginModule } from "./module/login.module";
+import { JwtModule } from "@nestjs/jwt";
+
+//import { JwtMoudleOptions } from "./utils";
 
 @Module({
   imports: [
@@ -33,11 +36,12 @@ import { LoginModule } from "./module/login.module";
     TestModule,
     LoggerModule,
     AuthModule,
-    LoginModule
+    LoginModule,
+    
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
+    //AppService,
     ConfigService,
     {
       provide: APP_FILTER,
