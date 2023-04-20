@@ -1,8 +1,10 @@
 import { TypedBody, TypedQuery, TypedRoute } from "@nestia/core";
-import { Controller, HttpCode } from "@nestjs/common";
+import { Controller, HttpCode, Res, UseGuards } from "@nestjs/common";
 import { CreateUserDto } from "src/models/dtos/create-user-dto";
 import { AuthService } from "../providers/auth.service";
 import { CheckDto } from "src/types";
+import { Response } from "express";
+import { JwtAuthGuard } from "src/providers/auth.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -43,4 +45,28 @@ export class AuthController {
       return await this._authService.checkDuplicateNickname(data);
     else return false;
   }
+
+
+    /**
+   * @summary 로그아웃 기능
+   * @description Header 에 있는 Token 을 활용하여 로그아웃을 합니다.
+   *
+   * @tag users
+   * @param res
+   * @returns true
+   *
+   */
+  @UseGuards(JwtAuthGuard)
+  @TypedRoute.Post("logout")
+  @HttpCode(201)
+  public async logout(@Res()res : Response){
+     const result = await this._authService.logout(res.locals.jwtPayload);
+     console.log(result);
+     if(result){
+      res.json("sibal");
+     }
+    else
+      return false;
+  }
+
 }

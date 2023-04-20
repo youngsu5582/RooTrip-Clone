@@ -49,11 +49,11 @@ export class LoginController {
       }
     );
     await this._userService.saveRefreshToken(id, refreshToken);
-    return {
+    return await Object.assign({
       status: result.status,
       expire: 15 * this.minute,
       accessToken,
       refreshToken
-    };
+    });
   }
 }

@@ -41,4 +41,7 @@ export class AuthService {
   async checkDuplicateNickname(nickname: string) {
     return Boolean(!(await this._userRepository.getByNickname(nickname)));
   }
+  async logout(jwtPayload: any) {
+    return await this._userRepository.deleteRefreshTokenById(jwtPayload.userId);
+  }
 }
