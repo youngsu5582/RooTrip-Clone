@@ -10,4 +10,7 @@ export class UsersRepository extends Repository<User> {
   public async getByNickname(nickname: string) {
     return await this.findOne({ where: { nickname } });
   }
+  public async deleteRefreshTokenById(id: string) {
+    return await this.update(id, { refreshToken: null });
+  }
 }

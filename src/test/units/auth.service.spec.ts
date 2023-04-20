@@ -11,7 +11,7 @@ const userDto: CreateUserDto = {
   nickname: "testnickname",
   password: "testest1234!"
 };
-describe("User service", () => {
+describe("Auth service", () => {
   let service: AuthService;
   let repository: UsersRepository;
   let module: TestingModule;

@@ -3,9 +3,6 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { TypeOrmMoudleOptions } from "./database/typeorm";
 import * as Joi from "joi";
-
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import { typeormConfig, appConfig, redisConfig } from "./config";
 import { typeormValidator, appValidator, redisValidator } from "./validator";
 import { TestModule } from "./module/test.module";
@@ -16,8 +13,6 @@ import { AllExceptionsFilter } from "./middleware/error.middleware";
 import { AuthModule } from "./module/auth.module";
 import { LoginModule } from "./module/login.module";
 import { JwtModule } from "@nestjs/jwt";
-
-//import { JwtMoudleOptions } from "./utils";
 
 @Module({
   imports: [
@@ -33,15 +28,14 @@ import { JwtModule } from "@nestjs/jwt";
       isGlobal: true,
       cache: true
     }),
+    JwtModule.register({ global: true }),
     TestModule,
     LoggerModule,
     AuthModule,
-    LoginModule,
-    
+    LoginModule
   ],
   controllers: [],
   providers: [
-    //AppService,
     ConfigService,
     {
       provide: APP_FILTER,
