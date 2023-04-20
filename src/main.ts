@@ -3,6 +3,16 @@ import { AppModule } from "./app.module";
 import InitSwagger from "./config/swagger/swagger";
 import { ConfigService } from "@nestjs/config";
 import { ValidationPipe } from "@nestjs/common";
+import { CustomJwtPayload } from "./types";
+
+declare module "express" {
+  interface Request {
+    data: {
+      jwtPayload: CustomJwtPayload;
+      token: string;
+    };
+  }
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

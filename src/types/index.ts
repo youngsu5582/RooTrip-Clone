@@ -8,3 +8,10 @@ export type ServiceResponseForm = {
   message?: string;
   data?: any;
 };
+
+export type CustomJwtPayload = {
+  [key: string]: any;
+  userId: string;
+  iat: number;
+  exp: number;
+};

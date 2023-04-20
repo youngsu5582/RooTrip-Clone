@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { UsersRepository } from "../models/repositories/user.repository";
 import { User } from "../models/tables/user.entity";
 import { CreateUserDto } from "../models/dtos/create-user-dto";
+import { CustomJwtPayload } from "src/types";
 @Injectable()
 export class AuthService {
   constructor(
@@ -41,7 +42,7 @@ export class AuthService {
   async checkDuplicateNickname(nickname: string) {
     return Boolean(!(await this._userRepository.getByNickname(nickname)));
   }
-  async logout(jwtPayload: any) {
+  async logout(jwtPayload: CustomJwtPayload) {
     return await this._userRepository.deleteRefreshTokenById(jwtPayload.userId);
   }
 }

@@ -7,7 +7,7 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
-import { Response } from "express";
+import { Request } from "express";
 import { extractAccessToken } from "src/utils/token";
 
 @Injectable()
@@ -24,8 +24,7 @@ export class JwtAuthGuard implements CanActivate {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const req = context.switchToHttp().getRequest();
-    const res = context.switchToHttp().getResponse() as Response;
+    const req = context.switchToHttp().getRequest() as Request;
 
     const token = extractAccessToken(req);
 
@@ -33,9 +32,8 @@ export class JwtAuthGuard implements CanActivate {
       const jwtPayload = this.jwtService.verify(token, {
         secret: this.jwtAccessSecret
       });
-      console.log(jwtPayload);
-      res.locals.jwtPayload = jwtPayload;
-      res.locals.token = token;
+      req.data.jwtPayload = jwtPayload;
+      req.data.token = token;
 
       return true;
     } catch (err) {
