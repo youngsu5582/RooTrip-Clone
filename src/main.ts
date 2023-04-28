@@ -5,7 +5,7 @@ import { ConfigService } from "@nestjs/config";
 import { ValidationPipe } from "@nestjs/common";
 import { CustomJwtPayload } from "./types";
 
-declare module "express-serve-static-core" {
+declare module "express" {
   interface Request {
     data: {
       jwtPayload: CustomJwtPayload;

@@ -63,7 +63,6 @@ export class LoginService {
       )
       .then((res) => res.data.access_token)
       .catch(() => null);
-    console.log(this._kakaoApiKey);
     const userInfo = await axios
       .post(
         "https://kapi.kakao.com/v2/user/me",

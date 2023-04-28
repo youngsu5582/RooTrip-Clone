@@ -1,6 +1,5 @@
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { LoginUserDto } from "src/models/dtos/login-user-dto";
 import { SocialDto } from "src/models/dtos/social-dto";
 import { User } from "src/models/tables/user.entity";
@@ -32,10 +31,7 @@ export class LoginController {
     const result = await this._loginService.localLogin(loginUserDto);
     if (result.status === false) return result;
     const user = result.data as User;
-    const { accessToken, refreshToken } = this._jwtUtil.generateToken({
-      userId: user.id
-    });
-    console.log(accessToken, refreshToken);
+    const { accessToken, refreshToken } = this._jwtUtil.generateToken(user);
     await this._userService.saveRefreshToken(user.id, refreshToken);
 
     return Object.assign({
@@ -47,7 +43,7 @@ export class LoginController {
   }
   @TypedRoute.Post("social")
   async socialLogin(@TypedBody() socialDto: SocialDto) {
-    console.log(socialDto);
+    socialDto;
     return true;
   }
 }

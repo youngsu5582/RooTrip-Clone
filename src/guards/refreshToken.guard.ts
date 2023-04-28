@@ -33,7 +33,6 @@ export class RefreshTokenGuard implements CanActivate {
 
       return true;
     } catch (err) {
-      console.log(err);
       return false;
     }
   }

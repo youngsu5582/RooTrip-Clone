@@ -2,6 +2,7 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
+import { User } from "src/models/tables/user.entity";
 import { CustomJwtPayload } from "src/types";
 
 @Injectable()
@@ -16,17 +17,23 @@ export class JwtUtil {
     this._jwtRefreshSecret = this._configService.get("app.jwtRefreshSecret");
   }
 
-  generateAccessToken(payload: any): string {
-    return this._jwtService.sign(payload, {
-      secret: this._jwtAccessSecret,
-      expiresIn: "15m"
-    });
+  generateAccessToken(user: User): string {
+    return this._jwtService.sign(
+      { userId: user.id },
+      {
+        secret: this._jwtAccessSecret,
+        expiresIn: "15m"
+      }
+    );
   }
-  generateRefreshToken(payload: any): string {
-    return this._jwtService.sign(payload, {
-      secret: this._jwtRefreshSecret,
-      expiresIn: "1d"
-    });
+  generateRefreshToken(user: User): string {
+    return this._jwtService.sign(
+      { userId: user.id },
+      {
+        secret: this._jwtRefreshSecret,
+        expiresIn: "1d"
+      }
+    );
   }
   decodeAccessToken(accessToken: string) {
     return this._jwtService.verify(

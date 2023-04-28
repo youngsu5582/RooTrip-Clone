@@ -1,4 +1,5 @@
 {
+  "ts-node": { "files": true },
   "compilerOptions": {
     "module": "CommonJS",
     "declaration": true,
@@ -24,7 +25,7 @@
         "transform": "@nestia/core/lib/transform",
         /**
          * Validate request body.
-         * 
+         *
          *   - "assert": Use typia.assert() function
          *   - "is": Use typia.is() function
          *   - "validate": Use typia.validate() function
@@ -32,7 +33,7 @@
         "validate": "assert",
         /**
          * Validate JSON typed response body.
-         * 
+         *
          *   - "assert": Use typia.assertStringify() function
          *   - "is": Use typia.isStringify() function
          *   - "validate": Use typia.validateStringify() function
@@ -46,12 +47,6 @@
       }
     ]
   },
-  "include": [
-    "./src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "./src/api"
-  ]
+  "include": ["./src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "./src/api"]
 }

@@ -50,7 +50,6 @@ export class AuthService {
     return await this._userRepository.deleteRefreshTokenById(jwtPayload.userId);
   }
   async socialRegister(createUserDto: SocialLoginType) {
-    console.log(createUserDto);
     const user = await this._userRepository.save({ ...createUserDto });
 
     let result: ServiceResponseForm;
