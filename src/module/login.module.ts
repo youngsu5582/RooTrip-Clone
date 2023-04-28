@@ -4,11 +4,13 @@ import { UsersRepository } from "../models/repositories/user.repository";
 import { LoginController } from "src/controllers/login.controller";
 import { LoginService } from "src/providers/login.service";
 import { UserService } from "src/providers/user.service";
+import { AuthService } from "src/providers/auth.service";
+import { JwtUtil } from "src/providers/jwt.service";
 
 @Module({
   imports: [CustomTypeOrmModule.forCustomRepository([UsersRepository])],
   controllers: [LoginController],
-  providers: [LoginService, UserService],
+  providers: [LoginService, UserService, AuthService, JwtUtil],
   exports: [LoginService]
 })
 export class LoginModule {}

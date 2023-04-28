@@ -4,7 +4,8 @@ import InitSwagger from "./config/swagger/swagger";
 import { ConfigService } from "@nestjs/config";
 import { ValidationPipe } from "@nestjs/common";
 import { CustomJwtPayload } from "./types";
-declare module "express" {
+
+declare module "express-serve-static-core" {
   interface Request {
     data: {
       jwtPayload: CustomJwtPayload;

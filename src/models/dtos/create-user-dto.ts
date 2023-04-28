@@ -1,17 +1,11 @@
-export interface CreateUserDto {
+import { UserDto } from "./common/user-dto";
+
+export interface CreateUserDto extends UserDto {
   /**
    * 사용자의 Email 주소
    * @format email
    */
   email: string;
-
-  /**
-   * 사용자 이름
-   * @minLength 2
-   * @maxLength 10
-   * @pattern ^[가-힣]{2,}$
-   */
-  name: string;
 
   /**
    * 사용자의 닉네임

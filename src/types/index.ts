@@ -1,3 +1,5 @@
+import { KakaoUserDto } from "src/models/dtos/kakao-user-dto";
+
 export type CheckType = "email" | "nickname";
 export type CheckDto = {
   type: CheckType;
@@ -16,3 +18,5 @@ export type CustomJwtPayload = {
   exp: number;
 };
 export type socialType = "kakao" | "naver" | "google";
+
+export type SocialLoginType = KakaoUserDto;

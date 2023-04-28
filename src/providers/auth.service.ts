@@ -3,7 +3,11 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { UsersRepository } from "../models/repositories/user.repository";
 import { User } from "../models/tables/user.entity";
 import { CreateUserDto } from "../models/dtos/create-user-dto";
-import { CustomJwtPayload } from "src/types";
+import {
+  CustomJwtPayload,
+  ServiceResponseForm,
+  SocialLoginType
+} from "src/types";
 @Injectable()
 export class AuthService {
   constructor(
@@ -44,5 +48,25 @@ export class AuthService {
   }
   async logout(jwtPayload: CustomJwtPayload) {
     return await this._userRepository.deleteRefreshTokenById(jwtPayload.userId);
+  }
+  async socialRegister(createUserDto: SocialLoginType) {
+    console.log(createUserDto);
+    const user = await this._userRepository.save({ ...createUserDto });
+
+    let result: ServiceResponseForm;
+    if (user) {
+      result = {
+        status: true,
+        data: user
+      };
+    } else
+      result = {
+        status: false,
+        message: "회원가입에실패했습니다."
+      };
+    return result;
+  }
+  async validateUserToken(id: string, refreshToken: string) {
+    return await this._userRepository.findOne({ where: { id, refreshToken } });
   }
 }

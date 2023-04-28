@@ -5,22 +5,18 @@ import {
   Inject
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
 import { extractAccessToken } from "src/utils/token";
 
 @Injectable()
-export class JwtAuthGuard implements CanActivate {
+export class AccessTokenGuard implements CanActivate {
   private readonly jwtAccessSecret;
-  private readonly jwtRefreshSecret;
   constructor(
-    private reflector: Reflector,
     @Inject(JwtService) private jwtService: JwtService,
     private readonly _configService: ConfigService
   ) {
     this.jwtAccessSecret = this._configService.get("app.jwtAccessSecret");
-    this.jwtRefreshSecret = this._configService.get("app.jwtRefreshSecret");
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
