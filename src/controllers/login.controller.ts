@@ -57,4 +57,6 @@ export class LoginController {
       refreshToken
     });
   }
+  @TypedRoute.Post("social")
+  async socialLogin() {}
 }

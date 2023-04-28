@@ -15,3 +15,4 @@ export type CustomJwtPayload = {
   iat: number;
   exp: number;
 };
+export type socialType = "kakao" | "naver" | "google";
