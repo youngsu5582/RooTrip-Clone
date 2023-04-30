@@ -8,6 +8,8 @@ import {
   ServiceResponseForm,
   SocialLoginType
 } from "src/types";
+import typia from "typia";
+import { SOCIAL_REGISTER_FAILED } from "src/errors/auth-error";
 @Injectable()
 export class AuthService {
   constructor(
@@ -51,19 +53,12 @@ export class AuthService {
   }
   async socialRegister(createUserDto: SocialLoginType) {
     const user = await this._userRepository.save({ ...createUserDto });
-
-    let result: ServiceResponseForm;
     if (user) {
-      result = {
+      return {
         status: true,
         data: user
-      };
-    } else
-      result = {
-        status: false,
-        message: "회원가입에실패했습니다."
-      };
-    return result;
+      } as ServiceResponseForm;
+    } else return typia.random<SOCIAL_REGISTER_FAILED>();
   }
   async validateUserToken(id: string, refreshToken: string) {
     return await this._userRepository.findOne({ where: { id, refreshToken } });

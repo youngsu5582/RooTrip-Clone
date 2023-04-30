@@ -24,7 +24,7 @@ export type SocialLoginType = KakaoUserDto;
 export interface ResponseForm<T> {
   status: true;
   //requestToResponse : `${number}ms`;
-  data: Partial<T>;
+  data: T;
 }
 
 export type Try<T> = ResponseForm<T>;

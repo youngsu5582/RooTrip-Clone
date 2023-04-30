@@ -1,5 +1,6 @@
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
+import { isErrorCheck } from "src/errors";
 import { createResponseForm } from "src/interceptors/transform.interceptor";
 import { LoginUserDto } from "src/models/dtos/login-user-dto";
 import { SocialDto } from "src/models/dtos/social-dto";
@@ -40,9 +41,33 @@ export class LoginController {
     };
     return createResponseForm(data);
   }
+
+  /**
+   *
+   * @summary 소셜 로그인 기능
+   * @description 사용자가 로그인하여 받은 code 와 무슨 소셜인지 구분하는 provider를 이용해 로그인 한다.
+   * @tag users
+   * @param socialDto
+   * @returns
+   */
   @TypedRoute.Post("social")
   async socialLogin(@TypedBody() socialDto: SocialDto) {
-    socialDto;
-    return true;
+    const { code, provider } = socialDto;
+    let userInfo;
+    if (provider === "kakao") userInfo = this._loginService.kakaoLogin(code);
+    let user = await this._userService.getUserById(userInfo.id);
+    if (!user) {
+      const result = await this._authService.socialRegister(userInfo);
+      if (isErrorCheck(result)) return result;
+      user = result.data;
+    }
+    const { accessToken, refreshToken } = this._jwtUtil.generateToken(user);
+    await this._userService.saveRefreshToken(user.id, refreshToken);
+    const data = {
+      expire: 15 * this.minute,
+      accessToken,
+      refreshToken
+    };
+    return createResponseForm(data);
   }
 }
