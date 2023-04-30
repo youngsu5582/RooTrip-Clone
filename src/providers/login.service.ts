@@ -32,11 +32,8 @@ export class LoginService {
           status: true,
           data: user
         } as ServiceResponseForm;
-      else
-        return typia.random<NOT_CORRECT_PASSWORD>();
-    } 
-    else 
-      return typia.random<NOT_EXISTED_EMAIL>();
+      else return typia.random<NOT_CORRECT_PASSWORD>();
+    } else return typia.random<NOT_EXISTED_EMAIL>();
   }
   async kakaoLogin(code: string) {
     const accessToken = await axios

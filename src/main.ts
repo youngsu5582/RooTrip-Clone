@@ -25,10 +25,10 @@ async function bootstrap() {
     new ValidationPipe({
       stopAtFirstError: true,
       transform: true,
-      whitelist: true
+      whitelist: true,
     })
   );
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  //app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.enableCors();
   await app
     .listen(port)

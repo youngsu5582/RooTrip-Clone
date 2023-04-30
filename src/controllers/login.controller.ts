@@ -12,10 +12,10 @@ import { LoginService } from "src/providers/login.service";
 import { UserService } from "src/providers/user.service";
 import { TryCatch } from "src/types";
 type LoginResponse = {
-  expire : number;
-  accessToken : string;
-  refreshToken : string;
-}
+  expire: number;
+  accessToken: string;
+  refreshToken: string;
+};
 @Controller("auth")
 export class LoginController {
   private readonly minute = 60;
@@ -35,10 +35,13 @@ export class LoginController {
    * @returns
    */
   @TypedRoute.Post("login")
-  async localLogin(@TypedBody() loginUserDto: LoginUserDto) :Promise<TryCatch<LoginResponse,NOT_CORRECT_PASSWORD|NOT_EXISTED_EMAIL>> {
+  async localLogin(
+    @TypedBody() loginUserDto: LoginUserDto
+  ): Promise<
+    TryCatch<LoginResponse, NOT_CORRECT_PASSWORD | NOT_EXISTED_EMAIL>
+  > {
     const result = await this._loginService.localLogin(loginUserDto);
-    if(isErrorCheck(result))
-      return result;
+    if (isErrorCheck(result)) return result;
     const user = result.data as User;
     const { accessToken, refreshToken } = this._jwtUtil.generateToken(user);
     await this._userService.saveRefreshToken(user.id, refreshToken);

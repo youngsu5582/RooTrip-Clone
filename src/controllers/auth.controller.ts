@@ -2,14 +2,17 @@ import { TypedBody, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller, HttpCode, Req, UseGuards } from "@nestjs/common";
 import { CreateUserDto } from "src/models/dtos/create-user-dto";
 import { AuthService } from "../providers/auth.service";
-import { CheckDto, MessageResponse, ServiceResponseForm, TryCatch } from "src/types";
+import { CheckDto, MessageResponse, TryCatch } from "src/types";
 import { Request } from "express";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { JwtUtil } from "src/providers/jwt.service";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { isErrorCheck } from "src/errors";
 import { createResponseForm } from "src/interceptors/transform.interceptor";
-import { ALREADY_EXISTED_EMAIL, LOCAL_REGISTER_FAILED } from "src/errors/auth-error";
+import {
+  ALREADY_EXISTED_EMAIL,
+  LOCAL_REGISTER_FAILED
+} from "src/errors/auth-error";
 @Controller("auth")
 export class AuthController {
   private readonly minute = 60;
@@ -28,17 +31,18 @@ export class AuthController {
    */
   @TypedRoute.Post("register")
   @HttpCode(201)
-  public async register(@TypedBody() createUserDto: CreateUserDto)
-  : Promise<TryCatch<MessageResponse, ALREADY_EXISTED_EMAIL | LOCAL_REGISTER_FAILED>>
-   {
+  public async register(
+    @TypedBody() createUserDto: CreateUserDto
+  ): Promise<
+    TryCatch<any, ALREADY_EXISTED_EMAIL | LOCAL_REGISTER_FAILED>
+  > {
     const result = await this._authService.create(createUserDto);
-    if(isErrorCheck(result)){
+    if (isErrorCheck(result)) {
       return result;
     }
-    const data = {
-      message:"회원가입에 성공했습니다."
-    }
-    return createResponseForm(data);
+    const message = "회원가입에 성공했습니다.";
+
+    return createResponseForm(null, message);
   }
 
   /**
@@ -55,10 +59,12 @@ export class AuthController {
   @HttpCode(200)
   public async check(@TypedQuery() checkDto: CheckDto) {
     const { data, type } = checkDto;
-    
+
     if (type === "email")
       //return await this._authService.checkDuplicateEmail(data);
-      return createResponseForm(await this._authService.checkDuplicateEmail(data));
+      return createResponseForm(
+        await this._authService.checkDuplicateEmail(data)
+      );
     else if (type === "nickname")
       return await this._authService.checkDuplicateNickname(data);
     else return false;

@@ -33,10 +33,8 @@ export class AuthService {
       .catch(() => null);
 
     if (user) {
-      return true
-    } 
-    else
-      return typia.random<LOCAL_REGISTER_FAILED>();  
+      return true;
+    } else return typia.random<LOCAL_REGISTER_FAILED>();
   }
   async checkDuplicateEmail(email: string) {
     return Boolean(!(await this._userRepository.getByEmail(email)));

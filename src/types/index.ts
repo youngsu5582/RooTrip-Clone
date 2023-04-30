@@ -7,8 +7,8 @@ export type CheckDto = {
   data: string;
 };
 export type MessageResponse = {
-  message : string;
-}
+  message: string;
+};
 export type ServiceResponseForm = {
   status: boolean;
   data?: any;
@@ -26,6 +26,7 @@ export type SocialLoginType = KakaoUserDto;
 
 export interface ResponseForm<T> {
   status: true;
+  message?: string;
   //requestToResponse : `${number}ms`;
   data: T;
 }

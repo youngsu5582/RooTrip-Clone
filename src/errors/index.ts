@@ -3,7 +3,6 @@ export interface ERROR {
   message: string;
 }
 export const isErrorCheck = (obj: any): obj is ERROR => {
-  if (obj.status === false) 
-    return true;
+  if (obj.status === false) return true;
   else return false;
 };
