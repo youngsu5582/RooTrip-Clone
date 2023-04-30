@@ -1,9 +1,10 @@
 import { TypedBody, TypedQuery, TypedRoute } from "@nestia/core";
-import { Controller, HttpCode, Req, UseGuards } from "@nestjs/common";
+import { Controller, HttpCode, Req, Res, UseGuards } from "@nestjs/common";
 import { CreateUserDto } from "src/models/dtos/create-user-dto";
 import { AuthService } from "../providers/auth.service";
 import { CheckDto } from "src/types";
-import { Request } from "express";
+import { Request, Response } from "express";
+import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { JwtUtil } from "src/providers/jwt.service";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
@@ -49,6 +50,29 @@ export class AuthController {
     else if (type === "nickname")
       return await this._authService.checkDuplicateNickname(data);
     else return false;
+  }
+
+  @TypedRoute.Post("token/reissue")
+  @HttpCode(201)
+  @UseGuards(RefreshTokenGuard)
+  public async refresh(@Req() req: Request, @Res() res: Response) {
+    const userId = req.data.jwtPayload.userId;
+    const refreshToken = req.body.token;
+    const user = await this._authService.validateUserToken(
+      userId,
+      refreshToken
+    );
+    if (!user) {
+      return res.status(401).send({
+        status: false,
+        message: "유저 정보와 RefreshToken이 일치하지 않습니다."
+      });
+    }
+    const accessToken = this._jwtUtil.generateAccessToken(user);
+    return {
+      expire: 15 * this.minute,
+      accessToken
+    };
   }
 
   /**

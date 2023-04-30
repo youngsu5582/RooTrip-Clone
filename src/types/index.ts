@@ -20,3 +20,11 @@ export type CustomJwtPayload = {
 export type socialType = "kakao" | "naver" | "google";
 
 export type SocialLoginType = KakaoUserDto;
+
+export interface ResponseForm<T> {
+  status: true;
+  //requestToResponse : `${number}ms`;
+  data: Partial<T>;
+}
+
+export type Try<T> = ResponseForm<T>;

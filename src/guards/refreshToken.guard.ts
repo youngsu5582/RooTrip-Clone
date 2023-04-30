@@ -23,14 +23,14 @@ export class RefreshTokenGuard implements CanActivate {
     const req = context.switchToHttp().getRequest() as Request;
 
     const token = extractRefreshToken(req);
-
     try {
       const jwtPayload = this.jwtService.verify(token, {
         secret: this.jwtRefreshSecret
       });
-      req.data.jwtPayload = jwtPayload;
-      req.data.token = token;
-
+      req.data = {
+        jwtPayload,
+        token
+      };
       return true;
     } catch (err) {
       return false;

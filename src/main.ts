@@ -1,8 +1,8 @@
-import { NestFactory } from "@nestjs/core";
+import { NestFactory, Reflector } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import InitSwagger from "./config/swagger/swagger";
 import { ConfigService } from "@nestjs/config";
-import { ValidationPipe } from "@nestjs/common";
+import { ClassSerializerInterceptor, ValidationPipe } from "@nestjs/common";
 import { CustomJwtPayload } from "./types";
 
 declare module "express" {
@@ -28,6 +28,7 @@ async function bootstrap() {
       whitelist: true
     })
   );
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.enableCors();
   await app
     .listen(port)
