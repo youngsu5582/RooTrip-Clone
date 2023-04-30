@@ -1,6 +1,7 @@
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 import { isErrorCheck } from "src/errors";
+import { NOT_CORRECT_PASSWORD, NOT_EXISTED_EMAIL } from "src/errors/auth-error";
 import { createResponseForm } from "src/interceptors/transform.interceptor";
 import { LoginUserDto } from "src/models/dtos/login-user-dto";
 import { SocialDto } from "src/models/dtos/social-dto";
@@ -9,6 +10,12 @@ import { AuthService } from "src/providers/auth.service";
 import { JwtUtil } from "src/providers/jwt.service";
 import { LoginService } from "src/providers/login.service";
 import { UserService } from "src/providers/user.service";
+import { TryCatch } from "src/types";
+type LoginResponse = {
+  expire : number;
+  accessToken : string;
+  refreshToken : string;
+}
 @Controller("auth")
 export class LoginController {
   private readonly minute = 60;
@@ -28,14 +35,15 @@ export class LoginController {
    * @returns
    */
   @TypedRoute.Post("login")
-  async localLogin(@TypedBody() loginUserDto: LoginUserDto) {
+  async localLogin(@TypedBody() loginUserDto: LoginUserDto) :Promise<TryCatch<LoginResponse,NOT_CORRECT_PASSWORD|NOT_EXISTED_EMAIL>> {
     const result = await this._loginService.localLogin(loginUserDto);
+    if(isErrorCheck(result))
+      return result;
     const user = result.data as User;
     const { accessToken, refreshToken } = this._jwtUtil.generateToken(user);
     await this._userService.saveRefreshToken(user.id, refreshToken);
     const data = {
       expire: 15 * this.minute,
-      status: result.status,
       accessToken,
       refreshToken
     };

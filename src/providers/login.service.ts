@@ -5,6 +5,8 @@ import { LoginUserDto } from "../models/dtos/login-user-dto";
 import { ServiceResponseForm } from "src/types";
 import axios from "axios";
 import { ConfigService } from "@nestjs/config";
+import typia from "typia";
+import { NOT_CORRECT_PASSWORD, NOT_EXISTED_EMAIL } from "src/errors/auth-error";
 @Injectable()
 export class LoginService {
   private readonly _kakaoApiKey;
@@ -24,25 +26,17 @@ export class LoginService {
   async localLogin(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
     const user = await this._userRepository.getByEmail(email);
-    let serviceResponse: ServiceResponseForm;
     if (user) {
       if (await user.comparePassword(password))
-        serviceResponse = {
+        return {
           status: true,
           data: user
-        };
+        } as ServiceResponseForm;
       else
-        serviceResponse = {
-          status: false,
-          message: "비밀번호가 일치하지 않습니다."
-        };
-    } else {
-      serviceResponse = {
-        status: false,
-        message: "해당 이메일이 없습니다."
-      };
-    }
-    return serviceResponse;
+        return typia.random<NOT_CORRECT_PASSWORD>();
+    } 
+    else 
+      return typia.random<NOT_EXISTED_EMAIL>();
   }
   async kakaoLogin(code: string) {
     const accessToken = await axios

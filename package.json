@@ -7,10 +7,12 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
+    "build:pre": "rimraf bin && rimraf src/api && rimraf dist",
     "build:swagger": "nestia swagger",
     "build:sdk": "nestia sdk",
     "format": "prettier --write \"src/**/*.ts\" \"src/test/**/*.ts\"",
-    "dev": "nestia swagger && nest start --watch",
+    "dev": "npm run build:swagger && nest start --watch",
+    "publish": "cd src/api && npm publish",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",

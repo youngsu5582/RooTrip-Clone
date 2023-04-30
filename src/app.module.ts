@@ -10,7 +10,6 @@ import {
   redisValidator,
   keyValidator
 } from "./validator";
-import { TestModule } from "./module/test.module";
 import { LoggerMiddleware } from "./middleware/logging.middleware";
 import { LoggerModule } from "./loaders/winston.module";
 import { APP_FILTER } from "@nestjs/core";
@@ -36,7 +35,6 @@ import { JwtModule } from "@nestjs/jwt";
       cache: true
     }),
     JwtModule.register({ global: true }),
-    TestModule,
     LoggerModule,
     AuthModule,
     LoginModule

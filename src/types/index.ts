@@ -1,3 +1,4 @@
+import { ERROR } from "src/errors";
 import { KakaoUserDto } from "src/models/dtos/kakao-user-dto";
 
 export type CheckType = "email" | "nickname";
@@ -5,9 +6,11 @@ export type CheckDto = {
   type: CheckType;
   data: string;
 };
+export type MessageResponse = {
+  message : string;
+}
 export type ServiceResponseForm = {
   status: boolean;
-  message?: string;
   data?: any;
 };
 
@@ -28,3 +31,4 @@ export interface ResponseForm<T> {
 }
 
 export type Try<T> = ResponseForm<T>;
+export type TryCatch<T, E extends ERROR> = ResponseForm<T> | E;

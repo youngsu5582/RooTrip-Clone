@@ -10,6 +10,8 @@ import {
 } from "src/types";
 import typia from "typia";
 import {
+  ALREADY_EXISTED_EMAIL,
+  LOCAL_REGISTER_FAILED,
   SOCIAL_REGISTER_FAILED,
   TOKEN_NOT_MATCH_USER
 } from "src/errors/auth-error";
@@ -25,25 +27,16 @@ export class AuthService {
       where: { email }
     });
     if (alreadyCreatedEmail && email !== null)
-      return {
-        status: false,
-        message: "중복된 이메일이 있습니다."
-      };
+      return typia.random<ALREADY_EXISTED_EMAIL>();
     const user = await this._userRepository
       .save(User.create({ ...createUserDto }))
       .catch(() => null);
 
     if (user) {
-      return {
-        status: true,
-        message: "회원가입 성공"
-      };
-    } else {
-      return {
-        status: false,
-        message: "회원가입 실패"
-      };
-    }
+      return true
+    } 
+    else
+      return typia.random<LOCAL_REGISTER_FAILED>();  
   }
   async checkDuplicateEmail(email: string) {
     return Boolean(!(await this._userRepository.getByEmail(email)));

@@ -1,8 +1,9 @@
 export interface ERROR {
-  status: boolean;
-  data: string;
+  status: false;
+  message: string;
 }
 export const isErrorCheck = (obj: any): obj is ERROR => {
-  if (obj.status === false) return true;
+  if (obj.status === false) 
+    return true;
   else return false;
 };
