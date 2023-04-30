@@ -2,7 +2,7 @@ import { TypedBody, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller, HttpCode, Req, UseGuards } from "@nestjs/common";
 import { CreateUserDto } from "src/models/dtos/create-user-dto";
 import { AuthService } from "../providers/auth.service";
-import { CheckDto, MessageResponse, TryCatch } from "src/types";
+import { CheckDto, TryCatch } from "src/types";
 import { Request } from "express";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { JwtUtil } from "src/providers/jwt.service";
@@ -33,9 +33,7 @@ export class AuthController {
   @HttpCode(201)
   public async register(
     @TypedBody() createUserDto: CreateUserDto
-  ): Promise<
-    TryCatch<any, ALREADY_EXISTED_EMAIL | LOCAL_REGISTER_FAILED>
-  > {
+  ): Promise<TryCatch<any, ALREADY_EXISTED_EMAIL | LOCAL_REGISTER_FAILED>> {
     const result = await this._authService.create(createUserDto);
     if (isErrorCheck(result)) {
       return result;

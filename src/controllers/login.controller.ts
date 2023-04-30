@@ -65,7 +65,11 @@ export class LoginController {
   async socialLogin(@TypedBody() socialDto: SocialDto) {
     const { code, provider } = socialDto;
     let userInfo;
-    if (provider === "kakao") userInfo = this._loginService.kakaoLogin(code);
+    if (provider === "kakao")
+      userInfo = await this._loginService.kakaoLogin(code);
+    else if (provider === "naver")
+      userInfo = await this._loginService.naverLogin(code);
+
     let user = await this._userService.getUserById(userInfo.id);
     if (!user) {
       const result = await this._authService.socialRegister(userInfo);

@@ -7,6 +7,7 @@ import axios from "axios";
 import { ConfigService } from "@nestjs/config";
 import typia from "typia";
 import { NOT_CORRECT_PASSWORD, NOT_EXISTED_EMAIL } from "src/errors/auth-error";
+import { encrypt } from "src/utils/crypto";
 @Injectable()
 export class LoginService {
   private readonly _kakaoApiKey;
@@ -72,5 +73,27 @@ export class LoginService {
         id: userInfo.id,
         name: userInfo.properties.nickname
       };
+  }
+  public async naverLogin(code: string) {
+    const naverTokenUrl = `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${this._naverClientKey}&client_secret=${this._naverSecretKey}&code=${code}&state=state`;
+    const accessToken = await axios
+      .post(naverTokenUrl, {}, {})
+      .then((res) => res.data.access_token)
+      .catch(() => null);
+    const userInfo = await axios
+      .get("https://openapi.naver.com/v1/nid/me", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      .then((res) => res.data.response)
+      .catch(() => null);
+    const id = encrypt(userInfo.id);
+    return {
+      id,
+      name: userInfo.name,
+      gender: userInfo.gender,
+      email: "n_" + userInfo.email
+    };
   }
 }
