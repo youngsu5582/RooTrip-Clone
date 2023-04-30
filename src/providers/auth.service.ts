@@ -9,7 +9,10 @@ import {
   SocialLoginType
 } from "src/types";
 import typia from "typia";
-import { SOCIAL_REGISTER_FAILED } from "src/errors/auth-error";
+import {
+  SOCIAL_REGISTER_FAILED,
+  TOKEN_NOT_MATCH_USER
+} from "src/errors/auth-error";
 @Injectable()
 export class AuthService {
   constructor(
@@ -61,6 +64,14 @@ export class AuthService {
     } else return typia.random<SOCIAL_REGISTER_FAILED>();
   }
   async validateUserToken(id: string, refreshToken: string) {
-    return await this._userRepository.findOne({ where: { id, refreshToken } });
+    const user = await this._userRepository.findOne({
+      where: { id, refreshToken }
+    });
+    if (user)
+      return {
+        status: true,
+        data: user
+      } as ServiceResponseForm;
+    else return typia.random<TOKEN_NOT_MATCH_USER>();
   }
 }
