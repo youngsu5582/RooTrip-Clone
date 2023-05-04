@@ -90,6 +90,7 @@ export class AuthController {
   /**
    * @summary 로그아웃 기능
    * @description Header 에 있는 Token 을 활용하여 로그아웃을 합니다.
+   * 
    * @tag users
    * @param res
    * @returns
