@@ -11,12 +11,13 @@ import {
   keyValidator
 } from "./validator";
 import { LoggerMiddleware } from "./middleware/logging.middleware";
-import { LoggerModule } from "./loaders/winston.module";
 import { APP_FILTER } from "@nestjs/core";
 import { AllExceptionsFilter } from "./middleware/error.middleware";
 import { AuthModule } from "./module/auth.module";
 import { LoginModule } from "./module/login.module";
 import { JwtModule } from "@nestjs/jwt";
+import { LoadersModule } from "./loaders/loaders.module";
+import { EmailModule } from "./module/email.module";
 
 @Module({
   imports: [
@@ -35,9 +36,10 @@ import { JwtModule } from "@nestjs/jwt";
       cache: true
     }),
     JwtModule.register({ global: true }),
-    LoggerModule,
+    LoadersModule,
     AuthModule,
-    LoginModule
+    LoginModule,
+    EmailModule
   ],
   controllers: [],
   providers: [

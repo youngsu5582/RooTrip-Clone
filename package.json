@@ -22,12 +22,13 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:inband": "jest --runInBand",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/sregister -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prepare": "ts-patch install"
   },
   "dependencies": {
     "@nestia/core": "^1.0.19",
+    "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/cache-manager": "^1.0.0",
     "@nestjs/common": "^9.4.0",
     "@nestjs/config": "^2.3.1",

@@ -24,7 +24,6 @@ export class AuthController {
    * @summary 회원 가입 기능
    * @description 이메일이 중복되지 않는 새로운 유저를 만든다.
    *
-   *
    * @tag users
    * @param createUserDto 유저 생성하기 위한 Dto
    * @returns

@@ -21,6 +21,7 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
   const service = app.get(ConfigService);
   const port = service.get("app.port");
+
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,

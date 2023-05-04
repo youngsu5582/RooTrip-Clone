@@ -24,3 +24,7 @@ export interface NOT_EXISTED_EMAIL extends ERROR {
   status: false;
   message: "해당 이메일이 없습니다.";
 }
+export interface EMAIL_SEND_FAILED extends ERROR {
+  status: false;
+  message: "이메일 전송에 실패했습니다.";
+}

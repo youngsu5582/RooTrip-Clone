@@ -21,4 +21,12 @@ export class RedisCacheService {
     const key = `blacklist : ${accessToken}`;
     return Boolean(await this.client.get(key));
   }
+  async addVerify(email: string, verifyNumber: string) {
+    const key = `verify : ${email}`;
+    return await this.client.setex(key, 180, verifyNumber);
+  }
+  async checkVerify(email: string) {
+    const key = `verify : ${email}`;
+    return await this.client.get(key);
+  }
 }

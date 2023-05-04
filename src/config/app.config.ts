@@ -5,5 +5,7 @@ export default registerAs("app", () => ({
   jwtAccessSecret:
     process.env.JWT_SECRET_ACCESS_KEY || "Random_Secret_Access_x*nd23",
   jwtRefreshSecret:
-    process.env.JWT_SECRET_REFRESH_KEY || "Random_Secret_Refresh_!@39*SD"
+    process.env.JWT_SECRET_REFRESH_KEY || "Random_Secret_Refresh_!@39*SD",
+  emailUser: process.env.EMAIL_USER,
+  emailPassword: process.env.EMAIL_PASSWORD
 }));
