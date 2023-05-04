@@ -15,11 +15,13 @@ import {
   SOCIAL_REGISTER_FAILED,
   TOKEN_NOT_MATCH_USER
 } from "src/errors/auth-error";
+import { RedisCacheService } from "src/database/redis/redis.service";
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UsersRepository)
-    private readonly _userRepository: UsersRepository
+    private readonly _userRepository: UsersRepository,
+    private readonly _cacheService: RedisCacheService
   ) {}
   async create(createUserDto: CreateUserDto) {
     const { email } = createUserDto;
@@ -42,7 +44,9 @@ export class AuthService {
   async checkDuplicateNickname(nickname: string) {
     return Boolean(!(await this._userRepository.getByNickname(nickname)));
   }
-  async logout(jwtPayload: CustomJwtPayload) {
+  async logout(jwtPayload: CustomJwtPayload, token: string) {
+    const expiresIn = jwtPayload.exp - jwtPayload.iat;
+    await this._cacheService.addBlacklist(token, expiresIn);
     return await this._userRepository.deleteRefreshTokenById(jwtPayload.userId);
   }
   async socialRegister(createUserDto: SocialLoginType) {

@@ -59,7 +59,6 @@ export class AuthController {
     const { data, type } = checkDto;
 
     if (type === "email")
-      //return await this._authService.checkDuplicateEmail(data);
       return createResponseForm(
         await this._authService.checkDuplicateEmail(data)
       );
@@ -102,7 +101,8 @@ export class AuthController {
   @HttpCode(201)
   public async logout(@Req() req: Request) {
     const jwtPayload = req.data.jwtPayload;
-    const result = await this._authService.logout(jwtPayload);
+    const token = req.data.token;
+    const result = await this._authService.logout(jwtPayload, token);
 
     if (result) return true;
     else return false;
