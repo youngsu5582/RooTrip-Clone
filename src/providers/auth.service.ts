@@ -49,7 +49,11 @@ export class AuthService {
   async logout(jwtPayload: CustomJwtPayload, token: string) {
     const expiresIn = jwtPayload.exp - jwtPayload.iat;
     await this._cacheService.addBlacklist(token, expiresIn);
-    return await this._userRepository.deleteRefreshTokenById(jwtPayload.userId);
+    const result = await this._userRepository.deleteRefreshTokenById(
+      jwtPayload.userId
+    );
+    if (result) return true;
+    else return typia.random<MODIFY_USER_FAILED>();
   }
   async socialRegister(createUserDto: SocialLoginType) {
     const user = await this._userRepository.save({ ...createUserDto });

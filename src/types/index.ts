@@ -33,3 +33,15 @@ export interface ResponseForm<T> {
 
 export type Try<T> = ResponseForm<T>;
 export type TryCatch<T, E extends ERROR> = ResponseForm<T> | E;
+
+export declare namespace UserType {
+  interface LoginResponse {
+    expire: number;
+    accessToken: string;
+    refreshToken: string;
+  }
+  interface ReissueResponse {
+    expire: number;
+    accessToken: string;
+  }
+}

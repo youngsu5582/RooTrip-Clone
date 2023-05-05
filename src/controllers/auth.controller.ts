@@ -2,7 +2,7 @@ import { TypedBody, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller, HttpCode, Req, UseGuards } from "@nestjs/common";
 import { CreateUserDto } from "src/models/dtos/create-user-dto";
 import { AuthService } from "../providers/auth.service";
-import { CheckDto, TryCatch } from "src/types";
+import { CheckDto, TryCatch, UserType } from "src/types";
 import { Request } from "express";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { JwtUtil } from "src/providers/jwt.service";
@@ -15,7 +15,8 @@ import {
   LOCAL_REGISTER_FAILED,
   MODIFY_USER_FAILED,
   NOT_CORRECT_NUMBER,
-  NOT_EXISTED_EMAIL
+  NOT_EXISTED_EMAIL,
+  TOKEN_NOT_MATCH_USER
 } from "src/errors/auth-error";
 import { EmailVerifyDto } from "src/models/dtos/email-verify-dto";
 import { EmailService } from "src/providers/email.service";
@@ -51,6 +52,8 @@ export class AuthController {
   }
 
   /**
+   * 23-05-05 Refactoring 고민중 (현재 , status : true 랑 false 서비스 로직 성공 여부를 파악)
+   * (중복시에는 false 를 return 해야하는데 data에 담아야 하나 , status 를 수정해야 하나 고민중)
    * @summary 이메일 , 닉네임 중복확인 기능
    * @description type (email,nickanme) 과 data 를 받아서 중복확인을 합니다.
    *
@@ -74,10 +77,19 @@ export class AuthController {
     else return false;
   }
 
+  /**
+   * @summary 토큰 재발급
+   * @description Body 로 refreshToken 을 받아서 , 검증 후 accessToken 을 반환한다.
+   *
+   * @param req
+   * @returns
+   */
   @TypedRoute.Post("token/reissue")
   @HttpCode(201)
   @UseGuards(RefreshTokenGuard)
-  public async refresh(@Req() req: Request) {
+  public async refresh(
+    @Req() req: Request
+  ): Promise<TryCatch<UserType.ReissueResponse, TOKEN_NOT_MATCH_USER>> {
     const userId = req.data.jwtPayload.userId;
     const refreshToken = req.body.token;
     const result = await this._authService.validateUserToken(
@@ -107,13 +119,14 @@ export class AuthController {
   @UseGuards(AccessTokenGuard)
   @TypedRoute.Post("logout")
   @HttpCode(201)
-  public async logout(@Req() req: Request) {
+  public async logout(
+    @Req() req: Request
+  ): Promise<TryCatch<undefined, MODIFY_USER_FAILED>> {
     const jwtPayload = req.data.jwtPayload;
     const token = req.data.token;
     const result = await this._authService.logout(jwtPayload, token);
-
-    if (result) return true;
-    else return false;
+    if (isErrorCheck(result)) return result;
+    return createResponseForm(undefined);
   }
 
   /**
