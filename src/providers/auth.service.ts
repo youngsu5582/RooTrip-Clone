@@ -32,12 +32,13 @@ export class AuthService {
     });
     if (alreadyCreatedEmail && email !== null)
       return typia.random<ALREADY_EXISTED_EMAIL>();
-    try {
-      await this._userRepository.save(User.create({ ...createUserDto }));
+    const user = await this._userRepository
+      .save(User.create({ ...createUserDto }))
+      .catch(() => null);
+
+    if (user) {
       return true;
-    } catch {
-      return typia.random<LOCAL_REGISTER_FAILED>();
-    }
+    } else return typia.random<LOCAL_REGISTER_FAILED>();
   }
   async checkDuplicateEmail(email: string) {
     return Boolean(!(await this._userRepository.getByEmail(email)));
@@ -48,23 +49,20 @@ export class AuthService {
   async logout(jwtPayload: CustomJwtPayload, token: string) {
     const expiresIn = jwtPayload.exp - jwtPayload.iat;
     await this._cacheService.addBlacklist(token, expiresIn);
-    try {
-      await this._userRepository.deleteRefreshTokenById(jwtPayload.userId);
-      return true;
-    } catch {
-      return typia.random<MODIFY_USER_FAILED>();
-    }
+    const result = await this._userRepository.deleteRefreshTokenById(
+      jwtPayload.userId
+    );
+    if (result) return true;
+    else return typia.random<MODIFY_USER_FAILED>();
   }
   async socialRegister(createUserDto: SocialLoginType) {
-    try {
-      const user = await this._userRepository.save({ ...createUserDto });
+    const user = await this._userRepository.save({ ...createUserDto });
+    if (user) {
       return {
         status: true,
         data: user
       } as ServiceResponseForm;
-    } catch {
-      return typia.random<SOCIAL_REGISTER_FAILED>();
-    }
+    } else return typia.random<SOCIAL_REGISTER_FAILED>();
   }
   async validateUserToken(id: string, refreshToken: string) {
     const user = await this._userRepository.findOne({
@@ -78,15 +76,15 @@ export class AuthService {
     else return typia.random<TOKEN_NOT_MATCH_USER>();
   }
   async changePassword(email: string, newPassword: string) {
-    const user = await this._userRepository.findOne({ where: { email } });
-    if (user) {
-      user.password = newPassword;
-      try {
+    try {
+      const user = await this._userRepository.findOne({ where: { email } });
+      if (user) {
+        user.password = newPassword;
         await this._userRepository.save(user);
         return true;
-      } catch {
-        return typia.random<MODIFY_USER_FAILED>();
-      }
-    } else return typia.random<NOT_EXISTED_EMAIL>();
+      } else return typia.random<NOT_EXISTED_EMAIL>();
+    } catch {
+      return typia.random<MODIFY_USER_FAILED>();
+    }
   }
 }

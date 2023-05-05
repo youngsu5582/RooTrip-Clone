@@ -24,12 +24,11 @@ export class EmailService {
       html: `<h1>${verifyNumber}</h1>`
     };
     await this._cacheService.addVerify(email, verifyNumber);
-    try {
-      await this._mailerService.sendMail(mailOptions);
-      return true;
-    } catch {
-      return typia.random<EMAIL_SEND_FAILED>();
-    }
+    const result = await this._mailerService
+      .sendMail(mailOptions)
+      .catch(() => null);
+    if (result) return true;
+    else return typia.random<EMAIL_SEND_FAILED>();
   }
 
   public async authVerify(emailVerifyDto: EmailVerifyDto) {
@@ -45,11 +44,10 @@ export class EmailService {
       subject: this._ResetSubject,
       html: `<h1>${password}</h1>`
     };
-    try {
-      await this._mailerService.sendMail(mailOptions);
-      return true;
-    } catch {
-      return typia.random<EMAIL_SEND_FAILED>();
-    }
+    const result = await this._mailerService
+      .sendMail(mailOptions)
+      .catch(() => null);
+    if (result) return true;
+    else return typia.random<EMAIL_SEND_FAILED>();
   }
 }
