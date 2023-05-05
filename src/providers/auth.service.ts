@@ -12,6 +12,8 @@ import typia from "typia";
 import {
   ALREADY_EXISTED_EMAIL,
   LOCAL_REGISTER_FAILED,
+  MODIFY_USER_FAILED,
+  NOT_EXISTED_EMAIL,
   SOCIAL_REGISTER_FAILED,
   TOKEN_NOT_MATCH_USER
 } from "src/errors/auth-error";
@@ -68,5 +70,17 @@ export class AuthService {
         data: user
       } as ServiceResponseForm;
     else return typia.random<TOKEN_NOT_MATCH_USER>();
+  }
+  async changePassword(email: string, newPassword: string) {
+    try {
+      const user = await this._userRepository.findOne({ where: { email } });
+      if (user) {
+        user.password = newPassword;
+        await this._userRepository.save(user);
+        return true;
+      } else return typia.random<NOT_EXISTED_EMAIL>();
+    } catch {
+      return typia.random<MODIFY_USER_FAILED>();
+    }
   }
 }

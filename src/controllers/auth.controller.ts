@@ -11,14 +11,22 @@ import { isErrorCheck } from "src/errors";
 import { createResponseForm } from "src/interceptors/transform.interceptor";
 import {
   ALREADY_EXISTED_EMAIL,
-  LOCAL_REGISTER_FAILED
+  EMAIL_SEND_FAILED,
+  LOCAL_REGISTER_FAILED,
+  MODIFY_USER_FAILED,
+  NOT_CORRECT_NUMBER,
+  NOT_EXISTED_EMAIL
 } from "src/errors/auth-error";
+import { EmailVerifyDto } from "src/models/dtos/email-verify-dto";
+import { EmailService } from "src/providers/email.service";
+import { uuid } from "src/utils/uuid";
 @Controller("auth")
 export class AuthController {
   private readonly minute = 60;
   constructor(
     private readonly _authService: AuthService,
-    private readonly _jwtUtil: JwtUtil
+    private readonly _jwtUtil: JwtUtil,
+    private readonly _emailService: EmailService
   ) {}
   /**
    * @summary 회원 가입 기능
@@ -90,7 +98,7 @@ export class AuthController {
   /**
    * @summary 로그아웃 기능
    * @description Header 에 있는 Token 을 활용하여 로그아웃을 합니다.
-   * 
+   *
    * @tag users
    * @param res
    * @returns
@@ -106,5 +114,44 @@ export class AuthController {
 
     if (result) return true;
     else return false;
+  }
+
+  /**
+   * @summary 비밀번호 초기화
+   *
+   * @param emailVerifyDto
+   * @returns
+   */
+
+  @HttpCode(201)
+  @TypedRoute.Post("/resetPassword")
+  public async resetPassword(
+    @TypedBody() emailVerifyDto: EmailVerifyDto
+  ): Promise<
+    TryCatch<
+      undefined,
+      | NOT_CORRECT_NUMBER
+      | NOT_EXISTED_EMAIL
+      | EMAIL_SEND_FAILED
+      | MODIFY_USER_FAILED
+    >
+  > {
+    const result = await this._emailService.authVerify(emailVerifyDto);
+    if (isErrorCheck(result)) return result;
+    const { email } = emailVerifyDto;
+    const password = await uuid();
+    const isChangePassword = await this._authService.changePassword(
+      email,
+      password
+    );
+    if (isErrorCheck(isChangePassword)) return isChangePassword;
+
+    const isSendPassword = await this._emailService.sendPassword(
+      email,
+      password
+    );
+    if (isErrorCheck(isSendPassword)) return isSendPassword;
+
+    return createResponseForm(undefined);
   }
 }

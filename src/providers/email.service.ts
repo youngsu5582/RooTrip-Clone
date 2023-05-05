@@ -37,4 +37,17 @@ export class EmailService {
     if (verifyNumber === checkNumber) return true;
     else return typia.random<NOT_CORRECT_NUMBER>();
   }
+  public async sendPassword(email: string, password: string) {
+    const mailOptions = {
+      from: "RooTripEmail@gmail.com",
+      to: email,
+      subject: this._ResetSubject,
+      html: `<h1>${password}</h1>`
+    };
+    const result = await this._mailerService
+      .sendMail(mailOptions)
+      .catch(() => null);
+    if (result) return true;
+    else return typia.random<EMAIL_SEND_FAILED>();
+  }
 }
