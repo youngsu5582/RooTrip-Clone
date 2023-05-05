@@ -55,12 +55,4 @@ export class JwtUtil {
       refreshToken
     };
   }
-
-  //   verify(token: string, options?: any): any {
-  //     return this.jwtService.verify(token, options);
-  //   }
-
-  //   decode(token: string, options?: any): any {
-  //     return this.jwtService.decode(token, options);
-  //   }
 }

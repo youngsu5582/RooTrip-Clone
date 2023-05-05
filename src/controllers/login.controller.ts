@@ -1,7 +1,12 @@
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 import { isErrorCheck } from "src/errors";
-import { NOT_CORRECT_PASSWORD, NOT_EXISTED_EMAIL } from "src/errors/auth-error";
+import {
+  NOT_CORRECT_PASSWORD,
+  NOT_EXISTED_EMAIL,
+  SOCIAL_LOGIN_FAILED,
+  SOCIAL_REGISTER_FAILED
+} from "src/errors/auth-error";
 import { createResponseForm } from "src/interceptors/transform.interceptor";
 import { LoginUserDto } from "src/models/dtos/login-user-dto";
 import { SocialDto } from "src/models/dtos/social-dto";
@@ -11,6 +16,7 @@ import { JwtUtil } from "src/providers/jwt.service";
 import { LoginService } from "src/providers/login.service";
 import { UserService } from "src/providers/user.service";
 import { TryCatch, UserType } from "src/types";
+import typia from "typia";
 
 @Controller("auth")
 export class LoginController {
@@ -58,14 +64,23 @@ export class LoginController {
    * @returns
    */
   @TypedRoute.Post("social")
-  async socialLogin(@TypedBody() socialDto: SocialDto) {
+  async socialLogin(
+    @TypedBody() socialDto: SocialDto
+  ): Promise<
+    TryCatch<
+      UserType.LoginResponse,
+      SOCIAL_LOGIN_FAILED | SOCIAL_REGISTER_FAILED
+    >
+  > {
     const { code, provider } = socialDto;
+
     let userInfo;
     if (provider === "kakao")
       userInfo = await this._loginService.kakaoLogin(code);
     else if (provider === "naver")
       userInfo = await this._loginService.naverLogin(code);
 
+    if (isErrorCheck(userInfo)) return typia.random<SOCIAL_LOGIN_FAILED>();
     let user = await this._userService.getUserById(userInfo.id);
     if (!user) {
       const result = await this._authService.socialRegister(userInfo);

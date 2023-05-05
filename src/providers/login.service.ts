@@ -6,7 +6,11 @@ import { ServiceResponseForm } from "src/types";
 import axios from "axios";
 import { ConfigService } from "@nestjs/config";
 import typia from "typia";
-import { NOT_CORRECT_PASSWORD, NOT_EXISTED_EMAIL } from "src/errors/auth-error";
+import {
+  NOT_CORRECT_PASSWORD,
+  NOT_EXISTED_EMAIL,
+  SOCIAL_LOGIN_FAILED
+} from "src/errors/auth-error";
 import { encrypt } from "src/utils/crypto";
 @Injectable()
 export class LoginService {
@@ -37,63 +41,72 @@ export class LoginService {
     } else return typia.random<NOT_EXISTED_EMAIL>();
   }
   async kakaoLogin(code: string) {
-    const accessToken = await axios
-      .post(
-        "https://kauth.kakao.com/oauth/token",
-        {},
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          params: {
-            grant_type: "authorization_code",
-            client_id: this._kakaoApiKey,
-            code,
-            redirect_uri: this._kakaoRedirectUri
+    try {
+      const accessToken = await axios
+        .post(
+          "https://kauth.kakao.com/oauth/token",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            params: {
+              grant_type: "authorization_code",
+              client_id: this._kakaoApiKey,
+              code,
+              redirect_uri: this._kakaoRedirectUri
+            }
           }
-        }
-      )
-      .then((res) => res.data.access_token)
-      .catch(() => null);
-    const userInfo = await axios
-      .post(
-        "https://kapi.kakao.com/v2/user/me",
-        {},
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded;charset",
-            Authorization: "Bearer " + accessToken
+        )
+        .then((res) => res.data.access_token);
+      const userInfo = await axios
+        .post(
+          "https://kapi.kakao.com/v2/user/me",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded;charset",
+              Authorization: "Bearer " + accessToken
+            }
           }
-        }
-      )
-      .then((res) => res.data)
-      .catch(() => null);
-    if (userInfo)
+        )
+        .then((res) => res.data);
       return {
         id: userInfo.id,
         name: userInfo.properties.nickname
       };
+    } catch {
+      return typia.random<SOCIAL_LOGIN_FAILED>();
+    }
   }
   public async naverLogin(code: string) {
     const naverTokenUrl = `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${this._naverClientKey}&client_secret=${this._naverSecretKey}&code=${code}&state=state`;
-    const accessToken = await axios
-      .post(naverTokenUrl, {}, {})
-      .then((res) => res.data.access_token)
-      .catch(() => null);
-    const userInfo = await axios
-      .get("https://openapi.naver.com/v1/nid/me", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
-      .then((res) => res.data.response)
-      .catch(() => null);
-    const id = encrypt(userInfo.id);
-    return {
-      id,
-      name: userInfo.name,
-      gender: userInfo.gender,
-      email: "n_" + userInfo.email
-    };
+    try {
+      const accessToken = await axios
+        .post(naverTokenUrl, {}, {})
+        .then((res) => res.data.access_token);
+      const userInfo = await axios
+        .get("https://openapi.naver.com/v1/nid/me", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+        .then((res) => res.data.response);
+      const id = encrypt(userInfo.id);
+      return {
+        id,
+        status: true,
+        name: userInfo.name,
+        gender: userInfo.gender,
+        email: "n_" + userInfo.email
+      };
+    } catch {
+      return typia.random<SOCIAL_LOGIN_FAILED>();
+    }
   }
 }
+
+export type tempType = {
+  [key: string]: any;
+  status: true;
+};
