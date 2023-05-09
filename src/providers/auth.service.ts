@@ -75,6 +75,7 @@ export class AuthService {
       } as ServiceResponseForm;
     else return typia.random<TOKEN_NOT_MATCH_USER>();
   }
+
   async changePassword(email: string, newPassword: string) {
     try {
       const user = await this._userRepository.findOne({ where: { email } });

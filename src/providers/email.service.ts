@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { RedisCacheService } from "src/database/redis/redis.service";
 import { EMAIL_SEND_FAILED, NOT_CORRECT_NUMBER } from "src/errors/auth-error";
 import { EmailVerifyDto } from "src/models/dtos/email-verify-dto";
+import { randomNumber } from "src/utils/random";
 import typia from "typia";
 
 @Injectable()
@@ -14,9 +15,7 @@ export class EmailService {
     private readonly _cacheService: RedisCacheService
   ) {}
   public async sendVerify(email: string) {
-    const verifyNumber = Math.floor(Math.random() * 100000)
-      .toString()
-      .padStart(6, "5");
+    const verifyNumber = randomNumber();
     const mailOptions = {
       from: "RooTripEmail@gmail.com",
       to: email,
@@ -24,11 +23,12 @@ export class EmailService {
       html: `<h1>${verifyNumber}</h1>`
     };
     await this._cacheService.addVerify(email, verifyNumber);
-    const result = await this._mailerService
-      .sendMail(mailOptions)
-      .catch(() => null);
-    if (result) return true;
-    else return typia.random<EMAIL_SEND_FAILED>();
+    try {
+      await this._mailerService.sendMail(mailOptions);
+      return true;
+    } catch {
+      return typia.random<EMAIL_SEND_FAILED>();
+    }
   }
 
   public async authVerify(emailVerifyDto: EmailVerifyDto) {
@@ -44,10 +44,11 @@ export class EmailService {
       subject: this._ResetSubject,
       html: `<h1>${password}</h1>`
     };
-    const result = await this._mailerService
-      .sendMail(mailOptions)
-      .catch(() => null);
-    if (result) return true;
-    else return typia.random<EMAIL_SEND_FAILED>();
+    try {
+      await this._mailerService.sendMail(mailOptions);
+      return true;
+    } catch {
+      return typia.random<EMAIL_SEND_FAILED>();
+    }
   }
 }
