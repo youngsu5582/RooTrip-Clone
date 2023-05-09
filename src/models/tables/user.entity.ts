@@ -1,6 +1,7 @@
-import { Entity, Column, BeforeInsert } from "typeorm";
+import { Entity, Column, BeforeInsert, OneToMany } from "typeorm";
 import { hashSync, compareSync } from "bcrypt";
 import { defaultColumn } from "../common/default-column";
+import { Post } from "./post.entity";
 type GenderType = "m" | "w";
 @Entity({ name: "user" })
 export class User extends defaultColumn {
@@ -45,6 +46,9 @@ export class User extends defaultColumn {
       this.password = hashSync(this.password, 10);
     }
   }
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 
   async comparePassword(unencryptedPassword: string) {
     if (this.password) return compareSync(unencryptedPassword, this.password);
