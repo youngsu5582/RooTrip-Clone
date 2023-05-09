@@ -15,8 +15,8 @@ export class PhotoController {
    * @summary 좌표 위경도
    * @description latitude 와 longitude 를 받아서 행정동 주소를 반환한다.
    * @tag photos
-   * @param coordinate 
-   * @returns 
+   * @param coordinate
+   * @returns
    */
   @TypedRoute.Get("reverse")
   public async reverseAddress(
