@@ -18,6 +18,7 @@ import { LoginModule } from "./module/login.module";
 import { JwtModule } from "@nestjs/jwt";
 import { LoadersModule } from "./loaders/loaders.module";
 import { EmailModule } from "./module/email.module";
+import { PhotoModule } from "./module/photo.module";
 
 @Module({
   imports: [
@@ -39,7 +40,8 @@ import { EmailModule } from "./module/email.module";
     LoadersModule,
     AuthModule,
     LoginModule,
-    EmailModule
+    EmailModule,
+    PhotoModule
   ],
   controllers: [],
   providers: [

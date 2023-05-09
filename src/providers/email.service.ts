@@ -22,6 +22,7 @@ export class EmailService {
       subject: this._VerifySubject,
       html: `<h1>${verifyNumber}</h1>`
     };
+
     await this._cacheService.addVerify(email, verifyNumber);
     try {
       await this._mailerService.sendMail(mailOptions);

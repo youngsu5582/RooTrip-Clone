@@ -45,3 +45,32 @@ export declare namespace UserType {
     accessToken: string;
   }
 }
+
+export declare namespace PhotoType {
+  interface reverseResponse {
+    city: string;
+    first: string;
+    coordinate: Coordinate;
+  }
+}
+
+export interface Coordinate {
+  /**
+   * 사진의 위도 (latitude)
+   * 한국의 위도는 33 에서 38 사이
+   *
+   * @minimum 33
+   * @maximum 38
+   *
+   */
+  latitude: number;
+  /**
+   * 사진의 경도 (longitude)
+   * 한국의 경도는 125 에서 131 사이
+   *
+   * @minimum 125
+   * @maximum 131
+   *
+   */
+  longitude: number;
+}
