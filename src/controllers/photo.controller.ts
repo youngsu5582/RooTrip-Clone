@@ -11,6 +11,13 @@ import { Coordinate, PhotoType, TryCatch } from "src/types";
 export class PhotoController {
   constructor(private readonly _geoService: GeoService) {}
 
+  /**
+   * @summary 좌표 위경도
+   * @description latitude 와 longitude 를 받아서 행정동 주소를 반환한다.
+   * @tag photos
+   * @param coordinate 
+   * @returns 
+   */
   @TypedRoute.Get("reverse")
   public async reverseAddress(
     @TypedQuery() coordinate: Coordinate
