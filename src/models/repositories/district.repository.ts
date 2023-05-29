@@ -1,6 +1,7 @@
 import { Repository } from "typeorm";
 import { District } from "../tables/district.entity";
 import { CustomRepository } from "src/config/typeorm/custom-typeorm.decorator";
+import { parsingCoordinate } from "src/utils/geoText";
 
 @CustomRepository(District)
 export class DistrictRepository extends Repository<District> {
@@ -16,10 +17,7 @@ export class DistrictRepository extends Repository<District> {
       const coordinate = data[0].coordinate;
       return {
         ...data[0],
-        coordinate: {
-          latitude: coordinate.y,
-          longitude: coordinate.x
-        }
+        coordinate: parsingCoordinate(coordinate)
       };
     });
   }

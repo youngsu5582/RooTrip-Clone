@@ -5,4 +5,3 @@ import { RedisCacheService } from "./redis/redis.service";
   exports: [RedisCacheService]
 })
 export class DatabaseModule {}
-  

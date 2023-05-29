@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ADDRESS_MATCH_FAILED } from "src/errors/photo-error";
 import { DistrictRepository } from "src/models/repositories/district.repository";
-import { Coordinate, PhotoType } from "src/types";
+import { PhotoType } from "src/types";
 import typia from "typia";
 
 @Injectable()
@@ -12,14 +12,18 @@ export class GeoService {
     private readonly _districtRepository: DistrictRepository
   ) {}
 
-  public async getAddress(coordinate: Coordinate) {
-    const point = `POINT(${coordinate.longitude} ${coordinate.latitude})`;
+  /**
+   * 0509 생각해본결과 굳이 Coordinate Type으로 latitude longitude 구분해서 받을 필요 없이 문자열로 받는게 맞는듯
+   *
+   * 2023.05.29 수정 완료
+   */
+  public async getAddress(point: string) {
     try {
       return (await this._districtRepository.getAddressByPoint(
         point
       )) as PhotoType.reverseResponse;
     } catch {
-      return typia.random<ADDRESS_MATCH_FAILED>();
+      throw typia.random<ADDRESS_MATCH_FAILED>();
     }
   }
 }

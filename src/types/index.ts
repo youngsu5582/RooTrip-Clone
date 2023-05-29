@@ -50,7 +50,8 @@ export declare namespace PhotoType {
   interface reverseResponse {
     city: string;
     first: string;
-    coordinate: Coordinate;
+    second: string;
+    coordinate: string;
   }
 }
 
