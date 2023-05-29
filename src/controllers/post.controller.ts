@@ -1,8 +1,10 @@
 import { TypedBody, TypedParam, TypedRoute } from "@nestia/core";
 import { Controller, Req, UseGuards } from "@nestjs/common";
 import { Request } from "express";
+import { isErrorCheck } from "src/errors";
 import {
   POST_CREATE_FAILED,
+  POST_DELETE_FAILED,
   POST_NOT_MATCH_USER,
   POST_UPDATE_FAILED
 } from "src/errors/post-error";
@@ -81,6 +83,28 @@ export class PostController {
       } catch {
         return typia.random<POST_UPDATE_FAILED>();
       }
+    } else return typia.random<POST_NOT_MATCH_USER>();
+  }
+
+  /**
+   * @summary 게시글 삭제
+   * @description userId 와 postId를 통해 확인후 게시글을 삭제한다.
+   * @tag posts
+   * @param postId
+   * @param req
+   * @returns
+   */
+  @TypedRoute.Delete("/:postId")
+  public async deletePost(
+    @TypedParam("postId") postId: string,
+    @Req() req: Request
+  ): Promise<TryCatch<undefined, POST_DELETE_FAILED | POST_NOT_MATCH_USER>> {
+    const userId = req.data.jwtPayload.userId;
+    const isMatched = await this._postService.checkUser(userId, postId); // 게시글 - 사용자 일치한지 확인
+    if (isMatched) {
+      const result = await this._postService.delete(userId, postId);
+      if (isErrorCheck(result)) return result;
+      createResponseForm(undefined);
     } else return typia.random<POST_NOT_MATCH_USER>();
   }
 }
