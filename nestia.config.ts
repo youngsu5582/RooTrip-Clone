@@ -7,7 +7,16 @@ export const NESTIA_CONFIG: sdk.INestiaConfig = {
     
     swagger: {
         output: "bin/swagger.json",
-        
+        security :{
+            bearer : {
+                type:'apiKey',
+                in:'header',
+                name:'Authorization'
+            }
+        }
     },
+    
+    primitive:false,
+    
 };
 export default NESTIA_CONFIG;
