@@ -8,8 +8,8 @@ export default class Photo extends defaultColumn {
    * 이미지의 경로 (s3)
    * @pattern ^(?:https?):\/\/[\S]+$
    */
-  @Column({})
-  image_url: string;
+  @Column({ name: "image_url" })
+  imageUrl: string;
 
   /**
    * 게시글의 아이디

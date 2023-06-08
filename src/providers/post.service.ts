@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { POST_DELETE_FAILED } from "src/errors/post-error";
 import { CreatePostDto } from "src/models/dtos/create-post-dto";
 import { UpdatePostDto } from "src/models/dtos/update-post-dto";
+import { CommentRepository } from "src/models/repositories/comment.repository";
 import { PostRepository } from "src/models/repositories/post.repository";
 import { Post } from "src/models/tables/post.entity";
 import typia from "typia";
@@ -11,7 +12,9 @@ import typia from "typia";
 export class PostService {
   constructor(
     @InjectRepository(PostRepository)
-    private readonly _postRepository: PostRepository
+    private readonly _postRepository: PostRepository,
+    @InjectRepository(CommentRepository)
+    private readonly _commentRepository: CommentRepository
   ) {}
   public async create(createPostDto: CreatePostDto, userId: string) {
     return await this._postRepository.save(
@@ -36,5 +39,8 @@ export class PostService {
     } catch {
       return typia.random<POST_DELETE_FAILED>();
     }
+  }
+  public async getCommentCountByPostId(postId: string) {
+    return await this._commentRepository.count({ where: { postId } });
   }
 }

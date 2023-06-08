@@ -75,3 +75,28 @@ export interface Coordinate {
    */
   longitude: number;
 }
+
+export type RegionType =
+  | "서울"
+  | "대구"
+  | "부산"
+  | "충청남도"
+  | "충청북도"
+  | "대전"
+  | "세종"
+  | "울산"
+  | "전라남도"
+  | "전라북도"
+  | "제주도"
+  | "인천";
+
+export interface RouteDto {
+  /**
+   * 대한민국 행정구역을 받아오는 배열
+   *
+   * @minItems 2
+   * @maxItems 3
+   *
+   */
+  cities: Array<RegionType>;
+}

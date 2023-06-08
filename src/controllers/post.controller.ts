@@ -45,7 +45,7 @@ export class PostController {
       const createPhotoDto = await Promise.all(
         createPostDto.newPhotos.map(async (photo) => {
           return {
-            image_url: photo.url,
+            imageUrl: photo.url,
             ...(await this._geoService.getAddress(
               parsingCoordinate(photo.coordinate)
             ))

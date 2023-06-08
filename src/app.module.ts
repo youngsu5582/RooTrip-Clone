@@ -20,6 +20,7 @@ import { LoadersModule } from "./loaders/loaders.module";
 import { EmailModule } from "./module/email.module";
 import { PhotoModule } from "./module/photo.module";
 import { PostModule } from "./module/post.module";
+import { RouteModule } from "./module/route.module";
 
 @Module({
   imports: [
@@ -43,7 +44,8 @@ import { PostModule } from "./module/post.module";
     LoginModule,
     EmailModule,
     PhotoModule,
-    PostModule
+    PostModule,
+    RouteModule
   ],
   controllers: [],
   providers: [

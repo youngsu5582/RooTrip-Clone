@@ -1,26 +1,25 @@
 import { Module } from "@nestjs/common";
 import { CustomTypeOrmModule } from "../config/typeorm/custom-typeorm.module";
 import { PostRepository } from "src/models/repositories/post.repository";
-import { PostController } from "src/controllers/post.controller";
 import { PostService } from "src/providers/post.service";
 import { DistrictRepository } from "src/models/repositories/district.repository";
 import { PhotoRepository } from "src/models/repositories/photo.repository";
 import { PhotoService } from "src/providers/photo.service";
-import { GeoService } from "src/providers/geo.service";
-import { RedisCacheService } from "src/database/redis/redis.service";
+import { RouteController } from "src/controllers/route.controller";
+import { RouteService } from "src/providers/route.service";
 import { CommentRepository } from "src/models/repositories/comment.repository";
 
 @Module({
   imports: [
     CustomTypeOrmModule.forCustomRepository([
       PostRepository,
+      CommentRepository,
       DistrictRepository,
-      PhotoRepository,
-      CommentRepository
+      PhotoRepository
     ])
   ],
-  controllers: [PostController],
-  providers: [PostService, PhotoService, GeoService, RedisCacheService],
+  controllers: [RouteController],
+  providers: [RouteService, PhotoService, PostService],
   exports: []
 })
-export class PostModule {}
+export class RouteModule {}

@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { defaultColumn } from "../common/default-column";
 import { User } from "./user.entity";
 import Photo from "./photo.entity";
+import Comment from "./comment.entity";
 
 @Entity({ name: "post" })
 export class Post extends defaultColumn {
@@ -32,4 +33,8 @@ export class Post extends defaultColumn {
 
   @OneToMany(() => Photo, (photo) => photo.post)
   photos: Photo[];
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  @JoinColumn()
+  comments: Comment[];
 }
