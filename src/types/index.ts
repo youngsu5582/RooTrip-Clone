@@ -31,9 +31,15 @@ export interface ResponseForm<T> {
   //requestToResponse : `${number}ms`;
   data: T;
 }
+export interface ErrorForm<T> {
+  status: false;
+  message?: string;
+  data?:T;
+}
 
 export type Try<T> = ResponseForm<T>;
-export type TryCatch<T, E extends ERROR> = ResponseForm<T> | E;
+export type Catch<T> = ErrorForm<T>;
+export type TryCatch<T, E extends ERROR> = ResponseForm<T> | ErrorForm<E>;
 
 export declare namespace UserType {
   interface LoginResponse {
@@ -56,12 +62,12 @@ export declare namespace PhotoType {
   }
 }
 export declare namespace RouteType {
-  interface routeResponse{
-      post:Post;
-      id:string;
-      coordinate:string;
-      imageUrl:string;
-      commentCount:number;
+  interface routeResponse {
+    post: Post;
+    id: string;
+    coordinate: string;
+    imageUrl: string;
+    commentCount: number;
   }
 }
 

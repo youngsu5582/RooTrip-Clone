@@ -18,7 +18,9 @@ export class RouteController {
     private readonly _postService: PostService
   ) {}
   @TypedRoute.Post()
-  public async recommendRoute(@Body() routeDto: RouteDto) : Promise<TryCatch<RouteType.routeResponse[],ROUTE_FOUND_FAILED>> {
+  public async recommendRoute(
+    @Body() routeDto: RouteDto
+  ): Promise<TryCatch<RouteType.routeResponse[], ROUTE_FOUND_FAILED>> {
     const result = await this._routeService.getPost(routeDto.cities);
     if (isErrorCheck(result)) return result;
     const refinePosts = await Promise.all(

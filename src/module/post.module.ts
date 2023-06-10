@@ -20,7 +20,7 @@ import { RedisCacheService } from "src/database/redis/redis.service";
     ])
   ],
   controllers: [PostController],
-  providers: [PostService, PhotoService, GeoService,RedisCacheService],
+  providers: [PostService, PhotoService, GeoService, RedisCacheService],
   exports: []
 })
 export class PostModule {}

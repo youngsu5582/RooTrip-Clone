@@ -8,7 +8,10 @@ import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { JwtUtil } from "src/providers/jwt.service";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { isErrorCheck } from "src/errors";
-import { createResponseForm } from "src/interceptors/transform.interceptor";
+import {
+  createErrorForm,
+  createResponseForm
+} from "src/interceptors/transform.interceptor";
 import {
   ALREADY_EXISTED_EMAIL,
   EMAIL_SEND_FAILED,
@@ -41,14 +44,16 @@ export class AuthController {
   @HttpCode(201)
   public async register(
     @TypedBody() createUserDto: CreateUserDto
-  ): Promise<TryCatch<any, ALREADY_EXISTED_EMAIL | LOCAL_REGISTER_FAILED>> {
-    const result = await this._authService.create(createUserDto);
+  ): Promise<
+    TryCatch<undefined, ALREADY_EXISTED_EMAIL | LOCAL_REGISTER_FAILED>
+  > {
+    const result = await this._authService.localRegister(createUserDto);
     if (isErrorCheck(result)) {
-      return result;
+      return createErrorForm(result);
     }
     const message = "회원가입에 성공했습니다.";
 
-    return createResponseForm(null, message);
+    return createResponseForm(undefined, message);
   }
 
   /**

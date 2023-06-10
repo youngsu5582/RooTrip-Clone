@@ -57,7 +57,7 @@ import { RedisCacheModule } from "./database/redis/redis.module";
       provide: APP_FILTER,
       useClass: AllExceptionsFilter
     },
-    AccessTokenGuard,
+    AccessTokenGuard
   ]
 })
 export class AppModule implements NestModule {

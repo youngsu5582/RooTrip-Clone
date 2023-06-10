@@ -25,7 +25,7 @@ export class AuthService {
     private readonly _userRepository: UsersRepository,
     private readonly _cacheService: RedisCacheService
   ) {}
-  async create(createUserDto: CreateUserDto) {
+  async localRegister(createUserDto: CreateUserDto) {
     const { email } = createUserDto;
     const alreadyCreatedEmail = await this._userRepository.findOne({
       where: { email }
