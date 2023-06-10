@@ -7,8 +7,8 @@ import { DistrictRepository } from "src/models/repositories/district.repository"
 import { PhotoRepository } from "src/models/repositories/photo.repository";
 import { PhotoService } from "src/providers/photo.service";
 import { GeoService } from "src/providers/geo.service";
-import { RedisCacheService } from "src/database/redis/redis.service";
 import { CommentRepository } from "src/models/repositories/comment.repository";
+import { RedisCacheService } from "src/database/redis/redis.service";
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { CommentRepository } from "src/models/repositories/comment.repository";
     ])
   ],
   controllers: [PostController],
-  providers: [PostService, PhotoService, GeoService, RedisCacheService],
+  providers: [PostService, PhotoService, GeoService,RedisCacheService],
   exports: []
 })
 export class PostModule {}

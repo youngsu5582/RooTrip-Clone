@@ -21,6 +21,8 @@ import { EmailModule } from "./module/email.module";
 import { PhotoModule } from "./module/photo.module";
 import { PostModule } from "./module/post.module";
 import { RouteModule } from "./module/route.module";
+import { AccessTokenGuard } from "./guards/accessToken.guard";
+import { RedisCacheModule } from "./database/redis/redis.module";
 
 @Module({
   imports: [
@@ -45,7 +47,8 @@ import { RouteModule } from "./module/route.module";
     EmailModule,
     PhotoModule,
     PostModule,
-    RouteModule
+    RouteModule,
+    RedisCacheModule
   ],
   controllers: [],
   providers: [
@@ -53,7 +56,8 @@ import { RouteModule } from "./module/route.module";
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter
-    }
+    },
+    AccessTokenGuard,
   ]
 })
 export class AppModule implements NestModule {

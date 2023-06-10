@@ -1,5 +1,6 @@
 import { ERROR } from "src/errors";
 import { KakaoUserDto } from "src/models/dtos/kakao-user-dto";
+import { Post } from "src/models/tables/post.entity";
 
 export type CheckType = "email" | "nickname";
 export type CheckDto = {
@@ -52,6 +53,15 @@ export declare namespace PhotoType {
     first: string;
     second: string;
     coordinate: string;
+  }
+}
+export declare namespace RouteType {
+  interface routeResponse{
+      post:Post;
+      id:string;
+      coordinate:string;
+      imageUrl:string;
+      commentCount:number;
   }
 }
 

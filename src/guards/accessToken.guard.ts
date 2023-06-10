@@ -16,7 +16,7 @@ export class AccessTokenGuard implements CanActivate {
   constructor(
     @Inject(JwtService) private jwtService: JwtService,
     private readonly _configService: ConfigService,
-    @Inject(RedisCacheService) private readonly _cacheService: RedisCacheService
+    @Inject(RedisCacheService)private readonly _cacheService: RedisCacheService
   ) {
     this.jwtAccessSecret = this._configService.get("app.jwtAccessSecret");
   }

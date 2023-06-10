@@ -3,10 +3,11 @@ import { Body, Controller, UseGuards } from "@nestjs/common";
 import { createResponseForm } from "src/interceptors/transform.interceptor";
 import { TypedRoute } from "@nestia/core";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
-import { RouteDto } from "src/types";
+import { RouteDto, RouteType, TryCatch } from "src/types";
 import { isErrorCheck } from "src/errors";
 import { PhotoService } from "src/providers/photo.service";
 import { PostService } from "src/providers/post.service";
+import { ROUTE_FOUND_FAILED } from "src/errors/route-error";
 
 @Controller("/route")
 @UseGuards(AccessTokenGuard)
@@ -17,7 +18,7 @@ export class RouteController {
     private readonly _postService: PostService
   ) {}
   @TypedRoute.Post()
-  public async recommend(@Body() routeDto: RouteDto) {
+  public async recommendRoute(@Body() routeDto: RouteDto) : Promise<TryCatch<RouteType.routeResponse[],ROUTE_FOUND_FAILED>> {
     const result = await this._routeService.getPost(routeDto.cities);
     if (isErrorCheck(result)) return result;
     const refinePosts = await Promise.all(

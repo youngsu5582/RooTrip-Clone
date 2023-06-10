@@ -8,6 +8,7 @@ import { PhotoService } from "src/providers/photo.service";
 import { RouteController } from "src/controllers/route.controller";
 import { RouteService } from "src/providers/route.service";
 import { CommentRepository } from "src/models/repositories/comment.repository";
+import { RedisCacheService } from "src/database/redis/redis.service";
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { CommentRepository } from "src/models/repositories/comment.repository";
     ])
   ],
   controllers: [RouteController],
-  providers: [RouteService, PhotoService, PostService],
+  providers: [RouteService, PhotoService, PostService,RedisCacheService],
   exports: []
 })
 export class RouteModule {}
