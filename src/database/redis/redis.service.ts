@@ -14,7 +14,6 @@ export class RedisCacheService {
 
   async addBlacklist(accessToken: string, expiresIn: number) {
     const key = `blacklist : ${accessToken}`;
-
     return await this.client.setex(key, expiresIn, 1);
   }
   async checkBlacklist(accessToken: string) {

@@ -3,9 +3,9 @@ import { KakaoUserDto } from "src/models/dtos/kakao-user-dto";
 import { Post } from "src/models/tables/post.entity";
 
 export type CheckType = "email" | "nickname";
-export type CheckDto = {
-  type: CheckType;
-  data: string;
+export type CheckDuplicateDto = {
+  checkType: CheckType;
+  value: string;
 };
 export type MessageResponse = {
   message: string;
@@ -29,12 +29,12 @@ export interface ResponseForm<T> {
   status: true;
   message?: string;
   //requestToResponse : `${number}ms`;
-  data: T;
+  data?: T | undefined;
 }
 export interface ErrorForm<T> {
   status: false;
   message?: string;
-  data?:T;
+  data?: T;
 }
 
 export type Try<T> = ResponseForm<T>;

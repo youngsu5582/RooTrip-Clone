@@ -1,6 +1,5 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { User } from "src/models/tables/user.entity";
 
 export const TypeOrmMoudleOptions = {
   imports: [ConfigModule],
@@ -13,9 +12,9 @@ export const TypeOrmMoudleOptions = {
       username: configService.get("database.typeorm.username"),
       password: configService.get("database.typeorm.password"),
       database: configService.get("database.typeorm.database"),
-      entities: [__dirname + "/../../models/tables/*.entity{.ts,.js}", User],
-      logging:
-        configService.get("app.nodeEnv") === "development" ? "all" : null,
+      entities: [__dirname + "/../../models/tables/*.entity{.ts,.js}"],
+      // logging:
+      //   configService.get("app.nodeEnv") === "development" ? "all" : null,
       synchronize: false
     };
     return option;

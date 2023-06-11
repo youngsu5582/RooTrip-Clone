@@ -10,10 +10,10 @@ export class User extends defaultColumn {
    * @format email
    */
   @Column({ length: 100, nullable: true })
-  email: string;
+  email!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   /**
    * 사용자의 닉네임
@@ -22,23 +22,23 @@ export class User extends defaultColumn {
    * @pattern ^(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9가-힣]{2,8}$
    */
   @Column({ nullable: true, type: String })
-  nickname: string | null;
+  nickname?: string | null;
 
   /**
    * 사용자의 비밀번호
    * @pattern ^(?=.*[A-Za-z])(?=.*\d)(?=.*[`~!@#$%^&*()/])[A-Za-z\d`~!@#$%^&*()/]{8,16}$
    */
   @Column({ nullable: true, type: String })
-  password: string | null;
+  password?: string | null;
 
   /**
    * 사용자의 성별
    */
   @Column({ nullable: true, type: String })
-  gender: GenderType | null;
+  gender?: GenderType | null;
 
   @Column({ nullable: true, type: String, select: false })
-  refreshToken: string | null;
+  refreshToken?: string | null;
 
   @BeforeInsert()
   async hashPassword() {
@@ -48,7 +48,7 @@ export class User extends defaultColumn {
   }
 
   @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
+  posts!: Post[];
 
   async comparePassword(unencryptedPassword: string) {
     if (this.password) return compareSync(unencryptedPassword, this.password);

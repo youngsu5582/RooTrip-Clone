@@ -28,7 +28,7 @@ export class LoginService {
     const { email, password } = loginUserDto;
     const user = await this._userRepository.getByEmail(email);
     if (user) {
-      if (await user.comparePassword(password))
+      if (await user.comparePassword(password!))
         return {
           status: true,
           data: user

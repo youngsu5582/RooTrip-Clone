@@ -25,10 +25,10 @@ export class PhotoService {
     return await this._photoRepository.find({ where: { postId } });
   }
   public async getThumbnailByPostId(postId: string) {
-    const result = await this._photoRepository.findOne({
+    const result = (await this._photoRepository.findOne({
       where: { postId },
       select: ["id", "coordinate", "imageUrl"]
-    });
+    })) as any;
     return result;
   }
 }

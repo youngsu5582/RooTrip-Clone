@@ -104,7 +104,7 @@ export class PostController {
     if (isMatched) {
       const result = await this._postService.delete(userId, postId);
       if (isErrorCheck(result)) return result;
-      createResponseForm(undefined);
+      return createResponseForm(undefined);
     } else return typia.random<POST_NOT_MATCH_USER>();
   }
 }

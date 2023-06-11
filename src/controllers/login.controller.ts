@@ -73,7 +73,7 @@ export class LoginController {
       user = result.data;
     }
     const { accessToken, refreshToken } = this._jwtUtil.generateToken(user);
-    await this._userService.saveRefreshToken(user.id, refreshToken);
+    await this._userService.saveRefreshToken(user!.id, refreshToken);
     const data = {
       expire: 15 * this.minute,
       accessToken,

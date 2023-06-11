@@ -24,6 +24,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-duplicate-imports": "error",
     "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/no-namespace": "off"
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
   }
 };

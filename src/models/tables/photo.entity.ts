@@ -9,14 +9,14 @@ export default class Photo extends defaultColumn {
    * @pattern ^(?:https?):\/\/[\S]+$
    */
   @Column({ name: "image_url" })
-  imageUrl: string;
+  imageUrl!: string;
 
   /**
    * 게시글의 아이디
    *
    */
   @Column({ name: "post_id" })
-  postId: string;
+  postId!: string;
 
   /**
    * TypeOrm 에서 사용하기 위한 post_id Mapping Object(Post)
@@ -25,8 +25,8 @@ export default class Photo extends defaultColumn {
     cascade: true,
     onDelete: "CASCADE"
   })
-  @JoinColumn({ name: "post_id" })
-  post: Post;
+  @JoinColumn({ name: "post_id", referencedColumnName: "id" })
+  post!: Post;
 
   /**
    * GeoJSON Point (좌표계)
@@ -38,23 +38,23 @@ export default class Photo extends defaultColumn {
     srid: 4326,
     select: false
   })
-  coordinate: string;
+  coordinate!: string;
 
   /**
    * 도 & 시를 표시 (경상북도 , 대구 광역시)
    */
   @Column()
-  city: string;
+  city!: string;
 
   /**
    * 구 & 군을 표시 (강동구 , 양양군)
    */
   @Column()
-  first: string;
+  first!: string;
 
   /**
    * 동 & 면 & 가 를 표시 (둔촌동 , 서면 , 종로1가)
    */
   @Column({ nullable: true })
-  second: string;
+  second?: string;
 }

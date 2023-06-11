@@ -4,6 +4,7 @@ import { UsersRepository } from "../models/repositories/user.repository";
 import { User } from "../models/tables/user.entity";
 import { CreateUserDto } from "../models/dtos/create-user-dto";
 import {
+  CheckDuplicateDto,
   CustomJwtPayload,
   ServiceResponseForm,
   SocialLoginType
@@ -14,8 +15,7 @@ import {
   LOCAL_REGISTER_FAILED,
   MODIFY_USER_FAILED,
   NOT_EXISTED_EMAIL,
-  SOCIAL_REGISTER_FAILED,
-  TOKEN_NOT_MATCH_USER
+  SOCIAL_REGISTER_FAILED
 } from "src/errors/auth-error";
 import { RedisCacheService } from "src/database/redis/redis.service";
 @Injectable()
@@ -40,20 +40,25 @@ export class AuthService {
       return true;
     } else return typia.random<LOCAL_REGISTER_FAILED>();
   }
-  async checkDuplicateEmail(email: string) {
-    return Boolean(!(await this._userRepository.getByEmail(email)));
-  }
-  async checkDuplicateNickname(nickname: string) {
-    return Boolean(!(await this._userRepository.getByNickname(nickname)));
+  async checkDuplicate(checkDuplicateDto: CheckDuplicateDto) {
+    const { checkType, value } = checkDuplicateDto;
+    try {
+      if (checkType === "email")
+        return Boolean(await this._userRepository.getByEmail(value));
+      else return Boolean(await this._userRepository.getByNickname(value));
+    } catch {
+      return false;
+    }
   }
   async logout(jwtPayload: CustomJwtPayload, token: string) {
     const expiresIn = jwtPayload.exp - jwtPayload.iat;
     await this._cacheService.addBlacklist(token, expiresIn);
-    const result = await this._userRepository.deleteRefreshTokenById(
-      jwtPayload.userId
-    );
-    if (result) return true;
-    else return typia.random<MODIFY_USER_FAILED>();
+    try {
+      await this._userRepository.deleteRefreshTokenById(jwtPayload.userId);
+      return true;
+    } catch {
+      return typia.random<MODIFY_USER_FAILED>();
+    }
   }
   async socialRegister(createUserDto: SocialLoginType) {
     const user = await this._userRepository.save({ ...createUserDto });
@@ -64,16 +69,10 @@ export class AuthService {
       } as ServiceResponseForm;
     } else return typia.random<SOCIAL_REGISTER_FAILED>();
   }
-  async validateUserToken(id: string, refreshToken: string) {
-    const user = await this._userRepository.findOne({
+  async validateRefreshToken(id: string, refreshToken: string) {
+    return await this._userRepository.findOne({
       where: { id, refreshToken }
     });
-    if (user)
-      return {
-        status: true,
-        data: user
-      } as ServiceResponseForm;
-    else return typia.random<TOKEN_NOT_MATCH_USER>();
   }
 
   async changePassword(email: string, newPassword: string) {

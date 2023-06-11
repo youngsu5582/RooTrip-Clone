@@ -24,7 +24,7 @@ export class AccessTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest() as Request;
 
-    const token = extractAccessToken(req);
+    const token = extractAccessToken(req)!;
     try {
       const jwtPayload = this.jwtService.verify(token, {
         secret: this.jwtAccessSecret

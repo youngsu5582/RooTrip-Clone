@@ -2,7 +2,7 @@ import { TypedBody, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller, HttpCode, Req, UseGuards } from "@nestjs/common";
 import { CreateUserDto } from "src/models/dtos/create-user-dto";
 import { AuthService } from "../providers/auth.service";
-import { CheckDto, TryCatch, UserType } from "src/types";
+import { CheckDuplicateDto, TryCatch, UserType } from "src/types";
 import { Request } from "express";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { JwtUtil } from "src/providers/jwt.service";
@@ -24,6 +24,7 @@ import {
 import { EmailVerifyDto } from "src/models/dtos/email-verify-dto";
 import { EmailService } from "src/providers/email.service";
 import { uuid } from "src/utils/uuid";
+import typia from "typia";
 @Controller("auth")
 export class AuthController {
   private readonly minute = 60;
@@ -33,6 +34,7 @@ export class AuthController {
     private readonly _emailService: EmailService
   ) {}
   /**
+   *
    * @summary 회원 가입 기능
    * @description 이메일이 중복되지 않는 새로운 유저를 만든다.
    *
@@ -63,23 +65,15 @@ export class AuthController {
    * @description type (email,nickanme) 과 data 를 받아서 중복확인을 합니다.
    *
    * @tag users
-   * @param type
-   * @param data
+   * @param checkDuplicateDto 체크 타입을 위한 Dto
    * @returns
    *
    */
   @TypedRoute.Get("check")
   @HttpCode(200)
-  public async check(@TypedQuery() checkDto: CheckDto) {
-    const { data, type } = checkDto;
-
-    if (type === "email")
-      return createResponseForm(
-        await this._authService.checkDuplicateEmail(data)
-      );
-    else if (type === "nickname")
-      return await this._authService.checkDuplicateNickname(data);
-    else return false;
+  public async check(@TypedQuery() checkDuplicateDto: CheckDuplicateDto) {
+    const result = this._authService.checkDuplicate(checkDuplicateDto);
+    return createResponseForm(result);
   }
 
   /**
@@ -97,14 +91,12 @@ export class AuthController {
   ): Promise<TryCatch<UserType.ReissueResponse, TOKEN_NOT_MATCH_USER>> {
     const userId = req.data.jwtPayload.userId;
     const refreshToken = req.body.token;
-    const result = await this._authService.validateUserToken(
+    const user = await this._authService.validateRefreshToken(
       userId,
       refreshToken
     );
-    if (isErrorCheck(result)) {
-      return result;
-    }
-    const accessToken = this._jwtUtil.generateAccessToken(result.data);
+    if (!user) return createErrorForm(typia.random<TOKEN_NOT_MATCH_USER>());
+    const accessToken = this._jwtUtil.generateAccessToken(user);
     const data = {
       expire: 15 * this.minute,
       accessToken
@@ -127,8 +119,7 @@ export class AuthController {
   public async logout(
     @Req() req: Request
   ): Promise<TryCatch<undefined, MODIFY_USER_FAILED>> {
-    const jwtPayload = req.data.jwtPayload;
-    const token = req.data.token;
+    const { jwtPayload, token } = req.data;
     const result = await this._authService.logout(jwtPayload, token);
     if (isErrorCheck(result)) return result;
     return createResponseForm(undefined);
