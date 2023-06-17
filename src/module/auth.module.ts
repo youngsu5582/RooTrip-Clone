@@ -7,10 +7,14 @@ import { JwtUtil } from "src/providers/jwt.service";
 import { RedisCacheModule } from "src/database/redis/redis.module";
 import { EmailModule } from "./email.module";
 import { EmailService } from "src/providers/email.service";
+import { ProfileRepository } from "src/models/repositories/profile.repository";
 
 @Module({
   imports: [
-    CustomTypeOrmModule.forCustomRepository([UsersRepository]),
+    CustomTypeOrmModule.forCustomRepository([
+      UsersRepository,
+      ProfileRepository
+    ]),
     RedisCacheModule,
     EmailModule
   ],

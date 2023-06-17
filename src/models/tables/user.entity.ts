@@ -1,8 +1,15 @@
-import { Entity, Column, BeforeInsert, OneToMany } from "typeorm";
+import {
+  Entity,
+  Column,
+  BeforeInsert,
+  OneToMany,
+  OneToOne,
+  JoinColumn
+} from "typeorm";
 import { hashSync, compareSync } from "bcrypt";
 import { defaultColumn } from "../common/default-column";
 import { Post } from "./post.entity";
-type GenderType = "m" | "w";
+import Profile from "./profile.entity";
 @Entity({ name: "user" })
 export class User extends defaultColumn {
   /**
@@ -12,33 +19,31 @@ export class User extends defaultColumn {
   @Column({ length: 100, nullable: true })
   email!: string;
 
-  @Column()
-  name!: string;
-
-  /**
-   * 사용자의 닉네임
-   * @minLength 2
-   * @maxLength 20
-   * @pattern ^(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9가-힣]{2,8}$
-   */
-  @Column({ nullable: true, type: String })
-  nickname?: string | null;
-
   /**
    * 사용자의 비밀번호
-   * @pattern ^(?=.*[A-Za-z])(?=.*\d)(?=.*[`~!@#$%^&*()/])[A-Za-z\d`~!@#$%^&*()/]{8,16}$
+   * @pattern ^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d`-~!@#$%^&*()/]{8,16}$
    */
   @Column({ nullable: true, type: String })
   password?: string | null;
 
   /**
-   * 사용자의 성별
+   * 토큰 재발급을 위한 리프레시 토큰
    */
-  @Column({ nullable: true, type: String })
-  gender?: GenderType | null;
-
   @Column({ nullable: true, type: String, select: false })
   refreshToken?: string | null;
+
+  /**
+   * 조인 위한 프로필 Entity
+   */
+  @OneToOne(() => Profile, (profile) => profile.user)
+  @JoinColumn({ name: "profile_id" })
+  profile?: Profile;
+
+  /**
+   * 프로필 Entity Id
+   */
+  @Column({ name: "profile_id", nullable: true })
+  profileId!: string;
 
   @BeforeInsert()
   async hashPassword() {
@@ -47,6 +52,9 @@ export class User extends defaultColumn {
     }
   }
 
+  /**
+   * 사용자가 작성한 게시글들
+   */
   @OneToMany(() => Post, (post) => post.user)
   posts!: Post[];
 

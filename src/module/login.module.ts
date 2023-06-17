@@ -7,10 +7,11 @@ import { UserService } from "src/providers/user.service";
 import { AuthService } from "src/providers/auth.service";
 import { JwtUtil } from "src/providers/jwt.service";
 import { RedisCacheModule } from "src/database/redis/redis.module";
+import { ProfileRepository } from "src/models/repositories/profile.repository";
 
 @Module({
   imports: [
-    CustomTypeOrmModule.forCustomRepository([UsersRepository]),
+    CustomTypeOrmModule.forCustomRepository([UsersRepository,ProfileRepository]),
     RedisCacheModule
   ],
   controllers: [LoginController],

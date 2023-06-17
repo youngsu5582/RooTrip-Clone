@@ -1,10 +1,10 @@
 import { TypedBody, TypedRoute } from "@nestia/core";
-import { Controller } from "@nestjs/common";
+import {  Controller } from "@nestjs/common";
 import { isErrorCheck } from "src/errors";
 import { NOT_CORRECT_PASSWORD, NOT_EXISTED_EMAIL } from "src/errors/auth-error";
 import { createResponseForm } from "src/interceptors/transform.interceptor";
-import { LoginUserDto } from "src/models/dtos/login-user-dto";
 import { SocialDto } from "src/models/dtos/social-dto";
+import { LoginUserDto } from "src/models/dtos/user/login-user-dto";
 import { User } from "src/models/tables/user.entity";
 import { AuthService } from "src/providers/auth.service";
 import { JwtUtil } from "src/providers/jwt.service";

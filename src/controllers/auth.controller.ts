@@ -1,6 +1,5 @@
 import { TypedBody, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller, HttpCode, Req, UseGuards } from "@nestjs/common";
-import { CreateUserDto } from "src/models/dtos/create-user-dto";
 import { AuthService } from "../providers/auth.service";
 import { CheckDuplicateDto, TryCatch, UserType } from "src/types";
 import { Request } from "express";
@@ -25,6 +24,7 @@ import { EmailVerifyDto } from "src/models/dtos/email-verify-dto";
 import { EmailService } from "src/providers/email.service";
 import { uuid } from "src/utils/uuid";
 import typia from "typia";
+import { CreateLocalUserDto } from "src/models/dtos/user/create-local-user-dto";
 @Controller("auth")
 export class AuthController {
   private readonly minute = 60;
@@ -34,22 +34,22 @@ export class AuthController {
     private readonly _emailService: EmailService
   ) {}
   /**
+   * 회원 가입 기능
    *
-   * @summary 회원 가입 기능
-   * @description 이메일이 중복되지 않는 새로운 유저를 만든다.
+   * 이메일이 중복되지 않는 새로운 유저를 만든다.
    *
    * @tag users
    * @param createUserDto 유저 생성하기 위한 Dto
-   * @returns
+   * @returns 새로 생성된 유저
    */
   @TypedRoute.Post("register")
   @HttpCode(201)
   public async register(
-    @TypedBody() createUserDto: CreateUserDto
+    @TypedBody() createLocalUserDto: CreateLocalUserDto
   ): Promise<
     TryCatch<undefined, ALREADY_EXISTED_EMAIL | LOCAL_REGISTER_FAILED>
   > {
-    const result = await this._authService.localRegister(createUserDto);
+    const result = await this._authService.localRegister(createLocalUserDto);
     if (isErrorCheck(result)) {
       return createErrorForm(result);
     }

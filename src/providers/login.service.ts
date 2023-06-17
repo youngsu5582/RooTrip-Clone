@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UsersRepository } from "../models/repositories/user.repository";
-import { LoginUserDto } from "../models/dtos/login-user-dto";
+import { LoginUserDto } from "../models/dtos/user/login-user-dto";
 import { ServiceResponseForm } from "src/types";
 import axios from "axios";
 import { ConfigService } from "@nestjs/config";
@@ -10,19 +10,21 @@ import { NOT_CORRECT_PASSWORD, NOT_EXISTED_EMAIL } from "src/errors/auth-error";
 import { encrypt } from "src/utils/crypto";
 @Injectable()
 export class LoginService {
-  private readonly _kakaoApiKey;
-  private readonly _kakaoRedirectUri;
-  private readonly _naverClientKey;
-  private readonly _naverSecretKey;
+  private readonly _kakaoApiKey: string;
+  private readonly _kakaoRedirectUri: string;
+  private readonly _naverClientKey: string;
+  private readonly _naverSecretKey: string;
   constructor(
     @InjectRepository(UsersRepository)
     private readonly _userRepository: UsersRepository,
     private readonly _configService: ConfigService
   ) {
-    this._kakaoApiKey = this._configService.get("key.kakaoApiKey");
-    this._kakaoRedirectUri = this._configService.get("key.kakaoRedirectUri");
-    this._naverClientKey = this._configService.get("key.naverClientKey");
-    this._naverSecretKey = this._configService.get("key.naverSecretKey");
+    this._kakaoApiKey = this._configService.getOrThrow("key.kakaoApiKey");
+    this._kakaoRedirectUri = this._configService.getOrThrow(
+      "key.kakaoRedirectUri"
+    );
+    this._naverClientKey = this._configService.getOrThrow("key.naverClientKey");
+    this._naverSecretKey = this._configService.getOrThrow("key.naverSecretKey");
   }
   async localLogin(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;

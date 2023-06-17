@@ -1,7 +1,9 @@
 import { ERROR } from "src/errors";
-import { KakaoUserDto } from "src/models/dtos/kakao-user-dto";
+import { KakaoUserDto } from "src/models/dtos/user/kakao-user-dto";
+
 import { Post } from "src/models/tables/post.entity";
 
+export type GenderType = "m" | "w";
 export type CheckType = "email" | "nickname";
 export type CheckDuplicateDto = {
   checkType: CheckType;

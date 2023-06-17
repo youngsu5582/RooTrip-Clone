@@ -7,9 +7,7 @@ export class UsersRepository extends Repository<User> {
   public async getByEmail(email: string) {
     return await this.findOne({ where: { email } });
   }
-  public async getByNickname(nickname: string) {
-    return await this.findOne({ where: { nickname } });
-  }
+
   public async deleteRefreshTokenById(id: string) {
     return await this.update(id, { refreshToken: null });
   }

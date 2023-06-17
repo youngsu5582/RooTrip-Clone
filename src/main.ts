@@ -30,6 +30,7 @@ async function bootstrap() {
     })
   );
   app.enableCors();
+  app.enableShutdownHooks();
   await app
     .listen(port)
     .then(() => console.log("Server Open!"))

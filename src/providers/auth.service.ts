@@ -1,8 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import {  Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UsersRepository } from "../models/repositories/user.repository";
 import { User } from "../models/tables/user.entity";
-import { CreateUserDto } from "../models/dtos/create-user-dto";
 import {
   CheckDuplicateDto,
   CustomJwtPayload,
@@ -18,34 +17,44 @@ import {
   SOCIAL_REGISTER_FAILED
 } from "src/errors/auth-error";
 import { RedisCacheService } from "src/database/redis/redis.service";
+import { ProfileRepository } from "src/models/repositories/profile.repository";
+import Profile from "src/models/tables/profile.entity";
+import { CreateLocalUserDto } from "src/models/dtos/user/create-local-user-dto";
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UsersRepository)
     private readonly _userRepository: UsersRepository,
+    @InjectRepository(ProfileRepository)
+    private readonly _profileRepository: ProfileRepository,
     private readonly _cacheService: RedisCacheService
   ) {}
-  async localRegister(createUserDto: CreateUserDto) {
-    const { email } = createUserDto;
+  async localRegister(createUserDto: CreateLocalUserDto) {
+    const { email, password, ...profileDto } = createUserDto;
     const alreadyCreatedEmail = await this._userRepository.findOne({
       where: { email }
     });
     if (alreadyCreatedEmail && email !== null)
       return typia.random<ALREADY_EXISTED_EMAIL>();
-    const user = await this._userRepository
-      .save(User.create({ ...createUserDto }))
-      .catch(() => null);
-
-    if (user) {
-      return true;
-    } else return typia.random<LOCAL_REGISTER_FAILED>();
+    try {
+      const user = await this._userRepository.save(
+        User.create({ email, password })
+      );
+      await this._profileRepository
+        .save(Profile.create({ ...profileDto }))
+        .then((profile) => (user.profile = profile));
+      user.save();
+      return user;
+    } catch {
+      return typia.random<LOCAL_REGISTER_FAILED>();
+    }
   }
   async checkDuplicate(checkDuplicateDto: CheckDuplicateDto) {
     const { checkType, value } = checkDuplicateDto;
     try {
       if (checkType === "email")
         return Boolean(await this._userRepository.getByEmail(value));
-      else return Boolean(await this._userRepository.getByNickname(value));
+      else return Boolean(await this._profileRepository.getByNickname(value));
     } catch {
       return false;
     }
