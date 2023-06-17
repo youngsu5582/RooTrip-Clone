@@ -19,6 +19,7 @@ import { RedisCacheService } from "src/database/redis/redis.service";
 import { ProfileRepository } from "src/models/repositories/profile.repository";
 import Profile from "src/models/tables/profile.entity";
 import { CreateLocalUserDto } from "src/models/dtos/user/create-local-user-dto";
+import { DB_CONNECT_FAILED } from "src/errors/common-error";
 @Injectable()
 export class AuthService {
   constructor(
@@ -55,7 +56,7 @@ export class AuthService {
         return Boolean(await this._userRepository.getByEmail(value));
       else return Boolean(await this._profileRepository.getByNickname(value));
     } catch {
-      return false;
+      return typia.random<DB_CONNECT_FAILED>();
     }
   }
   async logout(jwtPayload: CustomJwtPayload, token: string) {

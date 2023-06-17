@@ -25,6 +25,7 @@ import { EmailService } from "src/providers/email.service";
 import { uuid } from "src/utils/uuid";
 import typia from "typia";
 import { CreateLocalUserDto } from "src/models/dtos/user/create-local-user-dto";
+import { DB_CONNECT_FAILED } from "src/errors/common-error";
 @Controller("auth")
 export class AuthController {
   private readonly minute = 60;
@@ -71,8 +72,10 @@ export class AuthController {
    */
   @TypedRoute.Get("check")
   @HttpCode(200)
-  public async check(@TypedQuery() checkDuplicateDto: CheckDuplicateDto) {
-    const result = this._authService.checkDuplicate(checkDuplicateDto);
+  public async check(@TypedQuery() checkDuplicateDto: CheckDuplicateDto) : Promise<TryCatch<boolean,DB_CONNECT_FAILED>> {
+    const result = await this._authService.checkDuplicate(checkDuplicateDto);
+    if(isErrorCheck(result))
+      return createErrorForm(result);
     return createResponseForm(result);
   }
 

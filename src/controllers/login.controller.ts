@@ -1,8 +1,9 @@
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 import { isErrorCheck } from "src/errors";
-import { NOT_CORRECT_PASSWORD, NOT_EXISTED_EMAIL } from "src/errors/auth-error";
-import { createResponseForm } from "src/interceptors/transform.interceptor";
+import { NOT_CORRECT_PASSWORD, NOT_EXISTED_EMAIL, SOCIAL_REGISTER_FAILED } from "src/errors/auth-error";
+import { DB_CONNECT_FAILED } from "src/errors/common-error";
+import { createErrorForm, createResponseForm } from "src/interceptors/transform.interceptor";
 import { SocialDto } from "src/models/dtos/social-dto";
 import { LoginUserDto } from "src/models/dtos/user/login-user-dto";
 import { User } from "src/models/tables/user.entity";
@@ -11,6 +12,7 @@ import { JwtUtil } from "src/providers/jwt.service";
 import { LoginService } from "src/providers/login.service";
 import { UserService } from "src/providers/user.service";
 import { TryCatch, UserType } from "src/types";
+import typia from "typia";
 
 @Controller("auth")
 export class LoginController {
@@ -57,20 +59,23 @@ export class LoginController {
    * @returns
    */
   @TypedRoute.Post("social")
-  async socialLogin(@TypedBody() socialDto: SocialDto) {
+  async socialLogin(@TypedBody() socialDto: SocialDto) : Promise<
+  TryCatch<UserType.LoginResponse, SOCIAL_REGISTER_FAILED | DB_CONNECT_FAILED>> {
     const { code, provider } = socialDto;
-    let userInfo;
-    if (provider === "kakao")
-      userInfo = await this._loginService.kakaoLogin(code);
-    else if (provider === "naver")
-      userInfo = await this._loginService.naverLogin(code);
-
-    let user = await this._userService.getUserById(userInfo.id);
-    if (!user) {
-      const result = await this._authService.socialRegister(userInfo);
-      if (isErrorCheck(result)) return result;
-      user = result;
-    }
+    try{
+      let userInfo : any & {id:string};
+      if (provider === "kakao")
+        userInfo = await this._loginService.kakaoLogin(code);
+      else if (provider === "naver")
+        userInfo = await this._loginService.naverLogin(code);
+  
+      let user = await this._userService.getUserById(userInfo.id);
+      if (!user) {
+        const result = await this._authService.socialRegister(userInfo);
+        if (isErrorCheck(result)) return result;
+        user = result;
+      }
+      
     const { accessToken, refreshToken } = this._jwtUtil.generateToken(user);
     await this._userService.saveRefreshToken(user!.id, refreshToken);
     const data = {
@@ -79,5 +84,9 @@ export class LoginController {
       refreshToken
     };
     return createResponseForm(data);
+    }
+    catch{
+      return createErrorForm(typia.random<DB_CONNECT_FAILED>());
+    }
   }
 }
