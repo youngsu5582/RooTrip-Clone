@@ -11,7 +11,10 @@ import { ProfileRepository } from "src/models/repositories/profile.repository";
 
 @Module({
   imports: [
-    CustomTypeOrmModule.forCustomRepository([UsersRepository,ProfileRepository]),
+    CustomTypeOrmModule.forCustomRepository([
+      UsersRepository,
+      ProfileRepository
+    ]),
     RedisCacheModule
   ],
   controllers: [LoginController],

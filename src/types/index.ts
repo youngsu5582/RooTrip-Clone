@@ -12,10 +12,6 @@ export type CheckDuplicateDto = {
 export type MessageResponse = {
   message: string;
 };
-export type ServiceResponseForm = {
-  status: boolean;
-  data?: any;
-};
 
 export type CustomJwtPayload = {
   [key: string]: any;

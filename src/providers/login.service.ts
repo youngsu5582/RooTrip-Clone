@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UsersRepository } from "../models/repositories/user.repository";
 import { LoginUserDto } from "../models/dtos/user/login-user-dto";
-import { ServiceResponseForm } from "src/types";
 import axios from "axios";
 import { ConfigService } from "@nestjs/config";
 import typia from "typia";
@@ -31,10 +30,7 @@ export class LoginService {
     const user = await this._userRepository.getByEmail(email);
     if (user) {
       if (await user.comparePassword(password!))
-        return {
-          status: true,
-          data: user
-        } as ServiceResponseForm;
+        return user;
       else return typia.random<NOT_CORRECT_PASSWORD>();
     } else return typia.random<NOT_EXISTED_EMAIL>();
   }

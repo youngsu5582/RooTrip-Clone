@@ -1,5 +1,5 @@
 import { TypedBody, TypedRoute } from "@nestia/core";
-import {  Controller } from "@nestjs/common";
+import { Controller } from "@nestjs/common";
 import { isErrorCheck } from "src/errors";
 import { NOT_CORRECT_PASSWORD, NOT_EXISTED_EMAIL } from "src/errors/auth-error";
 import { createResponseForm } from "src/interceptors/transform.interceptor";
@@ -36,9 +36,8 @@ export class LoginController {
   ): Promise<
     TryCatch<UserType.LoginResponse, NOT_CORRECT_PASSWORD | NOT_EXISTED_EMAIL>
   > {
-    const result = await this._loginService.localLogin(loginUserDto);
-    if (isErrorCheck(result)) return result;
-    const user = result.data as User;
+    const user = await this._loginService.localLogin(loginUserDto);
+    if (isErrorCheck(user)) return user;
     const { accessToken, refreshToken } = this._jwtUtil.generateToken(user);
     await this._userService.saveRefreshToken(user.id, refreshToken);
     const data = {
@@ -70,7 +69,7 @@ export class LoginController {
     if (!user) {
       const result = await this._authService.socialRegister(userInfo);
       if (isErrorCheck(result)) return result;
-      user = result.data;
+      user = result;
     }
     const { accessToken, refreshToken } = this._jwtUtil.generateToken(user);
     await this._userService.saveRefreshToken(user!.id, refreshToken);

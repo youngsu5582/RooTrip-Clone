@@ -1,11 +1,10 @@
-import {  Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UsersRepository } from "../models/repositories/user.repository";
 import { User } from "../models/tables/user.entity";
 import {
   CheckDuplicateDto,
   CustomJwtPayload,
-  ServiceResponseForm,
   SocialLoginType
 } from "src/types";
 import typia from "typia";
@@ -70,13 +69,12 @@ export class AuthService {
     }
   }
   async socialRegister(createUserDto: SocialLoginType) {
-    const user = await this._userRepository.save({ ...createUserDto });
-    if (user) {
-      return {
-        status: true,
-        data: user
-      } as ServiceResponseForm;
-    } else return typia.random<SOCIAL_REGISTER_FAILED>();
+    try {
+      const user = await this._userRepository.save({ ...createUserDto });
+      return user;
+    } catch {
+      return typia.random<SOCIAL_REGISTER_FAILED>();
+    }
   }
   async validateRefreshToken(id: string, refreshToken: string) {
     return await this._userRepository.findOne({
