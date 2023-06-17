@@ -1,5 +1,7 @@
 import { ERROR } from "src/errors";
+import { GoogleUserDto } from "src/models/dtos/user/google-user-dto";
 import { KakaoUserDto } from "src/models/dtos/user/kakao-user-dto";
+import { NaverUserDto } from "src/models/dtos/user/naver-user-dto";
 
 import { Post } from "src/models/tables/post.entity";
 
@@ -21,7 +23,7 @@ export type CustomJwtPayload = {
 };
 export type socialType = "kakao" | "naver" | "google";
 
-export type SocialLoginType = KakaoUserDto;
+export type SocialLoginType = KakaoUserDto | NaverUserDto | GoogleUserDto;
 
 export interface ResponseForm<T> {
   status: true;

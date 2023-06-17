@@ -11,7 +11,7 @@ export default class Profile extends defaultColumn {
   @OneToOne(() => User, (user) => user.profile, {
     cascade: true,
     onDelete: "CASCADE"
-  })
+    })
   @JoinColumn({ name: "user_id" })
   user!: User;
 
@@ -20,6 +20,7 @@ export default class Profile extends defaultColumn {
    */
   @Column({ name: "user_id" })
   userId!: string;
+
 
   /**
    * 프로필 이미지 경로 (aws s3)
@@ -35,7 +36,6 @@ export default class Profile extends defaultColumn {
 
   /**
    * 사용자 이름
-   * @pattern ^[가-힣]{2,}$
    */
   @Column()
   name!: string;

@@ -40,7 +40,7 @@ export class AuthService {
         User.create({ email, password })
       );
       await this._profileRepository
-        .save(Profile.create({ ...profileDto }))
+        .save(Profile.create({ userId:user.id, ...profileDto }))
         .then((profile) => (user.profile = profile));
       user.save();
       return user;
@@ -69,10 +69,12 @@ export class AuthService {
     }
   }
   async socialRegister(createUserDto: SocialLoginType) {
+    const {id,name} = createUserDto;
     try {
-      const user = await this._userRepository.save({ ...createUserDto });
+      const user = await this._userRepository.save(User.create({id}));
+      await this._profileRepository.save(this._profileRepository.create({userId:user.id,name})).then(profile=>user.profile=profile);
       return user;
-    } catch {
+    } catch { 
       return typia.random<SOCIAL_REGISTER_FAILED>();
     }
   }
