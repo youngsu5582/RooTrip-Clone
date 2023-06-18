@@ -1,6 +1,10 @@
-export function CheckExecutionTime(type?:any){
-    return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-    console.log(descriptor.value);
+export function CheckExecutionTime(type?: any) {
+  type;
+  return function (
+    target: any,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) {
     const originalMethod = descriptor.value;
     descriptor.value = async function (...args: any[]) {
       const start = Date.now();
@@ -10,6 +14,7 @@ export function CheckExecutionTime(type?:any){
       result.executionTime = `${executionTime}ms`;
       return result;
     };
-  
+
     return descriptor;
-  }}
+  };
+}

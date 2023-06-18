@@ -17,7 +17,7 @@ import { UpdatePostDto } from "src/models/dtos/update-post-dto";
 import { GeoService } from "src/providers/geo.service";
 import { PhotoService } from "src/providers/photo.service";
 import { PostService } from "src/providers/post.service";
-import { TryCatch } from "src/types";
+import { PostType, TryCatch } from "src/types";
 import { parsingCoordinate } from "src/utils/geoText";
 import typia from "typia";
 @UseGuards(AccessTokenGuard)
@@ -29,8 +29,10 @@ export class PostController {
     private readonly _photoService: PhotoService
   ) {}
   /**
-   * @summary 게시글 생성
-   * @description CreatePostDto(article,newPhotos,routes) 를 통해 게시글을 생성한다.
+   * 게시글 생성
+   *
+   * CreatePostDto(article,newPhotos,routes) 를 통해 게시글을 생성한다.
+   *
    * @tag posts
    * @param createPostDto
    * @param req
@@ -40,7 +42,7 @@ export class PostController {
   public async createPost(
     @TypedBody() createPostDto: CreatePostDto,
     @UserId() userId: string
-  ): Promise<TryCatch<undefined, POST_CREATE_FAILED>> {
+  ): Promise<TryCatch<PostType.createResponse, POST_CREATE_FAILED>> {
     try {
       const createPhotoDto = await Promise.all(
         createPostDto.newPhotos.map(async (photo) => {
@@ -53,12 +55,23 @@ export class PostController {
         })
       );
       const post = await this._postService.create(createPostDto, userId);
-      await this._photoService.createPhotos(createPhotoDto, post.id);
-      return createResponseForm(undefined);
+      const photos = await this._photoService.createPhotos(
+        createPhotoDto,
+        post.id
+      );
+      
+      const data = {
+        postId: post.id,
+        id: photos[0].id,
+        coordinate: photos[0].coordinate,
+        imageUrl: photos[0].imageUrl
+      };
+      return createResponseForm(data);
     } catch {
       return typia.random<POST_CREATE_FAILED>();
     }
   }
+
   /**
    * @summary 게시글 수정
    * @description UpdatePostDto(article,content) 를 통해 게시글을 수정한다.

@@ -35,8 +35,8 @@ import { Token } from "src/decorator/param/token.decorator";
 import { JwtPayload } from "src/decorator/param/jwt-payload.decorator";
 import { CountApiUsage } from "src/decorator/function/count-api-usage.decorator";
 /**
-     * 2023.06.18 해당 코드에서는 사용하지 않으나 , Swagger 에서 인식하기 위해 추가만 해놓음. (삭제 고려)
-     */
+ * 2023.06.18 해당 코드에서는 사용하지 않으나 , Swagger 에서 인식하기 위해 추가만 해놓음. (삭제 고려)
+ */
 type RefreshTokenDto = {
   grant_type: "refresh_token";
   refresh_token: string;
@@ -58,7 +58,7 @@ export class AuthController {
    * @param createUserDto 유저 생성하기 위한 Dto
    * @returns 새로 생성된 유저
    */
-  
+
   @TypedRoute.Post("register")
   @HttpCode(201)
   public async register(

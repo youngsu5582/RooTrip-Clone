@@ -15,7 +15,8 @@ export const TypeOrmMoudleOptions = {
       entities: [__dirname + "/../../models/tables/*.entity{.ts,.js}"],
       // logging:
       //   configService.get("app.nodeEnv") === "development" ? "all" : null,
-      synchronize: true
+      synchronize: true,
+      legacySpatialSupport: false
     };
     return option;
   }

@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ADDRESS_MATCH_FAILED } from "src/errors/photo-error";
 import { DistrictRepository } from "src/models/repositories/district.repository";
-import { PhotoType } from "src/types";
 import typia from "typia";
 
 @Injectable()
@@ -19,9 +18,8 @@ export class GeoService {
    */
   public async getAddress(point: string) {
     try {
-      return (await this._districtRepository.getAddressByPoint(
-        point
-      )) as PhotoType.reverseResponse;
+      const temp = await this._districtRepository.getAddressByPoint(point);
+      return temp;
     } catch {
       throw typia.random<ADDRESS_MATCH_FAILED>();
     }

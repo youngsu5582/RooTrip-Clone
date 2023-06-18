@@ -43,4 +43,7 @@ export class PostService {
   public async getCommentCountByPostId(postId: string) {
     return await this._commentRepository.count({ where: { postId } });
   }
+  public async getPostById(postId: string) {
+    return await this._postRepository.findOne({ where: { id: postId } });
+  }
 }
