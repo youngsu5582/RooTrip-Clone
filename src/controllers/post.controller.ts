@@ -1,7 +1,7 @@
 import { TypedBody, TypedParam, TypedRoute } from "@nestia/core";
 import { Controller, UseGuards } from "@nestjs/common";
-import { PostId } from "src/decorator/post-id.decorator";
-import { UserId } from "src/decorator/user-id.decorator";
+import { PostId } from "src/decorator/param/post-id.decorator";
+import { UserId } from "src/decorator/param/user-id.decorator";
 import { isErrorCheck } from "src/errors";
 import {
   POST_CREATE_FAILED,
