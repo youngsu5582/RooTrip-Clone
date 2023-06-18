@@ -1,6 +1,7 @@
 import { TypedBody, TypedParam, TypedRoute } from "@nestia/core";
-import { Controller, Req, UseGuards } from "@nestjs/common";
-import { Request } from "express";
+import { Controller, UseGuards } from "@nestjs/common";
+import { PostId } from "src/decorator/post-id.decorator";
+import { UserId } from "src/decorator/user-id.decorator";
 import { isErrorCheck } from "src/errors";
 import {
   POST_CREATE_FAILED,
@@ -38,9 +39,8 @@ export class PostController {
   @TypedRoute.Post()
   public async createPost(
     @TypedBody() createPostDto: CreatePostDto,
-    @Req() req: Request
+    @UserId() userId: string
   ): Promise<TryCatch<undefined, POST_CREATE_FAILED>> {
-    const userId = req.data.jwtPayload.userId;
     try {
       const createPhotoDto = await Promise.all(
         createPostDto.newPhotos.map(async (photo) => {
@@ -70,11 +70,10 @@ export class PostController {
    */
   @TypedRoute.Patch("/:postId")
   public async updatePost(
-    @TypedParam("postId") postId: string,
+    @PostId() postId: string,
     @TypedBody() updatePostDto: UpdatePostDto,
-    @Req() req: Request
+    @UserId() userId: string
   ): Promise<TryCatch<undefined, POST_UPDATE_FAILED | POST_NOT_MATCH_USER>> {
-    const userId = req.data.jwtPayload.userId;
     const isMatched = await this._postService.checkUser(userId, postId); // 게시글 - 사용자 일치한지 확인
     if (isMatched) {
       try {
@@ -97,9 +96,8 @@ export class PostController {
   @TypedRoute.Delete("/:postId")
   public async deletePost(
     @TypedParam("postId") postId: string,
-    @Req() req: Request
+    @UserId() userId: string
   ): Promise<TryCatch<undefined, POST_DELETE_FAILED | POST_NOT_MATCH_USER>> {
-    const userId = req.data.jwtPayload.userId;
     const isMatched = await this._postService.checkUser(userId, postId); // 게시글 - 사용자 일치한지 확인
     if (isMatched) {
       const result = await this._postService.delete(userId, postId);

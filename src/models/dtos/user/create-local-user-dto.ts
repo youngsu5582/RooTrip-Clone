@@ -4,4 +4,4 @@ type CreateProfileDto = Pick<Profile, "nickname" | "name" | "gender">;
 
 type CreateUserDto = Pick<User, "email" | "password">;
 
-export interface CreateLocalUserDto  extends CreateUserDto , CreateProfileDto{}
+export interface CreateLocalUserDto extends CreateUserDto, CreateProfileDto {}

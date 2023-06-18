@@ -1,8 +1,12 @@
 import { TypedBody, TypedQuery, TypedRoute } from "@nestia/core";
-import { Controller, HttpCode, Req, UseGuards } from "@nestjs/common";
+import { Controller, HttpCode, UseGuards } from "@nestjs/common";
 import { AuthService } from "../providers/auth.service";
-import { CheckDuplicateDto, TryCatch, UserType } from "src/types";
-import { Request } from "express";
+import {
+  CheckDuplicateDto,
+  CustomJwtPayload,
+  TryCatch,
+  UserType
+} from "src/types";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { JwtUtil } from "src/providers/jwt.service";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
@@ -26,6 +30,13 @@ import { uuid } from "src/utils/uuid";
 import typia from "typia";
 import { CreateLocalUserDto } from "src/models/dtos/user/create-local-user-dto";
 import { DB_CONNECT_FAILED } from "src/errors/common-error";
+import { UserId } from "src/decorator/user-id.decorator";
+import { Token } from "src/decorator/token.decorator";
+import { JwtPayload } from "src/decorator/jwt-payload.decorator";
+type RefreshTokenDto = {
+  grant_type: "refresh_token";
+  refresh_token: string;
+};
 @Controller("auth")
 export class AuthController {
   private readonly minute = 60;
@@ -72,10 +83,11 @@ export class AuthController {
    */
   @TypedRoute.Get("check")
   @HttpCode(200)
-  public async check(@TypedQuery() checkDuplicateDto: CheckDuplicateDto) : Promise<TryCatch<boolean,DB_CONNECT_FAILED>> {
+  public async check(
+    @TypedQuery() checkDuplicateDto: CheckDuplicateDto
+  ): Promise<TryCatch<boolean, DB_CONNECT_FAILED>> {
     const result = await this._authService.checkDuplicate(checkDuplicateDto);
-    if(isErrorCheck(result))
-      return createErrorForm(result);
+    if (isErrorCheck(result)) return createErrorForm(result);
     return createResponseForm(result);
   }
 
@@ -83,17 +95,21 @@ export class AuthController {
    * @summary 토큰 재발급
    * @description Body 로 refreshToken 을 받아서 , 검증 후 accessToken 을 반환한다.
    *
-   * @param req
+   * @param refreshTokenDto 토큰 재발급 받기 위한 Dto
    * @returns
    */
   @TypedRoute.Post("token/reissue")
   @HttpCode(201)
   @UseGuards(RefreshTokenGuard)
   public async refresh(
-    @Req() req: Request
+    @UserId() userId: string,
+    @Token() refreshToken: string,
+    /**
+     * 2023.06.18 해당 코드에서는 사용하지 않으나 , Swagger 에서 인식하기 위해 추가만 해놓음. (삭제 고려)
+     */
+    @TypedBody() refreshTokenDto: RefreshTokenDto
   ): Promise<TryCatch<UserType.ReissueResponse, TOKEN_NOT_MATCH_USER>> {
-    const userId = req.data.jwtPayload.userId;
-    const refreshToken = req.body.token;
+    refreshTokenDto;
     const user = await this._authService.validateRefreshToken(
       userId,
       refreshToken
@@ -120,9 +136,9 @@ export class AuthController {
   @TypedRoute.Post("logout")
   @HttpCode(201)
   public async logout(
-    @Req() req: Request
+    @JwtPayload() jwtPayload: CustomJwtPayload,
+    @Token() token: string
   ): Promise<TryCatch<undefined, MODIFY_USER_FAILED>> {
-    const { jwtPayload, token } = req.data;
     const result = await this._authService.logout(jwtPayload, token);
     if (isErrorCheck(result)) return result;
     return createResponseForm(undefined);

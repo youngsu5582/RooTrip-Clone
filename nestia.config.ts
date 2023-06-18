@@ -22,7 +22,8 @@ export const NESTIA_CONFIG: INestiaConfig = {
         ]
     },
     compilerOptions:{
-        strictNullChecks:true
+        strictNullChecks:true,
+        
     },
     primitive:false,
     

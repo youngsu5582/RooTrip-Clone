@@ -29,8 +29,7 @@ export class LoginService {
     const { email, password } = loginUserDto;
     const user = await this._userRepository.getByEmail(email);
     if (user) {
-      if (await user.comparePassword(password!))
-        return user;
+      if (await user.comparePassword(password!)) return user;
       else return typia.random<NOT_CORRECT_PASSWORD>();
     } else return typia.random<NOT_EXISTED_EMAIL>();
   }

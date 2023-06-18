@@ -11,7 +11,7 @@ import {
   keyValidator
 } from "./validator";
 import { LoggerMiddleware } from "./middleware/logging.middleware";
-import { APP_FILTER } from "@nestjs/core";
+import { APP_FILTER, DiscoveryService } from "@nestjs/core";
 import { AllExceptionsFilter } from "./middleware/error.middleware";
 import { AuthModule } from "./module/auth.module";
 import { LoginModule } from "./module/login.module";
@@ -53,6 +53,7 @@ import { RedisCacheModule } from "./database/redis/redis.module";
   controllers: [],
   providers: [
     ConfigService,
+    DiscoveryService,
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter
