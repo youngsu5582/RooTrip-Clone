@@ -1,6 +1,7 @@
 # compiled output
 /dist
 /node_modules
+/packages
 
 # Logs
 logs
@@ -21,6 +22,8 @@ lerna-debug.log*
 # Nestia File
 /src/api
 /bin/*.*
+/packages/api/lib
+/lib
 
 # Log File
 /log

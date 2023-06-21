@@ -44,6 +44,7 @@ export class PostController {
     @UserId() userId: string
   ): Promise<TryCatch<PostType.createResponse, POST_CREATE_FAILED>> {
     try {
+      console.log(userId);
       const createPhotoDto = await Promise.all(
         createPostDto.newPhotos.map(async (photo) => {
           return {

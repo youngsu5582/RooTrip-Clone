@@ -34,10 +34,11 @@ import { UserId } from "src/decorator/param/user-id.decorator";
 import { Token } from "src/decorator/param/token.decorator";
 import { JwtPayload } from "src/decorator/param/jwt-payload.decorator";
 import { CountApiUsage } from "src/decorator/function/count-api-usage.decorator";
+
 /**
  * 2023.06.18 해당 코드에서는 사용하지 않으나 , Swagger 에서 인식하기 위해 추가만 해놓음. (삭제 고려)
  */
-type RefreshTokenDto = {
+export type RefreshTokenDto = {
   grant_type: "refresh_token";
   refresh_token: string;
 };
@@ -113,6 +114,8 @@ export class AuthController {
     @TypedBody() refreshTokenDto: RefreshTokenDto
   ): Promise<TryCatch<UserType.ReissueResponse, TOKEN_NOT_MATCH_USER>> {
     refreshTokenDto;
+
+    //console.log(temp);
     const user = await this._authService.validateRefreshToken(
       userId,
       refreshToken

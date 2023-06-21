@@ -8,7 +8,13 @@ import { Post } from "src/models/tables/post.entity";
 export type GenderType = "m" | "w";
 export type CheckType = "email" | "nickname";
 export type CheckDuplicateDto = {
-  checkType: CheckType;
+  /**
+   * checkType
+   */
+  checkType: string;
+  /**
+   * check 할 값
+   */
   value: string;
 };
 export type MessageResponse = {

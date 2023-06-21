@@ -12,7 +12,7 @@
     "build:sdk": "nestia sdk",
     "format": "prettier --write \"src/**/*.ts\" \"src/test/**/*.ts\"",
     "dev": "npm run build:swagger && nest start --watch",
-    "publish": "cd src/api && npm publish",
+    "publish": "cd packages/api && npm publish",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -50,6 +50,7 @@
     "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^4.4.1",
+    "rootrip-server-apis": "^0.0.3",
     "swagger-ui-express": "^4.6.2",
     "typeorm": "^0.3.13",
     "typia": "^3.7.4",
@@ -79,8 +80,7 @@
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "ttsc": "^0.3.1",
-    "ttypescript": "^1.5.15",
-    " ": "^4.9.5"
+    "ttypescript": "^1.5.15"
   },
   "jest": {
     "moduleNameMapper": {
