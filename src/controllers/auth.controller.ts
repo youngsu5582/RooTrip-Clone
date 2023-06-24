@@ -104,14 +104,13 @@ export class AuthController {
    * @param refreshTokenDto 토큰 재발급 받기 위한 Dto
    * @returns
    */
+  @UseGuards(RefreshTokenGuard)
   @TypedRoute.Post("token/reissue")
   @HttpCode(201)
-  @UseGuards(RefreshTokenGuard)
-  @CountApiUsage()
   public async refresh(
+    @TypedBody() refreshTokenDto: RefreshTokenDto,
     @UserId() userId: string,
     @Token() refreshToken: string,
-    @TypedBody() refreshTokenDto: RefreshTokenDto
   ): Promise<TryCatch<UserType.ReissueResponse, TOKEN_NOT_MATCH_USER>> {
     refreshTokenDto;
 
@@ -138,6 +137,7 @@ export class AuthController {
    * @returns
    *
    */
+  
   @UseGuards(AccessTokenGuard)
   @TypedRoute.Post("logout")
   @HttpCode(201)
