@@ -1,0 +1,18 @@
+{
+  "apps": [
+    {
+      "name": "my-app",
+      "script": "lib/main.js",
+      "instances": "4",
+      "exec_mode": "cluster",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "watch": false,
+      "log_date_format": "YYYY-MM-DD HH:mm:ss",
+      "error_file": "logs/error.log",
+      "out_file": "logs/out.log",
+      "max_memory_restart": "128M"
+    }
+  ]
+}
