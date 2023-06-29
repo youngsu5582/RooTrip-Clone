@@ -13,9 +13,9 @@ export const TypeOrmMoudleOptions = {
       password: configService.get("database.typeorm.password"),
       database: configService.get("database.typeorm.database"),
       entities: [__dirname + "/../../models/tables/*.entity{.ts,.js}"],
-      // logging:
+       logging:"all",
       //   configService.get("app.nodeEnv") === "development" ? "all" : null,
-      synchronize: true,
+      synchronize: false,
       legacySpatialSupport: false
     };
     return option;

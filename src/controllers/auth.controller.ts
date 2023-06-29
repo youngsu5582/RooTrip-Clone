@@ -87,8 +87,10 @@ export class AuthController {
    * @returns
    *
    */
+  
   @TypedRoute.Get("check")
   @HttpCode(200)
+  @CountApiUsage()
   public async check(
     @TypedQuery() checkDuplicateDto: CheckDuplicateDto
   ): Promise<TryCatch<boolean, DB_CONNECT_FAILED>> {
