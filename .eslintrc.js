@@ -15,7 +15,7 @@ module.exports = {
     node: true,
     jest: true
   },
-  ignorePatterns: [".eslintrc.js", "/src/api"],
+  ignorePatterns: [".eslintrc.js", "/src/api", "/src/test"],
   rules: {
     "no-console": "warn",
     "@typescript-eslint/interface-name-prefix": "off",
@@ -25,6 +25,6 @@ module.exports = {
     "@typescript-eslint/no-duplicate-imports": "error",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-namespace": "off",
-    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
   }
 };

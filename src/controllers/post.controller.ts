@@ -44,7 +44,6 @@ export class PostController {
     @UserId() userId: string
   ): Promise<TryCatch<PostType.createResponse, POST_CREATE_FAILED>> {
     try {
-      console.log(userId);
       const createPhotoDto = await Promise.all(
         createPostDto.newPhotos.map(async (photo) => {
           return {
@@ -60,7 +59,7 @@ export class PostController {
         createPhotoDto,
         post.id
       );
-      
+
       const data = {
         postId: post.id,
         id: photos[0].id,

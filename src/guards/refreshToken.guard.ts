@@ -27,7 +27,7 @@ export class RefreshTokenGuard implements CanActivate {
       const jwtPayload = this.jwtService.verify(token, {
         secret: this.jwtRefreshSecret
       });
-      
+
       req.data = {
         jwtPayload,
         token

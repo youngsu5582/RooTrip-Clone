@@ -91,7 +91,7 @@ export class AuthService {
 
   async changePassword(email: string, newPassword: string) {
     try {
-      const user = await this._userRepository.findOne({ where: { email } });
+      const user = await this._userRepository.getByEmail(email);
       if (user) {
         user.password = newPassword;
         await this._userRepository.save(user);

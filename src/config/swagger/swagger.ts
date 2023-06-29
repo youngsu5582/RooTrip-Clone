@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 import path from "path";
 export default async function (app: INestApplication) {
   const swaggerConfig = readFileSync(
-    path.join(path.join(process.cwd(),"/bin/swagger.json")),
+    path.join(path.join(process.cwd(), "/bin/swagger.json")),
     "utf-8"
   );
   const swaggerDocument = JSON.parse(swaggerConfig);

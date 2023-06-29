@@ -17,16 +17,10 @@ import {
 } from "src/interceptors/transform.interceptor";
 import {
   ALREADY_EXISTED_EMAIL,
-  EMAIL_SEND_FAILED,
   LOCAL_REGISTER_FAILED,
   MODIFY_USER_FAILED,
-  NOT_CORRECT_NUMBER,
-  NOT_EXISTED_EMAIL,
   TOKEN_NOT_MATCH_USER
 } from "src/errors/auth-error";
-import { EmailVerifyDto } from "src/models/dtos/email-verify-dto";
-import { EmailService } from "src/providers/email.service";
-import { uuid } from "src/utils/uuid";
 import typia from "typia";
 import { CreateLocalUserDto } from "src/models/dtos/user/create-local-user-dto";
 import { DB_CONNECT_FAILED } from "src/errors/common-error";
@@ -47,15 +41,14 @@ export class AuthController {
   private readonly minute = 60;
   constructor(
     private readonly _authService: AuthService,
-    private readonly _jwtUtil: JwtUtil,
-    private readonly _emailService: EmailService
+    private readonly _jwtUtil: JwtUtil
   ) {}
   /**
    * 회원 가입 기능
    *
    * 이메일이 중복되지 않는 새로운 유저를 만든다.
    *
-   * @tag users
+   * @tag auth
    * @param createUserDto 유저 생성하기 위한 Dto
    * @returns 새로 생성된 유저
    */
@@ -82,12 +75,12 @@ export class AuthController {
    * @summary 이메일 , 닉네임 중복확인 기능
    * @description type (email,nickanme) 과 data 를 받아서 중복확인을 합니다.
    *
-   * @tag users
+   * @tag auth
    * @param checkDuplicateDto 체크 타입을 위한 Dto
    * @returns
    *
    */
-  
+
   @TypedRoute.Get("check")
   @HttpCode(200)
   @CountApiUsage()
@@ -103,6 +96,7 @@ export class AuthController {
    * @summary 토큰 재발급
    * @description Body 로 refreshToken 을 받아서 , 검증 후 accessToken 을 반환한다.
    *
+   * @tag auth
    * @param refreshTokenDto 토큰 재발급 받기 위한 Dto
    * @returns
    */
@@ -112,7 +106,7 @@ export class AuthController {
   public async refresh(
     @TypedBody() refreshTokenDto: RefreshTokenDto,
     @UserId() userId: string,
-    @Token() refreshToken: string,
+    @Token() refreshToken: string
   ): Promise<TryCatch<UserType.ReissueResponse, TOKEN_NOT_MATCH_USER>> {
     refreshTokenDto;
 
@@ -134,12 +128,12 @@ export class AuthController {
    * @summary 로그아웃 기능
    * @description Header 에 있는 Token 을 활용하여 로그아웃을 합니다.
    *
-   * @tag users
+   * @tag auth
    * @param res
    * @returns
    *
    */
-  
+
   @UseGuards(AccessTokenGuard)
   @TypedRoute.Post("logout")
   @HttpCode(201)
@@ -149,45 +143,6 @@ export class AuthController {
   ): Promise<TryCatch<undefined, MODIFY_USER_FAILED>> {
     const result = await this._authService.logout(jwtPayload, token);
     if (isErrorCheck(result)) return result;
-    return createResponseForm(undefined);
-  }
-
-  /**
-   * @summary 비밀번호 초기화
-   *
-   * @param emailVerifyDto
-   * @returns
-   */
-
-  @HttpCode(201)
-  @TypedRoute.Post("/resetPassword")
-  public async resetPassword(
-    @TypedBody() emailVerifyDto: EmailVerifyDto
-  ): Promise<
-    TryCatch<
-      undefined,
-      | NOT_CORRECT_NUMBER
-      | NOT_EXISTED_EMAIL
-      | EMAIL_SEND_FAILED
-      | MODIFY_USER_FAILED
-    >
-  > {
-    const result = await this._emailService.authVerify(emailVerifyDto);
-    if (isErrorCheck(result)) return result;
-    const { email } = emailVerifyDto;
-    const password = await uuid();
-    const isChangePassword = await this._authService.changePassword(
-      email,
-      password
-    );
-    if (isErrorCheck(isChangePassword)) return isChangePassword;
-
-    const isSendPassword = await this._emailService.sendPassword(
-      email,
-      password
-    );
-    if (isErrorCheck(isSendPassword)) return isSendPassword;
-
     return createResponseForm(undefined);
   }
 }

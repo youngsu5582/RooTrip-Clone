@@ -1,3 +1,4 @@
 import { SetMetadata } from "@nestjs/common";
 
-export const setCustomMetadata = (symbol : Symbol | string , data:any)=>SetMetadata(symbol,data);
+export const setCustomMetadata = (symbol: symbol | string, data: any) =>
+  SetMetadata(symbol, data);

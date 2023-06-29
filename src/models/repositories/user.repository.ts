@@ -14,4 +14,3 @@ export class UsersRepository extends Repository<User> {
     return await this.update(id, { refreshToken: null });
   }
 }
-  

@@ -6,7 +6,6 @@ import { Request } from "express";
  */
 export const Token = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
-    
     const request = ctx.switchToHttp().getRequest() as Request;
     return request.data.token as any;
   }
