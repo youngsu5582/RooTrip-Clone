@@ -19,3 +19,8 @@ export interface POST_DELETE_FAILED extends ERROR {
   status: false;
   message: "게시글 삭제에 실패했습니다.";
 }
+
+export interface POST_GET_FAILED extends ERROR {
+  status: false;
+  message: "게시글 받는걸 실패했습니다.";
+}

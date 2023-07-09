@@ -1,16 +1,20 @@
-import { TypedBody, TypedParam, TypedRoute } from "@nestia/core";
-import { Controller, UseGuards } from "@nestjs/common";
+import { TypedBody, TypedParam, TypedQuery, TypedRoute } from "@nestia/core";
+import { Controller, HttpCode, UseGuards } from "@nestjs/common";
 import { PostId } from "src/decorator/param/post-id.decorator";
 import { UserId } from "src/decorator/param/user-id.decorator";
 import { isErrorCheck } from "src/errors";
 import {
   POST_CREATE_FAILED,
   POST_DELETE_FAILED,
+  POST_GET_FAILED,
   POST_NOT_MATCH_USER,
   POST_UPDATE_FAILED
 } from "src/errors/post-error";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
-import { createResponseForm } from "src/interceptors/transform.interceptor";
+import {
+  createErrorForm,
+  createResponseForm
+} from "src/interceptors/transform.interceptor";
 import { CreatePostDto } from "src/models/dtos/create-post-dto";
 import { UpdatePostDto } from "src/models/dtos/update-post-dto";
 
@@ -20,11 +24,12 @@ import { PostService } from "src/providers/post.service";
 import { PostType, TryCatch } from "src/types";
 import { parsingCoordinate } from "src/utils/geoText";
 import typia from "typia";
+import { ViewPostTypeDto } from "../models/dtos/view-post-type-dto";
 @UseGuards(AccessTokenGuard)
 @Controller("post")
 export class PostController {
   constructor(
-    private readonly _postService: PostService,
+    private readonly postService: PostService,
     private readonly _geoService: GeoService,
     private readonly _photoService: PhotoService
   ) {}
@@ -54,12 +59,11 @@ export class PostController {
           };
         })
       );
-      const post = await this._postService.create(createPostDto, userId);
+      const post = await this.postService.create(createPostDto, userId);
       const photos = await this._photoService.createPhotos(
         createPhotoDto,
         post.id
       );
-
       const data = {
         postId: post.id,
         id: photos[0].id,
@@ -87,10 +91,10 @@ export class PostController {
     @TypedBody() updatePostDto: UpdatePostDto,
     @UserId() userId: string
   ): Promise<TryCatch<undefined, POST_UPDATE_FAILED | POST_NOT_MATCH_USER>> {
-    const isMatched = await this._postService.checkUser(userId, postId); // 게시글 - 사용자 일치한지 확인
+    const isMatched = await this.postService.checkUser(userId, postId); // 게시글 - 사용자 일치한지 확인
     if (isMatched) {
       try {
-        await this._postService.update(postId, updatePostDto);
+        await this.postService.update(postId, updatePostDto);
         return createResponseForm(undefined);
       } catch {
         return typia.random<POST_UPDATE_FAILED>();
@@ -111,11 +115,38 @@ export class PostController {
     @TypedParam("postId") postId: string,
     @UserId() userId: string
   ): Promise<TryCatch<undefined, POST_DELETE_FAILED | POST_NOT_MATCH_USER>> {
-    const isMatched = await this._postService.checkUser(userId, postId); // 게시글 - 사용자 일치한지 확인
+    const isMatched = await this.postService.checkUser(userId, postId); // 게시글 - 사용자 일치한지 확인
     if (isMatched) {
-      const result = await this._postService.delete(userId, postId);
+      const result = await this.postService.delete(userId, postId);
       if (isErrorCheck(result)) return result;
       return createResponseForm(undefined);
     } else return typia.random<POST_NOT_MATCH_USER>();
+  }
+  /**
+   * @summary postIds(게시글 식별자들) 받기
+   * @description postIds 와 섬네일 이미지를 리턴한다.
+   *
+   * @param viewPostTypeDto
+   * @returns
+   */
+  @TypedRoute.Get()
+  @HttpCode(200)
+  public async getPosts(@TypedQuery() viewPostTypeDto: ViewPostTypeDto) {
+    try {
+      const postIds = await this._photoService.getPostIdsByType(
+        viewPostTypeDto
+      );
+      const refinePosts = await Promise.all(
+        postIds.map(async (postId) => {
+          const thumbnailImage = await this._photoService.getThumbnailByPostId(
+            postId
+          );
+          return { postId, ...thumbnailImage };
+        })
+      );
+      return createResponseForm(refinePosts);
+    } catch {
+      return createErrorForm(typia.random<POST_GET_FAILED>());
+    }
   }
 }

@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreatePhotoDto } from "src/models/dtos/create-photo-dto";
 import { PhotoRepository } from "src/models/repositories/photo.repository";
+import { ViewPostTypeDto } from "../models/dtos/view-post-type-dto";
+import { isCityType } from "../interceptors/type-guard.interceptor";
 
 @Injectable()
 export class PhotoService {
@@ -34,5 +36,13 @@ export class PhotoService {
       select: ["id", "coordinate", "imageUrl"]
     })) as any;
     return result;
+  }
+  public async getPostIdsByType(viewPostTypeDto: ViewPostTypeDto) {
+    if (isCityType(viewPostTypeDto))
+      return await this._photoRepository.getPostIdsByPolygon(
+        viewPostTypeDto.polygon,
+        viewPostTypeDto.markerCount
+      );
+    else return await this._photoRepository.getRandomPostIdsEachCity();
   }
 }
