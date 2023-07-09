@@ -29,7 +29,7 @@ import { ViewPostTypeDto } from "../models/dtos/view-post-type-dto";
 @Controller("post")
 export class PostController {
   constructor(
-    private readonly postService: PostService,
+    private readonly _postService: PostService,
     private readonly _geoService: GeoService,
     private readonly _photoService: PhotoService
   ) {}
@@ -59,7 +59,7 @@ export class PostController {
           };
         })
       );
-      const post = await this.postService.create(createPostDto, userId);
+      const post = await this._postService.create(createPostDto, userId);
       const photos = await this._photoService.createPhotos(
         createPhotoDto,
         post.id
@@ -91,10 +91,10 @@ export class PostController {
     @TypedBody() updatePostDto: UpdatePostDto,
     @UserId() userId: string
   ): Promise<TryCatch<undefined, POST_UPDATE_FAILED | POST_NOT_MATCH_USER>> {
-    const isMatched = await this.postService.checkUser(userId, postId); // 게시글 - 사용자 일치한지 확인
+    const isMatched = await this._postService.checkUser(userId, postId); // 게시글 - 사용자 일치한지 확인
     if (isMatched) {
       try {
-        await this.postService.update(postId, updatePostDto);
+        await this._postService.update(postId, updatePostDto);
         return createResponseForm(undefined);
       } catch {
         return typia.random<POST_UPDATE_FAILED>();
@@ -115,9 +115,9 @@ export class PostController {
     @TypedParam("postId") postId: string,
     @UserId() userId: string
   ): Promise<TryCatch<undefined, POST_DELETE_FAILED | POST_NOT_MATCH_USER>> {
-    const isMatched = await this.postService.checkUser(userId, postId); // 게시글 - 사용자 일치한지 확인
+    const isMatched = await this._postService.checkUser(userId, postId); // 게시글 - 사용자 일치한지 확인
     if (isMatched) {
-      const result = await this.postService.delete(userId, postId);
+      const result = await this._postService.delete(userId, postId);
       if (isErrorCheck(result)) return result;
       return createResponseForm(undefined);
     } else return typia.random<POST_NOT_MATCH_USER>();
@@ -125,7 +125,7 @@ export class PostController {
   /**
    * @summary postIds(게시글 식별자들) 받기
    * @description postIds 와 섬네일 이미지를 리턴한다.
-   *
+   * @tag posts
    * @param viewPostTypeDto
    * @returns
    */

@@ -17,7 +17,7 @@ export const NESTIA_CONFIG: INestiaConfig = {
         },
         servers:[
             {
-                "url": "http://165.229.86.126:9500/api/",
+                "url": "http://165.229.86.126:8000/api/",
                 "description": "insert your server url"
             }
         ]

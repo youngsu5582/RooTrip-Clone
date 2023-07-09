@@ -3,12 +3,19 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { TypeOrmMoudleOptions } from "./database/typeorm";
 import * as Joi from "joi";
-import { typeormConfig, appConfig, redisConfig, keyConfig } from "./config";
+import {
+  typeormConfig,
+  appConfig,
+  redisConfig,
+  keyConfig,
+  s3Config
+} from "./config";
 import {
   typeormValidator,
   appValidator,
   redisValidator,
-  keyValidator
+  keyValidator,
+  s3Validator
 } from "./validator";
 import { LoggerMiddleware } from "./middleware/logging.middleware";
 import { APP_FILTER, DiscoveryService } from "@nestjs/core";
@@ -29,12 +36,13 @@ import { RedisCacheModule } from "./database/redis/redis.module";
     TypeOrmModule.forRootAsync(TypeOrmMoudleOptions),
     ConfigModule.forRoot({
       envFilePath: [`config/.env.${process.env.NODE_ENV || "development"}`],
-      load: [typeormConfig, appConfig, redisConfig, keyConfig],
+      load: [typeormConfig, appConfig, redisConfig, keyConfig, s3Config],
       validationSchema: Joi.object({
         ...typeormValidator,
         ...appValidator,
         ...redisValidator,
-        ...keyValidator
+        ...keyValidator,
+        ...s3Validator
       }),
 
       isGlobal: true,

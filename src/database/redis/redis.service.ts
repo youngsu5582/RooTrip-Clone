@@ -34,10 +34,17 @@ export class RedisCacheService {
     await this.client.pfadd(key, userId);
     return await this.client.sadd(this.storage, postId);
   }
+  async todayPostViews(postId: string) {
+    const key = `postViews:${postId}`;
+    return await this.client.pfcount(key);
+  }
   async deletePostViews(postId: string) {
     const key = `postViews:${postId}`;
     this.client.del(key);
     this.client.srem(this.storage, postId);
     return;
+  }
+  async getTodayPostviews(postId: string) {
+    return await this.client.pfcount(postId);
   }
 }

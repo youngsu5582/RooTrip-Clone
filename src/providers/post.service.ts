@@ -7,6 +7,7 @@ import { CommentRepository } from "src/models/repositories/comment.repository";
 import { PostRepository } from "src/models/repositories/post.repository";
 import { Post } from "src/models/tables/post.entity";
 import typia from "typia";
+import { RedisCacheService } from "../database/redis/redis.service";
 
 @Injectable()
 export class PostService {
@@ -14,7 +15,8 @@ export class PostService {
     @InjectRepository(PostRepository)
     private readonly _postRepository: PostRepository,
     @InjectRepository(CommentRepository)
-    private readonly _commentRepository: CommentRepository
+    private readonly _commentRepository: CommentRepository,
+    private readonly _cacheService: RedisCacheService
   ) {}
   public async create(createPostDto: CreatePostDto, userId: string) {
     return await this._postRepository.save(
@@ -44,6 +46,15 @@ export class PostService {
     return await this._commentRepository.count({ where: { postId } });
   }
   public async getPostById(postId: string) {
-    return await this._postRepository.findOne({ where: { id: postId } });
+    return await this._postRepository.findOne({
+      where: { id: postId },
+      relations: ["photos", "user.profile", "comment"]
+    });
+  }
+  public async getTotalPostViews(postId: string) {
+    return (
+      (await this._postRepository.getPostViewsByPostId(postId)) +
+      (await this._cacheService.getTodayPostviews(postId))
+    );
   }
 }
