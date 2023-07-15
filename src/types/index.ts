@@ -2,10 +2,6 @@ import { ERROR } from "src/errors";
 import { GoogleUserDto } from "src/models/dtos/user/google-user-dto";
 import { KakaoUserDto } from "src/models/dtos/user/kakao-user-dto";
 import { NaverUserDto } from "src/models/dtos/user/naver-user-dto";
-
-import Post from "src/models/tables/post.entity";
-import Photo from "src/models/tables/photo.entity";
-
 export type GenderType = "m" | "w";
 export type CheckType = "email" | "nickname";
 export type CheckDuplicateDto = {
@@ -18,10 +14,6 @@ export type CheckDuplicateDto = {
    */
   value: string;
 };
-export type MessageResponse = {
-  message: string;
-};
-
 export type CustomJwtPayload = {
   [key: string]: any;
   userId: string;
@@ -47,52 +39,6 @@ export interface ErrorForm<T> {
 export type Try<T> = ResponseForm<T>;
 export type Catch<T> = ErrorForm<T>;
 export type TryCatch<T, E extends ERROR> = ResponseForm<T> | ErrorForm<E>;
-
-export declare namespace UserType {
-  interface LoginResponse {
-    expire: number;
-    accessToken: string;
-    refreshToken: string;
-  }
-  interface ReissueResponse {
-    expire: number;
-    accessToken: string;
-  }
-}
-
-type ArticleType = Pick<Post,"id"|"title"|"content"|"like"|"routes">;
-type TempType = Pick<Photo,"id"|"imageUrl"|"city"|"first"|"second">;
-
-export declare namespace PostType {
-  interface createResponse {
-    postId: string;
-    id: string;
-    coordinate: string;
-    imageUrl: string;
-  }
-  interface getResponse {
-    id : string;
-
-  }
-}
-
-export declare namespace PhotoType {
-  interface reverseResponse {
-    city: string;
-    first: string;
-    second: string;
-    coordinate: string;
-  }
-}
-export declare namespace RouteType {
-  interface routeResponse {
-    post: Post;
-    id: string;
-    coordinate: string;
-    imageUrl: string;
-    commentCount: number;
-  }
-}
 
 export interface Coordinate {
   /**

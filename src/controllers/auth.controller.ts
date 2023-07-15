@@ -5,7 +5,6 @@ import {
   CheckDuplicateDto,
   CustomJwtPayload,
   TryCatch,
-  UserType
 } from "src/types";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { JwtUtil } from "src/providers/jwt.service";
@@ -28,6 +27,7 @@ import { UserId } from "src/decorator/param/user-id.decorator";
 import { Token } from "src/decorator/param/token.decorator";
 import { JwtPayload } from "src/decorator/param/jwt-payload.decorator";
 import { CountApiUsage } from "src/decorator/function/count-api-usage.decorator";
+import { UserResponse } from "../responses/user-response";
 
 /**
  * 2023.06.18 해당 코드에서는 사용하지 않으나 , Swagger 에서 인식하기 위해 추가만 해놓음. (삭제 고려)
@@ -107,7 +107,7 @@ export class AuthController {
     @TypedBody() refreshTokenDto: RefreshTokenDto,
     @UserId() userId: string,
     @Token() refreshToken: string
-  ): Promise<TryCatch<UserType.ReissueResponse, TOKEN_NOT_MATCH_USER>> {
+  ): Promise<TryCatch<UserResponse.reissue, TOKEN_NOT_MATCH_USER>> {
     refreshTokenDto;
 
     //console.log(temp);

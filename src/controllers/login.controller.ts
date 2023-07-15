@@ -17,8 +17,9 @@ import { AuthService } from "src/providers/auth.service";
 import { JwtUtil } from "src/providers/jwt.service";
 import { LoginService } from "src/providers/login.service";
 import { UserService } from "src/providers/user.service";
-import { TryCatch, UserType } from "src/types";
+import { TryCatch } from "src/types";
 import typia from "typia";
+import { UserResponse } from "../responses/user-response";
 
 @Controller("auth")
 export class LoginController {
@@ -42,7 +43,7 @@ export class LoginController {
   async localLogin(
     @TypedBody() loginUserDto: LoginUserDto
   ): Promise<
-    TryCatch<UserType.LoginResponse, NOT_CORRECT_PASSWORD | NOT_EXISTED_EMAIL>
+    TryCatch<UserResponse.login, NOT_CORRECT_PASSWORD | NOT_EXISTED_EMAIL>
   > {
     const user = await this._loginService.localLogin(loginUserDto);
     if (isErrorCheck(user)) return user;
@@ -68,7 +69,7 @@ export class LoginController {
   async socialLogin(
     @TypedBody() socialDto: SocialDto
   ): Promise<
-    TryCatch<UserType.LoginResponse, SOCIAL_REGISTER_FAILED | DB_CONNECT_FAILED>
+    TryCatch<UserResponse.login, SOCIAL_REGISTER_FAILED | DB_CONNECT_FAILED>
   > {
     const { code, provider } = socialDto;
     try {

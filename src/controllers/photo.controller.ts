@@ -10,10 +10,11 @@ import {
 } from "src/interceptors/transform.interceptor";
 import { GeoService } from "src/providers/geo.service";
 
-import { Coordinate, PhotoType, TryCatch } from "src/types";
+import { Coordinate, TryCatch } from "src/types";
 import { parsingCoordinate } from "src/utils/geoText";
 import { S3Provider } from "../database/s3/s3.provider";
 import { isErrorCheck } from "../errors";
+import { PhotoResponse } from "../responses/photo-response";
 @Controller("photo")
 export class PhotoController {
   constructor(
@@ -31,7 +32,7 @@ export class PhotoController {
   @TypedRoute.Get("reverse")
   public async reverseAddress(
     @TypedQuery() coordinate: Coordinate
-  ): Promise<TryCatch<PhotoType.reverseResponse, ADDRESS_MATCH_FAILED>> {
+  ): Promise<TryCatch<PhotoResponse.reverse, ADDRESS_MATCH_FAILED>> {
     const result = await this._geoService.getAddress(
       parsingCoordinate(coordinate)
     );

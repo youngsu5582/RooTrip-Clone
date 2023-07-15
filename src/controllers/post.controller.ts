@@ -21,13 +21,15 @@ import { UpdatePostDto } from "src/models/dtos/update-post-dto";
 import { GeoService } from "src/providers/geo.service";
 import { PhotoService } from "src/providers/photo.service";
 import { PostService } from "src/providers/post.service";
-import { PostType, TryCatch } from "src/types";
+import { TryCatch } from "src/types";
+
 import { parsingCoordinate } from "src/utils/geoText";
 import typia from "typia";
 import { ViewPostTypeDto } from "../models/dtos/view-post-type-dto";
 import { IncrementViews } from "../decorator/function/increment-views.decorator";
 import { photoType } from "../models/types/photo-type";
-import Post from "../models/tables/post.entity";
+import { PostResponse } from "../responses/post-response";
+
 @UseGuards(AccessTokenGuard)
 @Controller("post")
 export class PostController {
@@ -50,7 +52,7 @@ export class PostController {
   public async createPost(
     @TypedBody() createPostDto: CreatePostDto,
     @UserId() userId: string
-  ): Promise<TryCatch<PostType.createResponse, POST_CREATE_FAILED>> {
+  ): Promise<TryCatch<PostResponse.create, POST_CREATE_FAILED>> {
     try {
       console.log(createPostDto);
       const createPhotoDto = await Promise.all(
