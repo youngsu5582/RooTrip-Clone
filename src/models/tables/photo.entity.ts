@@ -1,5 +1,5 @@
 import { Entity, Column, Index, ManyToOne, JoinColumn } from "typeorm";
-import { Post } from "./post.entity";
+import Post from "./post.entity";
 import { defaultColumn } from "../common/default-column";
 
 @Entity({ name: "photo" })
@@ -15,7 +15,7 @@ export default class Photo extends defaultColumn {
    * 게시글의 아이디
    *
    */
-  @Column({ name: "post_id" })
+  @Column({ name: "post_id" , select:false })
   postId!: string;
 
   /**

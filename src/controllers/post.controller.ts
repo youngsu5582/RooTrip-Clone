@@ -25,6 +25,9 @@ import { PostType, TryCatch } from "src/types";
 import { parsingCoordinate } from "src/utils/geoText";
 import typia from "typia";
 import { ViewPostTypeDto } from "../models/dtos/view-post-type-dto";
+import { IncrementViews } from "../decorator/function/increment-views.decorator";
+import { photoType } from "../models/types/photo-type";
+import Post from "../models/tables/post.entity";
 @UseGuards(AccessTokenGuard)
 @Controller("post")
 export class PostController {
@@ -49,10 +52,11 @@ export class PostController {
     @UserId() userId: string
   ): Promise<TryCatch<PostType.createResponse, POST_CREATE_FAILED>> {
     try {
+      console.log(createPostDto);
       const createPhotoDto = await Promise.all(
-        createPostDto.newPhotos.map(async (photo) => {
+        createPostDto.newPhotos.map(async (photo:photoType) => {
           return {
-            imageUrl: photo.url,
+            imageUrl: photo.fileName,
             ...(await this._geoService.getAddress(
               parsingCoordinate(photo.coordinate)
             ))
@@ -70,8 +74,9 @@ export class PostController {
         coordinate: photos[0].coordinate,
         imageUrl: photos[0].imageUrl
       };
+      
       return createResponseForm(data);
-    } catch {
+    } catch (err){
       return typia.random<POST_CREATE_FAILED>();
     }
   }
@@ -146,6 +151,37 @@ export class PostController {
       );
       return createResponseForm(refinePosts);
     } catch {
+      return createErrorForm(typia.random<POST_GET_FAILED>());
+    }
+  }
+  /**
+   * @summary 게시글 받기
+   * @description postId 를 통해 , 게시글 내용을 리턴한다.
+   * @tag posts
+   * @param postId
+   * @param userId
+   * @returns
+   */
+  @TypedRoute.Get("/:postId")
+  @IncrementViews()
+  public async getPost(
+    @PostId() postId: string,
+    @UserId() userId: string
+  ): Promise<TryCatch<any, any>> {
+    try{
+      
+    const postViews = await this._postService.getTotalPostViews(postId);
+    const post = await this._postService.getPostById(postId);
+    const data = {postViews,post};
+    const profile = post?.user.profile;
+    post!.user = {
+      id:post?.userId,
+      name : profile?.nickname?profile.nickname:profile?.name,
+      profile:profile?.profileImage
+    } as any;
+    return createResponseForm({...data});
+    }
+    catch{
       return createErrorForm(typia.random<POST_GET_FAILED>());
     }
   }

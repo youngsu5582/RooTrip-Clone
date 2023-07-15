@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn } from "typeorm";
-import { Post } from "./post.entity";
+import Post from "./post.entity";
 import { User } from "./user.entity";
 import { defaultColumn } from "../common/default-column";
 

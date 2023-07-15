@@ -5,8 +5,8 @@ import Photo from "./photo.entity";
 import Comment from "./comment.entity";
 
 @Entity({ name: "post" })
-export class Post extends defaultColumn {
-  @Column({ name: "user_id" })
+export default class Post extends defaultColumn {
+  @Column({ name: "user_id",select:false })
   userId!: string;
 
   @ManyToOne(() => User, (user) => user.posts, {
@@ -25,7 +25,7 @@ export class Post extends defaultColumn {
   @Column({ type: "int", default: 0 })
   like!: number;
 
-  @Column({ type: "int", default: 0 })
+  @Column({ type: "int", default: 0,select:false })
   views!: number;
 
   @Column({ type: "simple-array" })

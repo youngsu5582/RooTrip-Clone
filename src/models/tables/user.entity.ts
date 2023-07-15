@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 import { hashSync, compareSync } from "bcrypt";
 import { defaultColumn } from "../common/default-column";
-import { Post } from "./post.entity";
+import Post from "./post.entity";
 import Profile from "./profile.entity";
 @Entity({ name: "user" })
 export class User extends defaultColumn {

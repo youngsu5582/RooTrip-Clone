@@ -3,7 +3,8 @@ import { GoogleUserDto } from "src/models/dtos/user/google-user-dto";
 import { KakaoUserDto } from "src/models/dtos/user/kakao-user-dto";
 import { NaverUserDto } from "src/models/dtos/user/naver-user-dto";
 
-import { Post } from "src/models/tables/post.entity";
+import Post from "src/models/tables/post.entity";
+import Photo from "src/models/tables/photo.entity";
 
 export type GenderType = "m" | "w";
 export type CheckType = "email" | "nickname";
@@ -58,12 +59,20 @@ export declare namespace UserType {
     accessToken: string;
   }
 }
+
+type ArticleType = Pick<Post,"id"|"title"|"content"|"like"|"routes">;
+type TempType = Pick<Photo,"id"|"imageUrl"|"city"|"first"|"second">;
+
 export declare namespace PostType {
   interface createResponse {
     postId: string;
     id: string;
     coordinate: string;
     imageUrl: string;
+  }
+  interface getResponse {
+    id : string;
+
   }
 }
 
