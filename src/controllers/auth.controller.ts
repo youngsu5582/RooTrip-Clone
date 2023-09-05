@@ -76,17 +76,20 @@ export class AuthController {
    * @returns
    *
    */
+  /**
+   * 23-09-05 현재 불필요한 로직으로 생각하여 주석 처리
+   */
 
-  @TypedRoute.Get("check")
-  @HttpCode(200)
-  @CountApiUsage()
-  public async check(
-    @TypedQuery() checkDuplicateDto: CheckDuplicateDto
-  ): Promise<TryCatch<boolean, DB_CONNECT_FAILED>> {
-    const result = await this._authService.checkDuplicate(checkDuplicateDto);
-    if (isErrorCheck(result)) return createErrorForm(result);
-    return createResponseForm(result);
-  }
+  // @TypedRoute.Get("check")
+  // @HttpCode(200)
+  // @CountApiUsage()
+  // public async check(
+  //   @TypedQuery() checkDuplicateDto: CheckDuplicateDto
+  // ): Promise<TryCatch<boolean, DB_CONNECT_FAILED>> {
+  //   const result = await this._authService.checkDuplicate(checkDuplicateDto);
+  //   if (isErrorCheck(result)) return createErrorForm(result);
+  //   return createResponseForm(result);
+  // }
 
   /**
    * @summary 토큰 재발급
