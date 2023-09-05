@@ -6,7 +6,7 @@ import Comment from "./comment.entity";
 
 @Entity({ name: "post" })
 export default class Post extends defaultColumn {
-  @Column({ name: "user_id",select:false })
+  @Column({ name: "user_id", select: false })
   userId!: string;
 
   @ManyToOne(() => User, (user) => user.posts, {
@@ -25,7 +25,7 @@ export default class Post extends defaultColumn {
   @Column({ type: "int", default: 0 })
   like!: number;
 
-  @Column({ type: "int", default: 0,select:false })
+  @Column({ type: "int", default: 0, select: false })
   views!: number;
 
   @Column({ type: "simple-array" })

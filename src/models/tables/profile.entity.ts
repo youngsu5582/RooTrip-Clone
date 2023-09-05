@@ -1,7 +1,6 @@
 import { Entity, Column, OneToOne, JoinColumn } from "typeorm";
 import { User } from "./user.entity";
 import { defaultColumn } from "../common/default-column";
-import { GenderType } from "src/types";
 
 @Entity({ name: "profile" })
 export default class Profile extends defaultColumn {
@@ -31,7 +30,7 @@ export default class Profile extends defaultColumn {
    * 자기 소개 위한 한줄 설명란
    */
   @Column({ nullable: true, type: String, default: "" })
-  tagLine?: string;
+  bio?: string;
 
   /**
    * 사용자 이름
@@ -47,10 +46,12 @@ export default class Profile extends defaultColumn {
    */
   @Column({ nullable: true, type: String })
   nickname?: string;
-
   /**
-   * 사용자의 성별
+   * 2023.09.05 DB Entity 수정 ( 성별 비활성화 )
    */
-  @Column({ nullable: true, type: String })
-  gender?: GenderType;
+  // /**
+  //  * 사용자의 성별
+  //  */
+  // @Column({ nullable: true, type: String })
+  // gender?: GenderType;
 }

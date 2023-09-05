@@ -1,11 +1,7 @@
 import { TypedBody, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller, HttpCode, UseGuards } from "@nestjs/common";
 import { AuthService } from "../providers/auth.service";
-import {
-  CheckDuplicateDto,
-  CustomJwtPayload,
-  TryCatch,
-} from "src/types";
+import { CheckDuplicateDto, CustomJwtPayload, TryCatch } from "src/types";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { JwtUtil } from "src/providers/jwt.service";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
