@@ -46,17 +46,12 @@ export class PostService {
     return await this._commentRepository.count({ where: { postId } });
   }
   public async getPostById(postId: string) {
-    try{
-      return await this._postRepository.findOne({
+    try {
+      return (await this._postRepository.findOne({
         where: { id: postId },
         relations: ["photos", "user.profile", "comments"]
-      }) as Post;
-    }
-    catch(err){
-      console.log(err);
-
-    }
-    
+      })) as Post;
+    } catch (err) {}
   }
   public async getTotalPostViews(postId: string) {
     return (

@@ -82,4 +82,14 @@ export class EmailController {
       return typia.random<EMAIL_SEND_FAILED>();
     }
   }
+  @TypedRoute.Post("send/authentication")
+  @HttpCode(201)
+  public async sendAuthentication(@TypedBody() emailSendDto: EmailSendDto) {
+    try {
+      await this._emailService.sendAuthentication(emailSendDto.email);
+      return true;
+    } catch {
+      return typia.random<EMAIL_SEND_FAILED>();
+    }
+  }
 }

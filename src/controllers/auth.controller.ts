@@ -1,7 +1,7 @@
 import { TypedBody, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller, HttpCode, UseGuards } from "@nestjs/common";
 import { AuthService } from "../providers/auth.service";
-import { CheckDuplicateDto, CustomJwtPayload, TryCatch } from "src/types";
+import { CustomJwtPayload, TryCatch } from "src/types";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { JwtUtil } from "src/providers/jwt.service";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
@@ -18,11 +18,9 @@ import {
 } from "src/errors/auth-error";
 import typia from "typia";
 import { CreateLocalUserDto } from "src/models/dtos/user/create-local-user-dto";
-import { DB_CONNECT_FAILED } from "src/errors/common-error";
 import { UserId } from "src/decorator/param/user-id.decorator";
 import { Token } from "src/decorator/param/token.decorator";
 import { JwtPayload } from "src/decorator/param/jwt-payload.decorator";
-import { CountApiUsage } from "src/decorator/function/count-api-usage.decorator";
 import { UserResponse } from "../responses/user-response";
 
 /**
@@ -143,5 +141,10 @@ export class AuthController {
     const result = await this._authService.logout(jwtPayload, token);
     if (isErrorCheck(result)) return result;
     return createResponseForm(undefined);
+  }
+
+  @TypedRoute.Get("verify/callback")
+  public async verifyEmail(@TypedQuery() test: { code: string }) {
+    return test;
   }
 }

@@ -7,6 +7,7 @@ import { AuthService } from "../providers/auth.service";
 import { UsersRepository } from "../models/repositories/user.repository";
 import { CustomTypeOrmModule } from "../config/typeorm/custom-typeorm.module";
 import { ProfileRepository } from "../models/repositories/profile.repository";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 @Module({
   imports: [
     RedisCacheModule,
@@ -14,10 +15,11 @@ import { ProfileRepository } from "../models/repositories/profile.repository";
     CustomTypeOrmModule.forCustomRepository([
       UsersRepository,
       ProfileRepository
-    ])
+    ]),
+    ConfigModule
   ],
   controllers: [EmailController],
-  providers: [EmailService, AuthService],
+  providers: [EmailService, AuthService, ConfigService],
   exports: [EmailService]
 })
 export class EmailModule {}

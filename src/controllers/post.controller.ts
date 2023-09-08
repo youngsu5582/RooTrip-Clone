@@ -54,9 +54,8 @@ export class PostController {
     @UserId() userId: string
   ): Promise<TryCatch<PostResponse.create, POST_CREATE_FAILED>> {
     try {
-      console.log(createPostDto);
       const createPhotoDto = await Promise.all(
-        createPostDto.newPhotos.map(async (photo:photoType) => {
+        createPostDto.newPhotos.map(async (photo: photoType) => {
           return {
             imageUrl: photo.fileName,
             ...(await this._geoService.getAddress(
@@ -76,9 +75,9 @@ export class PostController {
         coordinate: photos[0].coordinate,
         imageUrl: photos[0].imageUrl
       };
-      
+
       return createResponseForm(data);
-    } catch (err){
+    } catch (err) {
       return typia.random<POST_CREATE_FAILED>();
     }
   }
@@ -166,24 +165,19 @@ export class PostController {
    */
   @TypedRoute.Get("/:postId")
   @IncrementViews()
-  public async getPost(
-    @PostId() postId: string,
-    @UserId() userId: string
-  ): Promise<TryCatch<any, any>> {
-    try{
-      
-    const postViews = await this._postService.getTotalPostViews(postId);
-    const post = await this._postService.getPostById(postId);
-    const data = {postViews,post};
-    const profile = post?.user.profile;
-    post!.user = {
-      id:post?.userId,
-      name : profile?.nickname?profile.nickname:profile?.name,
-      profile:profile?.profileImage
-    } as any;
-    return createResponseForm({...data});
-    }
-    catch{
+  public async getPost(@PostId() postId: string): Promise<TryCatch<any, any>> {
+    try {
+      const postViews = await this._postService.getTotalPostViews(postId);
+      const post = await this._postService.getPostById(postId);
+      const data = { postViews, post };
+      const profile = post?.user.profile;
+      post!.user = {
+        id: post?.userId,
+        name: profile?.nickname ? profile.nickname : profile?.name,
+        profile: profile?.profileImage
+      } as any;
+      return createResponseForm({ ...data });
+    } catch {
       return createErrorForm(typia.random<POST_GET_FAILED>());
     }
   }

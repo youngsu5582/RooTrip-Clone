@@ -15,7 +15,7 @@ export default class Photo extends defaultColumn {
    * 게시글의 아이디
    *
    */
-  @Column({ name: "post_id" , select:false })
+  @Column({ name: "post_id", select: false })
   postId!: string;
 
   /**

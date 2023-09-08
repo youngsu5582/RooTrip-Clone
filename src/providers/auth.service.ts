@@ -101,4 +101,12 @@ export class AuthService {
       return typia.random<MODIFY_USER_FAILED>();
     }
   }
+  // async checkExistedEmail(email: string) {
+  //   try{
+  //     const alreadyCreatedEmail = await this._userRepository.findOne({
+  //       where: { email }
+  //     });
+  //     if(alreadyCreatedEmail)
+  //   }
+  // }
 }
