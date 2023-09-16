@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { District } from "../tables/district.entity";
-import { CustomRepository } from "src/config/typeorm/custom-typeorm.decorator";
+import { CustomRepository } from "../../database/typeorm/custom-typeorm.decorator";
 
 @CustomRepository(District)
 export class DistrictRepository extends Repository<District> {

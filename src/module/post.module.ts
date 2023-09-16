@@ -1,5 +1,4 @@
 import { Module } from "@nestjs/common";
-import { CustomTypeOrmModule } from "../config/typeorm/custom-typeorm.module";
 import { PostRepository } from "src/models/repositories/post.repository";
 import { PostController } from "src/controllers/post.controller";
 import { PostService } from "src/providers/post.service";
@@ -9,6 +8,7 @@ import { PhotoService } from "src/providers/photo.service";
 import { GeoService } from "src/providers/geo.service";
 import { CommentRepository } from "src/models/repositories/comment.repository";
 import { RedisCacheService } from "src/database/redis/redis.service";
+import { CustomTypeOrmModule } from "../database/typeorm/custom-typeorm.module";
 
 @Module({
   imports: [

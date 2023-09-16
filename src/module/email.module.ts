@@ -5,9 +5,9 @@ import { EmailService } from "src/providers/email.service";
 import { AuthModule } from "./auth.module";
 import { AuthService } from "../providers/auth.service";
 import { UsersRepository } from "../models/repositories/user.repository";
-import { CustomTypeOrmModule } from "../config/typeorm/custom-typeorm.module";
 import { ProfileRepository } from "../models/repositories/profile.repository";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { CustomTypeOrmModule } from "../database/typeorm/custom-typeorm.module";
 @Module({
   imports: [
     RedisCacheModule,

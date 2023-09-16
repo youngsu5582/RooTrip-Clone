@@ -1,5 +1,5 @@
 import { Repository } from "typeorm";
-import { CustomRepository } from "src/config/typeorm/custom-typeorm.decorator";
+import { CustomRepository } from "../../database/typeorm/custom-typeorm.decorator";
 import Photo from "../tables/photo.entity";
 import { CreatePhotoDto } from "../dtos/create-photo-dto";
 

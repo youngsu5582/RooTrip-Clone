@@ -1,5 +1,4 @@
 import { Module } from "@nestjs/common";
-import { CustomTypeOrmModule } from "../config/typeorm/custom-typeorm.module";
 import { PostRepository } from "src/models/repositories/post.repository";
 import { PostService } from "src/providers/post.service";
 import { DistrictRepository } from "src/models/repositories/district.repository";
@@ -9,6 +8,7 @@ import { RouteController } from "src/controllers/route.controller";
 import { RouteService } from "src/providers/route.service";
 import { CommentRepository } from "src/models/repositories/comment.repository";
 import { RedisCacheService } from "src/database/redis/redis.service";
+import { CustomTypeOrmModule } from "../database/typeorm/custom-typeorm.module";
 
 @Module({
   imports: [

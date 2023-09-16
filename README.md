@@ -1,4 +1,4 @@
-# RooTrip-CLone
+# RooTrip-Clone
 
 ![165 229 86 126_8080_ (1)](https://user-images.githubusercontent.com/44726494/228187883-256028d0-c7e6-44dd-afaf-717f0e8d1de8.png)
 **나의 여행을 공유하는 여행용 SNS**
@@ -18,18 +18,25 @@
 ```
 └─ src
  ├─ controllers         컨트롤러
- ├─ database            사용 DB 설정 및 저장소
- ├─ decorator           편의성 Decroator 집ㅎ
- ├─ pages               페이지 컴포넌트
- ├─ constants           공통 상수
- ├─ config              초기 설정 및 구성 정보
- ├─ styles              css, scss 스타일
- ├─ services (= api)    api 관련 로직 모듈, auth 인증 관련 모듈
- ├─ utils               정규표현식 패턴, 공통 함수
- ├─ store               전역 상태 관리
- ├─ App.js
- └─ index.js
+ ├─ config              설정 관련
+ ├─ loaders             서드 파티 연동
+ ├─ middleware          미들웨어
+ ├─ errors              에러 집합
+ ├─ models              DB
+ ├─ ├─ common           공통 사용 모델
+ ├─ ├─ dtos             입출력 Request Response
+ ├─ ├─ repositories     레포지토리
+ ├─ ├─ tables           테이블(엔티티)
+ ├─ ├─ types            DB 관련 타입
+ ├─ module              모듈
+ ├─ provider            서비스
+ ├─ utils               유틸 함수
+ ├─ validator           env 검증
+ ├─ app.module.ts       서버 구성 모듈
+ ├─ main.ts             서버 실행
 ```
+
+=> 차후 , Standard Architecture 에 의존한 DDD 로 수정 예정 ( 2023.09.15 )
 
 ## 팀원
 
@@ -43,4 +50,4 @@
 
 🛠 Address: [Notion](https://www.notion.so/e0bed146cc4c4280b7c5a05f4df22b90?v=975aa4fe34d6456e9ca84e4fd59690d6)
 <br/> 🌞 Address: [RooTrip-FE](https://github.com/JungMunGyu/RooTrip-Front)
-<br/> 🌚 Address: [RooTrip-BE](https://github.com/youngsu5582/RooTrip-Backend)
+<br/> 🌚 Address: [RooTrip-BE](https://github.com/youngsu5582/RooTrip-Clone)
