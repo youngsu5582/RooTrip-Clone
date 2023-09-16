@@ -13,6 +13,7 @@ import {
   LOCAL_REGISTER_FAILED,
   MODIFY_USER_FAILED,
   NOT_EXISTED_EMAIL,
+  NOT_VALIDATE_CODE,
   SOCIAL_REGISTER_FAILED
 } from "src/errors/auth-error";
 import { RedisCacheService } from "src/database/redis/redis.service";
@@ -20,6 +21,7 @@ import { ProfileRepository } from "src/models/repositories/profile.repository";
 import Profile from "src/models/tables/profile.entity";
 import { CreateLocalUserDto } from "src/models/dtos/user/create-local-user-dto";
 import { DB_CONNECT_FAILED } from "src/errors/common-error";
+import { MailerService } from "@nestjs-modules/mailer";
 
 @Injectable()
 export class AuthService {
@@ -28,24 +30,29 @@ export class AuthService {
     private readonly _userRepository: UsersRepository,
     @InjectRepository(ProfileRepository)
     private readonly _profileRepository: ProfileRepository,
-    private readonly _cacheService: RedisCacheService
+    private readonly _cacheService: RedisCacheService,
+    private readonly _mailerService: MailerService
   ) {}
-  async localRegister(createUserDto: CreateLocalUserDto) {
-    const { email, password, ...profileDto } = createUserDto;
+  async localRegister(code: string, createUserDto: CreateLocalUserDto) {
+    const { email } = createUserDto;
     const alreadyCreatedEmail = await this._userRepository.findOne({
       where: { email }
     });
     if (alreadyCreatedEmail && email !== null)
       return typia.random<ALREADY_EXISTED_EMAIL>();
     try {
-      const user = await this._userRepository.save(
-        User.create({ email, password })
+      return this._cacheService.addTemporalRegister(
+        code,
+        JSON.stringify(createUserDto)
       );
-      await this._profileRepository
-        .save(Profile.create({ userId: user.id, ...profileDto }))
-        .then((profile) => (user.profile = profile));
-      user.save();
-      return user;
+      // const user = await this._userRepository.save(
+      //   User.create({ email, password })
+      // );
+      // await this._profileRepository
+      //   .save(Profile.create({ userId: user.id, ...profileDto }))
+      //   .then((profile) => (user.profile = profile));
+      // user.save();
+      //return user;
     } catch {
       return typia.random<LOCAL_REGISTER_FAILED>();
     }
@@ -99,6 +106,24 @@ export class AuthService {
       } else return typia.random<NOT_EXISTED_EMAIL>();
     } catch {
       return typia.random<MODIFY_USER_FAILED>();
+    }
+  }
+  async completeRegister(code: string) {
+    const data = await this._cacheService.getTemporalRegister(code);
+    if (!data) return typia.random<NOT_VALIDATE_CODE>();
+    const createUserData: CreateLocalUserDto = JSON.parse(data);
+    const { email, password, ...profileDto } = createUserData;
+    try {
+      const user = await this._userRepository.save(
+        User.create({ email, password })
+      );
+      await this._profileRepository
+        .save(Profile.create({ userId: user.id, ...profileDto }))
+        .then((profile) => (user.profile = profile));
+      user.save();
+      return user;
+    } catch {
+      return true;
     }
   }
   // async checkExistedEmail(email: string) {

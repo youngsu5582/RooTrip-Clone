@@ -6,6 +6,7 @@ import { AuthService } from "../providers/auth.service";
 import { JwtUtil } from "src/providers/jwt.service";
 import { RedisCacheModule } from "src/database/redis/redis.module";
 import { ProfileRepository } from "src/models/repositories/profile.repository";
+import { EmailService } from "../providers/email.service";
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { ProfileRepository } from "src/models/repositories/profile.repository";
     RedisCacheModule
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtUtil],
+  providers: [AuthService, JwtUtil, EmailService],
   exports: [AuthService]
 })
 export class AuthModule {}

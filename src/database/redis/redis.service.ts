@@ -47,4 +47,14 @@ export class RedisCacheService {
   async getTodayPostviews(postId: string) {
     return await this.client.pfcount(postId);
   }
+  async addTemporalRegister(code: string, jsonToStringfy: string) {
+    const key = `temporalData:${code}`;
+    return await this.client.set(key, jsonToStringfy);
+  }
+  async getTemporalRegister(code: string) {
+    const key = `temporalData:${code}`;
+    const data = await this.client.get(key);
+    await this.client.del(key);
+    return data;
+  }
 }

@@ -1,5 +1,5 @@
-import { TypedBody, TypedQuery, TypedRoute } from "@nestia/core";
-import { Controller, HttpCode, UseGuards } from "@nestjs/common";
+import { TypedBody, TypedRoute } from "@nestia/core";
+import { Controller, HttpCode, Query, UseGuards } from "@nestjs/common";
 import { AuthService } from "../providers/auth.service";
 import { CustomJwtPayload, TryCatch } from "src/types";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
@@ -14,14 +14,16 @@ import {
   ALREADY_EXISTED_EMAIL,
   LOCAL_REGISTER_FAILED,
   MODIFY_USER_FAILED,
+  NOT_VALIDATE_CODE,
   TOKEN_NOT_MATCH_USER
 } from "src/errors/auth-error";
 import typia from "typia";
-import { CreateLocalUserDto } from "src/models/dtos/user/create-local-user-dto";
 import { UserId } from "src/decorator/param/user-id.decorator";
 import { Token } from "src/decorator/param/token.decorator";
 import { JwtPayload } from "src/decorator/param/jwt-payload.decorator";
 import { UserResponse } from "../responses/user-response";
+import { EmailService } from "../providers/email.service";
+import { CreateLocalUserDto } from "../models/dtos/user/create-local-user-dto";
 
 /**
  * 2023.06.18 해당 코드에서는 사용하지 않으나 , Swagger 에서 인식하기 위해 추가만 해놓음. (삭제 고려)
@@ -35,7 +37,8 @@ export class AuthController {
   private readonly minute = 60;
   constructor(
     private readonly _authService: AuthService,
-    private readonly _jwtUtil: JwtUtil
+    private readonly _jwtUtil: JwtUtil,
+    private readonly _emailService: EmailService
   ) {}
   /**
    * 회원 가입 기능
@@ -54,7 +57,13 @@ export class AuthController {
   ): Promise<
     TryCatch<undefined, ALREADY_EXISTED_EMAIL | LOCAL_REGISTER_FAILED>
   > {
-    const result = await this._authService.localRegister(createLocalUserDto);
+    const code = await this._emailService.sendAuthentication(
+      createLocalUserDto.email
+    );
+    const result = await this._authService.localRegister(
+      code,
+      createLocalUserDto
+    );
     if (isErrorCheck(result)) {
       return createErrorForm(result);
     }
@@ -144,7 +153,11 @@ export class AuthController {
   }
 
   @TypedRoute.Get("verify/callback")
-  public async verifyEmail(@TypedQuery() test: { code: string }) {
-    return test;
+  public async verifyEmail(
+    @Query("code") code: string
+  ): Promise<TryCatch<undefined, NOT_VALIDATE_CODE>> {
+    const result = await this._authService.completeRegister(code);
+    if (isErrorCheck(result)) return createErrorForm(result);
+    return createResponseForm(undefined);
   }
 }

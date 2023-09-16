@@ -36,7 +36,7 @@ export class PhotoController {
     const result = await this._geoService.getAddress(
       parsingCoordinate(coordinate)
     );
-    return createResponseForm(result);
+    return createResponseForm({ address: result });
   }
   /**
    * @summary SignedUrl 반환

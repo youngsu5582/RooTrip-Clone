@@ -36,3 +36,7 @@ export interface MODIFY_USER_FAILED extends ERROR {
   status: false;
   message: "사용자 정보 변경에 실패했습니다.";
 }
+export interface NOT_VALIDATE_CODE extends ERROR {
+  status: false;
+  message: "부적절한 코드입니다.";
+}

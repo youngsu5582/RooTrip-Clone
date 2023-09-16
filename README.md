@@ -1,73 +1,46 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# RooTrip-CLone
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![165 229 86 126_8080_ (1)](https://user-images.githubusercontent.com/44726494/228187883-256028d0-c7e6-44dd-afaf-717f0e8d1de8.png)
+**나의 여행을 공유하는 여행용 SNS**
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Table of Contents
 
-## Description
+1. <a href="#커밋-컨벤션">커밋 컨벤션</a>
+2. <a href="#폴더-규칙">폴더 규칙</a>
+3. <a href="#팀원">팀원</a>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 커밋 컨벤션
 
-## Installation
+<img src="https://user-images.githubusercontent.com/44726494/222941077-0441e481-34ce-44d8-9673-7108840d09e6.png" alt="commit convention" width="432px" />
 
-```bash
-$ npm install
+## 폴더 규칙
+
+```
+└─ src
+ ├─ controllers         컨트롤러
+ ├─ database            사용 DB 설정 및 저장소
+ ├─ decorator           편의성 Decroator 집ㅎ
+ ├─ pages               페이지 컴포넌트
+ ├─ constants           공통 상수
+ ├─ config              초기 설정 및 구성 정보
+ ├─ styles              css, scss 스타일
+ ├─ services (= api)    api 관련 로직 모듈, auth 인증 관련 모듈
+ ├─ utils               정규표현식 패턴, 공통 함수
+ ├─ store               전역 상태 관리
+ ├─ App.js
+ └─ index.js
 ```
 
-## Running the app
+## 팀원
 
-```bash
-# development
-$ npm run start
+| 이름   | 역할  | 주소                                     |
+| ------ | ----- | ---------------------------------------- |
+| 김힘찬 | 🛠 PM  | [Github](https://github.com/HmDol)       |
+| 강병준 | 🌞 FE | [Github](https://github.com/bangdori)    |
+| 정문규 | 🌞 FE | [Github](https://github.com/JungMunGyu)  |
+| 우재민 | 🌚 BE | [Github](https://github.com/WooJJam)     |
+| 이영수 | 🌚 BE | [Github](https://github.com/youngsu5582) |
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+🛠 Address: [Notion](https://www.notion.so/e0bed146cc4c4280b7c5a05f4df22b90?v=975aa4fe34d6456e9ca84e4fd59690d6)
+<br/> 🌞 Address: [RooTrip-FE](https://github.com/JungMunGyu/RooTrip-Front)
+<br/> 🌚 Address: [RooTrip-BE](https://github.com/youngsu5582/RooTrip-Backend)

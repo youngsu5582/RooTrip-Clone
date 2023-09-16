@@ -70,9 +70,9 @@ export class EmailService {
     };
     try {
       await this._mailerService.sendMail(mailOptions);
-      return true;
+      return redirectCode;
     } catch {
-      return typia.random<EMAIL_SEND_FAILED>();
+      throw typia.random<EMAIL_SEND_FAILED>();
     }
   }
 }
